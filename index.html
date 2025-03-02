@@ -22,7 +22,7 @@
                 <p class="name" style="text-align: center;">
                   Rohit Gandikota
                 </p>
-                <p>I'm a PhD student at Northeastern University advised by <a href="https://www.baulab.info">Prof. David Bau</a>. I'm interested in enumerating and understanding knowledge inside generative image and language models. I also closely work with <a href="https://groups.csail.mit.edu/vision/torralbalab/"> Prof. Antonio Torralba </a> from MIT. I interned at <a href="https://research.adobe.com">Adobe Research (Summer '24)</a>.
+                <p>I'm a PhD student at Northeastern University advised by <a href="https://www.baulab.info">Prof. David Bau</a>. I'm interested in enumerating and understanding knowledge inside generative image and language models. I also closely work with <a href="https://groups.csail.mit.edu/vision/torralbalab/"> Prof. Antonio Torralba </a> from MIT. I interned at <a href="https://research.adobe.com">Adobe Research</a>.
                 </p>
                 <p>
                 I previously worked at <a href="https://www.isro.gov.in">Indian Space Research Organization</a> as an Applied Scientist, where I worked on advancing image sensing capabilites towards better disaster management and monitoring systems using neural networks.
@@ -48,7 +48,8 @@
               <td style="padding:16px;width:100%;vertical-align:middle">
                 <h2>Research</h2>
                 <p>
-                  I'm interested in computer vision, deep learning, generative AI, and image processing. Most of my research is about inferring the physical world (shape, motion, color, light, etc) from images, usually with radiance fields. Some papers are <span class="highlight">highlighted</span>.
+                  I'm interested in understanding and enumerating knowledge inside generative models like text-to-image diffusion and language models. Most of my research is about editing and discovering concepts through model editing and interventions.
+                    <!-- Some papers are <span class="highlight">highlighted</span>. -->
                 </p>
               </td>
             </tr>
@@ -58,10 +59,11 @@
 
 
 
+        <!-- SliderSpace Entry -->
         <tr onmouseout="sliderspace_stop()" onmouseover="sliderspace_start()">
           <td style="padding:16px;width:20%;vertical-align:middle">
             <div class="one">
-              <div class="two" id='sliderspace_image'><video  width=100% muted autoplay loop>
+              <div class="two" id='sliderspace_image'><video width=100% muted autoplay loop>
               <source src="images/sliderspace.mp4" type="video/mp4">
               Your browser does not support the video tag.
               </video></div>
@@ -71,7 +73,7 @@
               function sliderspace_start() {
                 document.getElementById('sliderspace_image').style.opacity = "1";
               }
-    
+        
               function sliderspace_stop() {
                 document.getElementById('sliderspace_image').style.opacity = "0";
               }
@@ -80,7 +82,7 @@
           </td>
           <td style="padding:8px;width:80%;vertical-align:middle">
             <a href="https://sliderspace.baulab.info/">
-              <span class="papertitle"></span>
+              <span class="papertitle">SliderSpace: Decomposing the Visual Capabilities of Diffusion Models</span>
             </a>
             <br>
             <strong>Rohit Gandikota</strong>, 
@@ -90,7 +92,7 @@
             <a href="https://research.adobe.com/person/eli-shechtman/">Eli Shechtman</a>, 
             <a href="https://home.ttic.edu/~nickkolkin/home.html">Nick Kolkin</a>
             <br>
-            <em>arXiv</em>, 2024
+            <em>arXiv</em>, 2025
             <br>
             <a href="https://sliderspace.baulab.info/">project page</a>
             /
@@ -101,13 +103,247 @@
             <a href="https://huggingface.co/spaces/baulab/SliderSpace">demo</a>
             <p></p>
             <p>
-    				Decomposing representations and discovering novel concepts inside diffusion models as sliders
+            SliderSpace automatically decomposes diffusion models' visual capabilities into controllable, human-understandable directions from a single text prompt. This framework enables users to explore and discover novel concepts encoded inside any diffusion model
             </p>
           </td>
         </tr>
-
-
-
+        
+        <!-- Art-Free Entry -->
+        <tr onmouseout="artfree_stop()" onmouseover="artfree_start()">
+          <td style="padding:16px;width:20%;vertical-align:middle">
+            <div class="one">
+              <div class="two" id='artfree_image'><video width=100% muted autoplay loop>
+              <source src="images/artfree.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+              </video></div>
+              <img src='images/artfree.jpg' width=100%>
+            </div>
+            <script type="text/javascript">
+              function artfree_start() {
+                document.getElementById('artfree_image').style.opacity = "1";
+              }
+        
+              function artfree_stop() {
+                document.getElementById('artfree_image').style.opacity = "0";
+              }
+              artfree_stop()
+            </script>
+          </td>
+          <td style="padding:8px;width:80%;vertical-align:middle">
+            <a href="https://joaanna.github.io/art-free-diffusion/">
+              <span class="papertitle">Art-Free Generative Models: Art Creation Without Graphic Art Knowledge</span>
+            </a>
+            <br>
+            <a href="https://rhfeiyang.top">Hui Ren</a>*,
+            <a href="https://joaanna.github.io">Joanna Materzyńska</a>*,
+            <strong>Rohit Gandikota</strong>, 
+            <a href="https://baulab.info">David Bau</a>
+            <a href="https://groups.csail.mit.edu/vision/torralbalab/">Antonio Torralba</a>
+            <br>
+            <em>arXiv</em>, 2024
+            <br>
+            <a href="https://joaanna.github.io/art-free-diffusion/">project page</a>
+            /
+            <a href="https://arxiv.org/abs/2412.00176">arXiv</a>
+            /
+            <a href="https://github.com/rhfeiyang/art-free-diffusion">code</a>
+            /
+            <a href="https://huggingface.co/spaces/rhfeiyang/Art-Free-Diffusion">demo</a>
+            <p></p>
+            <p>
+            This work presents a new paradigm - "do diffusion models need millions of artworks in training data to actually learn art?". We release a new diffusion model trained completely on art-free data. This model can still mimic art by seeing less than 5 art images.
+            </p>
+          </td>
+        </tr>
+        
+        <!-- ELM Entry -->
+        <tr onmouseout="elm_stop()" onmouseover="elm_start()">
+          <td style="padding:16px;width:20%;vertical-align:middle">
+            <div class="one">
+              <div class="two" id='elm_image'><video width=100% muted autoplay loop>
+              <source src="images/elm.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+              </video></div>
+              <img src='images/elm.jpg' width=100%>
+            </div>
+            <script type="text/javascript">
+              function elm_start() {
+                document.getElementById('elm_image').style.opacity = "1";
+              }
+        
+              function elm_stop() {
+                document.getElementById('elm_image').style.opacity = "0";
+              }
+              elm_stop()
+            </script>
+          </td>
+          <td style="padding:8px;width:80%;vertical-align:middle">
+            <a href="https://elm.baulab.info">
+              <span class="papertitle">Erasing Conceptual Knowledge from Language Models</span>
+            </a>
+            <br>
+            <strong>Rohit Gandikota</strong>, 
+            <a href="https://sfeucht.github.io/">Sheridan Feucht</a>,
+            <a href="https://people.math.harvard.edu/~smarks/">Sameul Marks</a>,
+            <a href="https://baulab.info">David Bau</a>
+            <br>
+            <em>arXiv</em>, 2024
+            <br>
+            <a href="https://elm.baulab.info">project page</a>
+            /
+            <a href="https://arxiv.org/abs/2410.02760">arXiv</a>
+            /
+            <a href="https://github.com/rohitgandikota/erasing-llm">code</a>
+            /
+            <a href="https://huggingface.co/collections/baulab/elm-6715d68576da0cd1a89c0c04">models</a>
+            <p></p>
+            <p>
+            We show that language models can be used as classifiers and propose an unlearning methods where a language model self-critics its knowledge and guides itself to unlearn. This method is essential to retain the fluent text generation capabilities after unlearning.
+            </p>
+          </td>
+        </tr>
+        
+        <!-- Concept Sliders Entry -->
+        <tr onmouseout="concept_sliders_stop()" onmouseover="concept_sliders_start()">
+          <td style="padding:16px;width:20%;vertical-align:middle">
+            <div class="one">
+              <div class="two" id='concept_sliders_image'><video width=100% muted autoplay loop>
+              <source src="images/concept_sliders.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+              </video></div>
+              <img src='images/concept_sliders.jpg' width=100%>
+            </div>
+            <script type="text/javascript">
+              function concept_sliders_start() {
+                document.getElementById('concept_sliders_image').style.opacity = "1";
+              }
+        
+              function concept_sliders_stop() {
+                document.getElementById('concept_sliders_image').style.opacity = "0";
+              }
+              concept_sliders_stop()
+            </script>
+          </td>
+          <td style="padding:8px;width:80%;vertical-align:middle">
+            <a href="https://sliders.baulab.info">
+              <span class="papertitle">Concept Sliders: LoRA Adaptors for Precise Control in Diffusion Models</span>
+            </a>
+            <br>
+            <strong>Rohit Gandikota</strong>, 
+            <a href="https://joaanna.github.io">Joanna Materzyńska</a>,
+            <a href="https://github.com/p1atdev">Tingrui Zhou</a>,
+            <a href="https://groups.csail.mit.edu/vision/torralbalab/">Antonio Torralba</a>
+            <a href="https://baulab.info">David Bau</a>
+            <br>
+            <em>ECCV</em>, 2024
+            <br>
+            <a href="https://sliders.baulab.info">project page</a>
+            /
+            <a href="https://arxiv.org/abs/2311.12092">arXiv</a>
+            /
+            <a href="https://github.com/rohitgandikota/sliders">code</a>
+            /
+            <a href="https://huggingface.co/spaces/baulab/ConceptSliders">demo</a>
+            <p></p>
+            <p>
+             This work introduces LoRA adaptors that provide precise control over specific attributes in diffusion model outputs, such as weather, age, or artistic styles. The sliders are trained using a small set of prompts or images to identify low-rank parameter directions, minimizing interference with other attributes. They can be composed and continuously controlled
+            </p>
+          </td>
+        </tr>
+        
+        <!-- UCE Entry -->
+        <tr onmouseout="uce_stop()" onmouseover="uce_start()">
+          <td style="padding:16px;width:20%;vertical-align:middle">
+            <div class="one">
+              <div class="two" id='uce_image'><video width=100% muted autoplay loop>
+              <source src="images/uce.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+              </video></div>
+              <img src='images/uce.jpg' width=100%>
+            </div>
+            <script type="text/javascript">
+              function uce_start() {
+                document.getElementById('uce_image').style.opacity = "1";
+              }
+        
+              function uce_stop() {
+                document.getElementById('uce_image').style.opacity = "0";
+              }
+              uce_stop()
+            </script>
+          </td>
+          <td style="padding:8px;width:80%;vertical-align:middle">
+            <a href="https://unified.baulab.info">
+              <span class="papertitle">Unified Concept Editing in Diffusion Models</span>
+            </a>
+            <br>
+            <strong>Rohit Gandikota</strong>, 
+            <a href="https://orgadhadas.github.io/">Hadas Orgad</a>,
+            <a href="https://belinkov.com/">Yonatan Belinkov</a>,
+              <a href="https://joaanna.github.io">Joanna Materzyńska</a>,
+            <a href="https://baulab.info">David Bau</a>
+            <br>
+            <em>WACV</em>, 2024
+            <br>
+            <a href="https://unified.baulab.info">project page</a>
+            /
+            <a href="https://arxiv.org/pdf/2308.14761.pdf">arXiv</a>
+            /
+            <a href="https://github.com/rohitgandikota/unified-concept-editing">code</a>
+            <p></p>
+            <p>
+            UCE employs a fast closed-form solution for editing text-to-image diffusion models to address bias, copyright, and offensive content simultaneously without retraining. The method enables scalable and concurrent edits by modifying cross attention weights.
+            </p>
+          </td>
+        </tr>
+        
+        <!-- Erasing Concepts from Diffusion Models Entry -->
+        <tr onmouseout="erasing_diffusion_stop()" onmouseover="erasing_diffusion_start()">
+          <td style="padding:16px;width:20%;vertical-align:middle">
+            <div class="one">
+              <div class="two" id='erasing_diffusion_image'><video width=100% muted autoplay loop>
+              <source src="images/erasing_diffusion.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+              </video></div>
+              <img src='images/erasing_diffusion.jpg' width=100%>
+            </div>
+            <script type="text/javascript">
+              function erasing_diffusion_start() {
+                document.getElementById('erasing_diffusion_image').style.opacity = "1";
+              }
+        
+              function erasing_diffusion_stop() {
+                document.getElementById('erasing_diffusion_image').style.opacity = "0";
+              }
+              erasing_diffusion_stop()
+            </script>
+          </td>
+          <td style="padding:8px;width:80%;vertical-align:middle">
+            <a href="https://erasing.baulab.info">
+              <span class="papertitle">Erasing Concepts from Diffusion Models</span>
+            </a>
+            <br>
+            <strong>Rohit Gandikota</strong>*, 
+            <a href="https://joaanna.github.io">Joanna Materzyńska</a>*,
+            <a href="https://groups.csail.mit.edu/vision/torralbalab/">Antonio Torralba</a>
+            <a href="https://baulab.info">David Bau</a>
+            <br>
+            <em>ICCV</em>, 2023
+            <br>
+            <a href="https://erasing.baulab.info">project page</a>
+            /
+            <a href="https://arxiv.org/abs/2303.07345">arXiv</a>
+            /
+            <a href="https://github.com/rohitgandikota/erasing">code</a>
+            /
+            <a href="https://huggingface.co/spaces/baulab/Erasing-Concepts-In-Diffusion">demo</a>
+            <p></p>
+            <p>
+            This work presents a method for removing specific visual concepts from text-to-image diffusion models while preserving their overall generative capabilities.
+            </p>
+          </td>
+        </tr>
+        
 
     </tbody>
 </table>
@@ -139,7 +375,7 @@
               <td style="padding:8px;width:80%;vertical-align:middle">
                 <a href="https://www.inae.in/student-members-inducted-during-2019/">Best Research Thesis Award (Bachelor's), INAE</a>
                 <br>
-                <a href="https://www.iist.ac.in/departments/avionics-awards">Full-ride scholarship, Bachelor's, Indian Institue of Space Science and Technology</a>
+                <a href="https://www.iist.ac.in/departments/avionics-awards">Full-ride scholarship for Bachelor's, Department of Space, India</a>
               </td>
             </tr>
 
@@ -153,7 +389,7 @@
               <td style="padding:0px">
                 <br>
                 <p style="text-align:right;font-size:small;">
-                  Website template adopted from <a href="https://github.com/jonbarron/jonbarron_website">Jon Barron's website!</a>.
+                  Website template adopted from <a href="https://github.com/jonbarron/jonbarron_website">Jon Barron's website</a>!
                 </p>
               </td>
             </tr>
