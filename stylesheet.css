@@ -110,13 +110,13 @@ h2 {
 }
 
 .one {
-  width: 285px;
+  width: 200px;
   height: 160px;
   position: relative;
 }
 
 .two {
-  width: 285px;
+  width: 200px;
   height: 160px;
   position: absolute;
   transition: opacity .2s ease-in-out;
