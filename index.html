@@ -63,7 +63,7 @@
         <tr onmouseout="sliderspace_stop()" onmouseover="sliderspace_start()">
           <td style="padding:16px;width:20%;vertical-align:middle">
             <div class="one">
-              <div class="two" id='sliderspace_image'><video width=100% muted autoplay loop>
+              <div class="two" id='sliderspace_image'><video width=100% muted autoplay loop playsinline>
               <source src="images/sliderspace.mp4" type="video/mp4">
               Your browser does not support the video tag.
               </video></div>
@@ -72,7 +72,9 @@
             <script type="text/javascript">
               function sliderspace_start() {
                 document.getElementById('sliderspace_image').style.opacity = "1";
-                  document.querySelector('#sliderspace_image video').play();
+                // For Safari compatibility
+               document.querySelector('#sliderspace_image video').setAttribute('playsinline', '');
+               document.querySelector('#sliderspace_image video').play();
               }
         
               function sliderspace_stop() {
