@@ -57,7 +57,53 @@
 <table style="width:100%;border:0px;border-spacing:0px;border-collapse:separate;margin-right:auto;margin-left:auto;">
     <tbody>
 
+        <!-- Distillation Entry -->
+        <tr onmouseout="distillation_stop()" onmouseover="distillation_start()">
+          <td style="padding:16px;width:20%;vertical-align:middle">
+            <div class="one">
+              <div class="two" id='distillation_image'><video width=100% muted autoplay loop playsinline>
+              <source src="images/distillation.png" type="video/mp4">
+              Your browser does not support the video tag.
+              </video></div>
+              <img src='images/distillation.png' width=100%>
+            </div>
+            <script type="text/javascript">
+              function sliderspace_start() {
+                document.getElementById('distillation_image').style.opacity = "1";
+                // For Safari compatibility
+               document.querySelector('#distillation_image video').setAttribute('playsinline', '');
+               document.querySelector('#distillation_image video').play();
+              }
+        
+              function sliderspace_stop() {
+                document.getElementById('distillation_image').style.opacity = "0";
+              }
+              distillation_stop()
+            </script>
+          </td>
+          <td style="padding:8px;width:80%;vertical-align:middle">
+            <a href="https://distillation.baulab.info/">
+              <span class="papertitle">Distilling Diversity and Control in Diffusion Models</span>
+            </a>
+            <br>
+            <strong>Rohit Gandikota</strong>, 
+            <a href="https://baulab.info">David Bau</a>
+            <br>
+            <em>arXiv</em>, 2025
+            <br>
+            <a href="https://distillation.baulab.info/">project page</a>
+            /
+            <a href="https://arxiv.org/abs/2503.10637">arXiv</a>
+            /
+            <a href="https://github.com/rohitgandikota/distillation">code</a>
+            <p></p>
+            <p>
+            We propose using DT visualization (Diffusion Target) to better understand diffusion models. Through DT, we find that distilled models already predict the final image in their first (!) timestep. By simply swapping first timestep with base model, we completely restore the diversity lost by distilled model compared to base - "Diversity Distillation". We also show that sliders and loras can be transferred across base and distilled models - "Control Distillation".
+            </p>
+          </td>
+        </tr>
 
+        
 
         <!-- SliderSpace Entry -->
         <tr onmouseout="sliderspace_stop()" onmouseover="sliderspace_start()">
