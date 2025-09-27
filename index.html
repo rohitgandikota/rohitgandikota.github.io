@@ -98,7 +98,7 @@
             <a href="https://github.com/rohitgandikota/distillation">code</a>
             <p></p>
             <p>
-            Distillated diffusion models are super fast, but lack sample diversity. In our work, we study why this occurs. We found that distilled models have the same concepts required for diversity of base, but don't use them. Through theoretical analysis and casual experiments we narrow down this to - the first timestep of diffusion generation!
+            Distillated diffusion models are super fast, but lack diversity in output samples. We ask - why? Distilled models have the concept representations required for base model's diversity, but don't use them. Through theoretical analysis and casual experiments we narrow this down to - the first timestep of diffusion generation!
             </p>
           </td>
         </tr>
@@ -248,7 +248,7 @@
             <a href="https://huggingface.co/spaces/baulab/ConceptSliders">demo</a>
             <p></p>
             <p>
-             This work introduces LoRA adaptors that provide precise control over specific attributes in diffusion model outputs, such as weather, age, or artistic styles. The sliders are trained using a small set of prompts or images to identify low-rank parameter directions, minimizing interference with other attributes. They can be composed and continuously controlled
+                Concept Sliders are light-weight adaptors that can control specific attributes in a diffusion model's outputs. Training these sliders are very simple - just provide the text prompts of the concept (e.g. "winter weather", "old age", "abstract art"). They can be composed and continuously controlled!
             </p>
           </td>
         </tr>
