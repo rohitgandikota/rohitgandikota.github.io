@@ -68,14 +68,14 @@
               <img src='images/dt.png' width=100%>
             </div>
             <script type="text/javascript">
-              function sliderspace_start() {
+              function distillation_start() {
                 document.getElementById('distillation_image').style.opacity = "1";
                 // For Safari compatibility
                document.querySelector('#distillation_image video').setAttribute('playsinline', '');
                document.querySelector('#distillation_image video').play();
               }
         
-              function sliderspace_stop() {
+              function distillation_stop() {
                 document.getElementById('distillation_image').style.opacity = "0";
               }
               distillation_stop()
@@ -180,7 +180,7 @@
           </td>
           <td style="padding:8px;width:80%;vertical-align:middle">
             <a href="https://joaanna.github.io/art-free-diffusion/">
-              <span class="papertitle">Art-Free Generative Models: Art Creation Without Graphic Art Knowledge</span>
+              <span class="papertitle">Opt-In Art: Learning Art Styles Only from Few Examples</span>
             </a>
             <br>
             <a href="https://rhfeiyang.top">Hui Ren</a>*,
@@ -189,7 +189,7 @@
             <a href="https://baulab.info">David Bau</a>,
             <a href="https://groups.csail.mit.edu/vision/torralbalab/">Antonio Torralba</a>
             <br>
-            <em>arXiv</em>, 2024
+            <em>NeurIPS</em>, 2025
             <br>
             <a href="https://joaanna.github.io/art-free-diffusion/">project page</a>
             /
@@ -201,6 +201,105 @@
             <p></p>
             <p>
             This work presents a new paradigm - "do diffusion models need millions of artworks in training data to actually learn art?". We release a new diffusion model trained completely on art-free data. This model can still mimic art by seeing less than 5 art images.
+            </p>
+          </td>
+        </tr>
+
+        <!-- When are concepts erased Entry -->
+        <tr onmouseout="where_stop()" onmouseover="where_start()">
+          <td style="padding:16px;width:20%;vertical-align:middle">
+            <div class="one">
+              <div class="two" id='where_image'><video width=100% muted autoplay loop playsinline>
+              <source src="images/where_concepts_go.png" type="video/mp4">
+              Your browser does not support the video tag.
+              </video></div>
+              <img src='images/where_concepts_go.png' width=100%>
+            </div>
+            <script type="text/javascript">
+              function where_start() {
+                document.getElementById('where_image').style.opacity = "1";
+                // For Safari compatibility
+               document.querySelector('#where_image video').setAttribute('playsinline', '');
+               document.querySelector('#where_image video').play();
+              }
+        
+              function where_stop() {
+                document.getElementById('where_image').style.opacity = "0";
+              }
+              where_stop()
+            </script>
+          </td>
+          <td style="padding:8px;width:80%;vertical-align:middle">
+            <a href="https://nyu-dice-lab.github.io/when-are-concepts-erased/">
+              <span class="papertitle">When Are Concepts Erased From Diffusion Models?</span>
+            </a>
+            <br>
+              <a href="https://www.linkedin.com/in/kevin-lu-4588-/">Kevin Lu</a>,
+              <a href="https://github.com/NickyDCFP">Nicky Kriplani</a>,
+              <strong>Rohit Gandikota</strong>, 
+              <a href="https://www.mnpham.com">Minh Pham</a>,
+              <a href="https://baulab.info">David Bau</a>,
+              <a href="https://chinmayhegde.github.io">Chinmay Hegde</a>,
+              <a href="https://nivc.github.io">Niv Cohen</a>
+            <br>
+            <em>NeurIPS</em>, 2025
+            <br>
+            <a href="https://nyu-dice-lab.github.io/when-are-concepts-erased/">project page</a>
+            /
+            <a href="https://arxiv.org/abs/2505.17013">arXiv</a>
+            /
+            <a href="https://github.com/kevinlu4588/DiffusionConceptErasure">code</a>
+            <p></p>
+            <p>
+                Traditionally erasure is evaluated externally by analyzing generated images. We release a nuanced and rigorous suite of evaluation techniques including incontext, training-free, and dynamic tracing probes to investigate if concepts are "really" erased. Answer: Not really!
+            </p>
+          </td>
+        </tr>
+
+        <!-- RippleBench Entry -->
+        <tr onmouseout="ripplebench_stop()" onmouseover="ripplebench_start()">
+          <td style="padding:16px;width:20%;vertical-align:middle">
+            <div class="one">
+              <div class="two" id='ripplebench_image'><video width=100% muted autoplay loop playsinline>
+              <source src="images/ripplebench.png" type="video/mp4">
+              Your browser does not support the video tag.
+              </video></div>
+              <img src='images/ripplebench.png' width=100%>
+            </div>
+            <script type="text/javascript">
+              function ripplebench_start() {
+                document.getElementById('ripplebench_image').style.opacity = "1";
+                // For Safari compatibility
+               document.querySelector('#ripplebench_image video').setAttribute('playsinline', '');
+               document.querySelector('#ripplebench_image video').play();
+              }
+        
+              function ripplebench_stop() {
+                document.getElementById('ripplebench_image').style.opacity = "0";
+              }
+              ripplebench_stop()
+            </script>
+          </td>
+          <td style="padding:8px;width:80%;vertical-align:middle">
+            <a href="https://openreview.net/forum?id=JTnYGSxN5k">
+              <span class="papertitle">RippleBench: Capturing Ripple Effects by Leveraging Existing Knowledge Repositories</span>
+            </a>
+            <br>
+              <a href="https://royrinberg.com">Roy Rinberg</a>,
+              <a href="https://ushabhalla.github.io">Usha Bhalla</a>,
+              <a href="https://igorshilov.com">Igor Shilov</a>
+              <strong>Rohit Gandikota</strong>,
+            <br>
+            <em>MechInterp (Spotlight), NeurIPS</em>, 2025
+            <br>
+            <a href="https://github.com/RoyRin/wiki-rag/tree/main">project page</a>
+            /
+            <a href="https://openreview.net/forum?id=JTnYGSxN5k">paper</a>
+            /
+            <a href="https://github.com/RoyRin/wiki-rag/tree/main">code</a>
+            <p></p>
+            <p>
+                Knowledge editing in LLMs have unintended ripple effects on nearby concepts. Measuring this requires a personalised dataset, and is challenging to build. We propose RippleBench - given a concept ("biology"), our RAG-LLM pipeline can automatically generate structured datasets. 
             </p>
           </td>
         </tr>
