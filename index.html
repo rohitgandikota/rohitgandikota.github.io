@@ -156,54 +156,6 @@
             </p>
           </td>
         </tr>
-        
-        <!-- Art-Free Entry -->
-        <tr onmouseout="artfree_stop()" onmouseover="artfree_start()">
-          <td style="padding:16px;width:20%;vertical-align:middle">
-            <div class="one">
-              <div class="two" id='artfree_image'><video width=100% muted autoplay loop>
-              <source src="images/artfree.png" type="video/mp4">
-              Your browser does not support the video tag.
-              </video></div>
-              <img src='images/artfree.png' width=100%>
-            </div>
-            <script type="text/javascript">
-              function artfree_start() {
-                document.getElementById('artfree_image').style.opacity = "1";
-              }
-        
-              function artfree_stop() {
-                document.getElementById('artfree_image').style.opacity = "0";
-              }
-              artfree_stop()
-            </script>
-          </td>
-          <td style="padding:8px;width:80%;vertical-align:middle">
-            <a href="https://joaanna.github.io/art-free-diffusion/">
-              <span class="papertitle">Opt-In Art: Learning Art Styles Only from Few Examples</span>
-            </a>
-            <br>
-            <a href="https://rhfeiyang.top">Hui Ren</a>*,
-            <a href="https://joaanna.github.io">Joanna Materzyńska</a>*,
-            <strong>Rohit Gandikota</strong>, 
-            <a href="https://baulab.info">David Bau</a>,
-            <a href="https://groups.csail.mit.edu/vision/torralbalab/">Antonio Torralba</a>
-            <br>
-            <em>NeurIPS</em>, 2025
-            <br>
-            <a href="https://joaanna.github.io/art-free-diffusion/">project page</a>
-            /
-            <a href="https://arxiv.org/abs/2412.00176">arXiv</a>
-            /
-            <a href="https://github.com/rhfeiyang/art-free-diffusion">code</a>
-            /
-            <a href="https://huggingface.co/spaces/rhfeiyang/Art-Free-Diffusion">demo</a>
-            <p></p>
-            <p>
-            This work presents a new paradigm - "do diffusion models need millions of artworks in training data to actually learn art?". We release a new diffusion model trained completely on art-free data. This model can still mimic art by seeing less than 5 art images.
-            </p>
-          </td>
-        </tr>
 
         <!-- When are concepts erased Entry -->
         <tr onmouseout="where_stop()" onmouseover="where_start()">
@@ -252,6 +204,54 @@
             <p></p>
             <p>
                 Traditionally erasure is evaluated externally by analyzing generated images. We release a nuanced and rigorous suite of evaluation techniques including incontext, training-free, and dynamic tracing probes to investigate if concepts are "really" erased. Answer: Not really!
+            </p>
+          </td>
+        </tr>
+        
+        <!-- Art-Free Entry -->
+        <tr onmouseout="artfree_stop()" onmouseover="artfree_start()">
+          <td style="padding:16px;width:20%;vertical-align:middle">
+            <div class="one">
+              <div class="two" id='artfree_image'><video width=100% muted autoplay loop>
+              <source src="images/artfree.png" type="video/mp4">
+              Your browser does not support the video tag.
+              </video></div>
+              <img src='images/artfree.png' width=100%>
+            </div>
+            <script type="text/javascript">
+              function artfree_start() {
+                document.getElementById('artfree_image').style.opacity = "1";
+              }
+        
+              function artfree_stop() {
+                document.getElementById('artfree_image').style.opacity = "0";
+              }
+              artfree_stop()
+            </script>
+          </td>
+          <td style="padding:8px;width:80%;vertical-align:middle">
+            <a href="https://joaanna.github.io/art-free-diffusion/">
+              <span class="papertitle">Opt-In Art: Learning Art Styles Only from Few Examples</span>
+            </a>
+            <br>
+            <a href="https://rhfeiyang.top">Hui Ren</a>*,
+            <a href="https://joaanna.github.io">Joanna Materzyńska</a>*,
+            <strong>Rohit Gandikota</strong>, 
+            <a href="https://baulab.info">David Bau</a>,
+            <a href="https://groups.csail.mit.edu/vision/torralbalab/">Antonio Torralba</a>
+            <br>
+            <em>NeurIPS</em>, 2025
+            <br>
+            <a href="https://joaanna.github.io/art-free-diffusion/">project page</a>
+            /
+            <a href="https://arxiv.org/abs/2412.00176">arXiv</a>
+            /
+            <a href="https://github.com/rhfeiyang/art-free-diffusion">code</a>
+            /
+            <a href="https://huggingface.co/spaces/rhfeiyang/Art-Free-Diffusion">demo</a>
+            <p></p>
+            <p>
+            This work presents a new paradigm - "do diffusion models need millions of artworks in training data to actually learn art?". We release a new diffusion model trained completely on art-free data. This model can still mimic art by seeing less than 5 art images.
             </p>
           </td>
         </tr>
