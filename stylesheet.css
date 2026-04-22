@@ -91,9 +91,13 @@ strong {
 
 h2 {
   margin: 0;
-  font-weight: normal;
+  font-weight: bold;
   font-family: 'Lato', Verdana, Helvetica, sans-serif;
   font-size: 22px;
+}
+
+.colored-box h2 {
+  font-weight: normal;
 }
 
 .papertitle {
