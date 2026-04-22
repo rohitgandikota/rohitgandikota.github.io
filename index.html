@@ -22,10 +22,10 @@
                 <p class="name" style="text-align: center;">
                   Rohit Gandikota
                 </p>
-                <p>I'm a PhD student at Northeastern University advised by <a href="https://www.baulab.info">Prof. David Bau</a>. I'm interested in enumerating and understanding knowledge inside generative image and language models. I also closely work with <a href="https://groups.csail.mit.edu/vision/torralbalab/"> Prof. Antonio Torralba </a> from MIT. I interned at <a href="https://research.adobe.com">Adobe Research ('24, '25)</a>.
+                <p>I'm a PhD student at Northeastern University advised by <a href="https://www.baulab.info">Prof. David Bau</a>. I'm interested in understanding and unlocking the hidden knowledge inside generative models. I also closely work with <a href="https://groups.csail.mit.edu/vision/torralbalab/"> Prof. Antonio Torralba </a> from MIT. I interned at <a href="https://research.adobe.com">Adobe Research ('24, '25)</a>.
                 </p>
                 <p>
-                I previously worked at <a href="https://www.isro.gov.in">Indian Space Research Organization</a> as an Applied Scientist, where I worked on advancing image sensing capabilites towards better disaster management and monitoring systems using neural networks.
+                I previously worked at <a href="https://www.isro.gov.in">Indian Space Research Organization</a> as an Applied Scientist, where I worked on advancing image sensing capabilities towards better disaster management and monitoring systems using neural networks.
                 </p>
 
                   
@@ -48,7 +48,7 @@
               <td style="padding:16px;width:100%;vertical-align:middle">
                 <h2>Research</h2>
                 <p>
-                    I believe that, as humans, we are only scratching the surface of how we interact with powerful generative models. My research explores how we can go beyond these limits by uncovering novel concepts and designing intuitive ways for people to use these models. The goal is not just to use models, but to use their potential to push the boundaries of human creativity and capability.
+                    AI should extend human intent. Language models are getting there because text is interpretable, and editing the output is a natural extension of reading it. Vision models are far behind. Their outputs aren't interpretable, so controlling them requires understanding the model itself. My research works toward a future where vision models behave less like black boxes and more like renderers, programmable through a precise, compositional language for visual editing and control.
                     <!-- Some papers are <span class="highlight">highlighted</span>. -->
                 </p>
               </td>
@@ -98,7 +98,7 @@
             <a href="https://github.com/rohitgandikota/distillation">code</a>
             <p></p>
             <p>
-            Distillated diffusion models are super fast, but lack diversity in output samples. We ask - why? Distilled models have the concept representations required for base model's diversity, but don't use them. Through theoretical analysis and casual experiments we narrow this down to - the first timestep of diffusion generation!
+            Distilled diffusion models are super fast, but lack diversity in output samples. We ask - why? Distilled models have the concept representations required for base model's diversity, but don't use them. Through theoretical analysis and causal experiments we narrow this down to - the first timestep of diffusion generation!
             </p>
           </td>
         </tr>
@@ -188,7 +188,7 @@
             <br>
             <strong>Rohit Gandikota</strong>, 
             <a href="https://sfeucht.github.io/">Sheridan Feucht</a>,
-            <a href="https://people.math.harvard.edu/~smarks/">Sameul Marks</a>,
+            <a href="https://people.math.harvard.edu/~smarks/">Samuel Marks</a>,
             <a href="https://baulab.info">David Bau</a>
             <br>
             <em>NeurIPS</em>, 2025
@@ -202,7 +202,7 @@
             <a href="https://huggingface.co/collections/baulab/elm-6715d68576da0cd1a89c0c04">models</a>
             <p></p>
             <p>
-            We show that language models can be used as classifiers and propose an unlearning methods where a language model self-critics its knowledge and guides itself to unlearn. This method is essential to retain the fluent text generation capabilities after unlearning.
+            We show that language models can be used as classifiers and propose an unlearning method where a language model self-critiques its knowledge and guides itself to unlearn. This method is essential to retain the fluent text generation capabilities after unlearning.
             </p>
           </td>
         </tr>
@@ -355,9 +355,9 @@
 <table style="width:100%;border:0px;border-spacing:0px;border-collapse:separate;margin-right:auto;margin-left:auto;"><tbody>
       <tr>
       <td style="padding:16px;width:100%;vertical-align:middle">
-        <h2>Advicing</h2>
+        <h2>Advising</h2>
         <p>
-            I've had the oppurtunity to work with and advice some of the most amazing students and folks!
+            I've had the opportunity to work with and advise some of the most amazing students and folks!
         </p>
       </td>
     </tr>
@@ -518,6 +518,200 @@
     </tbody>
 </table>
           
+<table style="width:100%;border:0px;border-spacing:0px;border-collapse:separate;margin-right:auto;margin-left:auto;"><tbody>
+      <tr>
+      <td style="padding:16px;width:100%;vertical-align:middle">
+        <h2>Collaborations</h2>
+        <p>
+            I've had the pleasure of collaborating on projects led by some amazing researchers and teams.
+        </p>
+      </td>
+    </tr>
+    </tbody></table>
+    <table style="width:100%;border:0px;border-spacing:0px;border-collapse:separate;margin-right:auto;margin-left:auto;">
+    <tbody>
+
+
+        <!-- In-Context Algebra Entry -->
+        <tr onmouseout="algebra_stop()" onmouseover="algebra_start()">
+          <td style="padding:16px;width:20%;vertical-align:middle">
+            <div class="one">
+              <div class="two" id='algebra_image'><video width=100% muted autoplay loop playsinline>
+              <source src="images/algebra.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+              </video></div>
+              <img src='images/algebra.png' width=100%>
+            </div>
+            <script type="text/javascript">
+              function algebra_start() {
+                document.getElementById('algebra_image').style.opacity = "1";
+                // For Safari compatibility
+               document.querySelector('#algebra_image video').setAttribute('playsinline', '');
+               document.querySelector('#algebra_image video').play();
+              }
+
+              function algebra_stop() {
+                document.getElementById('algebra_image').style.opacity = "0";
+              }
+              algebra_stop()
+            </script>
+          </td>
+          <td style="padding:8px;width:80%;vertical-align:middle">
+            <a href="https://algebra.baulab.info">
+              <span class="papertitle">In-Context Algebra</span>
+            </a>
+            <br>
+              <a href="https://ericwtodd.github.io/">Eric Todd</a>,
+              <a href="https://jannik-brinkmann.github.io/">Jannik Brinkmann</a>,
+              <strong>Rohit Gandikota</strong>,
+              <a href="https://baulab.info">David Bau</a>
+            <br>
+            <em>ICLR</em>, 2026
+            <br>
+            <a href="https://algebra.baulab.info">project page</a>
+            /
+            <a href="https://arxiv.org/abs/2512.16902">arXiv</a>
+            /
+            <a href="https://github.com/ericwtodd/algebra">code</a>
+            <p></p>
+            <p>
+                How do transformers reason about variables whose meaning shifts across contexts? We train models on finite-group arithmetic and find three symbolic mechanisms emerge: commutative copying, identity recognition, and closure-based cancellation - algebra learned purely from context.
+            </p>
+          </td>
+        </tr>
+
+
+        <!-- Agents of Chaos Entry -->
+        <tr onmouseout="agents_stop()" onmouseover="agents_start()">
+          <td style="padding:16px;width:20%;vertical-align:middle">
+            <div class="one">
+              <div class="two" id='agents_image'><video width=100% muted autoplay loop playsinline>
+              <source src="images/agents.png" type="video/mp4">
+              Your browser does not support the video tag.
+              </video></div>
+              <img src='images/agents.png' width=100%>
+            </div>
+            <script type="text/javascript">
+              function agents_start() {
+                document.getElementById('agents_image').style.opacity = "1";
+              }
+
+              function agents_stop() {
+                document.getElementById('agents_image').style.opacity = "0";
+              }
+              agents_stop()
+            </script>
+          </td>
+          <td style="padding:8px;width:80%;vertical-align:middle">
+            <a href="https://agentsofchaos.baulab.info">
+              <span class="papertitle">Agents of Chaos</span>
+            </a>
+            <br>
+              <a href="https://scholar.google.com/citations?user=hd7quH4AAAAJ&hl=en">Natalie Shapira</a>, ..., <strong>Rohit Gandikota</strong>, ..., <a href="https://baulab.info">David Bau</a> (37 authors)
+            <br>
+            <em>arXiv</em>, 2026
+            <br>
+            <a href="https://agentsofchaos.baulab.info">project page</a>
+            /
+            <a href="https://arxiv.org/abs/2602.20021">arXiv</a>
+            <p></p>
+            <p>
+                A two-week red-teaming study of autonomous LLM agents deployed in a live lab environment with persistent memory, email, Discord, and shell access. Twenty researchers probe them benignly and adversarially - documenting emergent failures like identity spoofing, cross-agent propagation of unsafe behaviors, and partial system takeover.
+            </p>
+          </td>
+        </tr>
+
+
+        <!-- Forbidden Topics Entry -->
+        <tr onmouseout="forbidden_stop()" onmouseover="forbidden_start()">
+          <td style="padding:16px;width:20%;vertical-align:middle">
+            <div class="one">
+              <div class="two" id='forbidden_image'><video width=100% muted autoplay loop playsinline>
+              <source src="images/forbidden.png" type="video/mp4">
+              Your browser does not support the video tag.
+              </video></div>
+              <img src='images/forbidden.png' width=100%>
+            </div>
+            <script type="text/javascript">
+              function forbidden_start() {
+                document.getElementById('forbidden_image').style.opacity = "1";
+              }
+
+              function forbidden_stop() {
+                document.getElementById('forbidden_image').style.opacity = "0";
+              }
+              forbidden_stop()
+            </script>
+          </td>
+          <td style="padding:8px;width:80%;vertical-align:middle">
+            <a href="https://forbidden.baulab.info">
+              <span class="papertitle">Discovering Forbidden Topics in Language Models</span>
+            </a>
+            <br>
+              <a href="https://www.canrager.com/">Can Rager</a>,
+              <a href="https://wendlerc.github.io/">Chris Wendler</a>,
+              <strong>Rohit Gandikota</strong>,
+              <a href="https://baulab.info">David Bau</a>
+            <br>
+            <em>arXiv</em>, 2025
+            <br>
+            <a href="https://forbidden.baulab.info">project page</a>
+            /
+            <a href="https://arxiv.org/abs/2505.17441">arXiv</a>
+            /
+            <a href="https://github.com/canrager/iterated_prefill_crawler">code</a>
+            <p></p>
+            <p>
+                What topics do language models refuse to discuss? We introduce refusal discovery and propose Iterated Prefill Crawler (IPC), which retrieved 31 of 36 hidden refusal topics on Tulu-3-8B. Applied to frontier models, IPC surfaces censorship-tuning and thought-suppression behaviors.
+            </p>
+          </td>
+        </tr>
+
+
+        <!-- Model Tampering Entry -->
+        <tr onmouseout="tampering_stop()" onmouseover="tampering_start()">
+          <td style="padding:16px;width:20%;vertical-align:middle">
+            <div class="one">
+              <div class="two" id='tampering_image'><video width=100% muted autoplay loop playsinline>
+              <source src="images/tampering.png" type="video/mp4">
+              Your browser does not support the video tag.
+              </video></div>
+              <img src='images/tampering.png' width=100%>
+            </div>
+            <script type="text/javascript">
+              function tampering_start() {
+                document.getElementById('tampering_image').style.opacity = "1";
+              }
+
+              function tampering_stop() {
+                document.getElementById('tampering_image').style.opacity = "0";
+              }
+              tampering_stop()
+            </script>
+          </td>
+          <td style="padding:8px;width:80%;vertical-align:middle">
+            <a href="https://arxiv.org/abs/2502.05209">
+              <span class="papertitle">Model Tampering Attacks Enable More Rigorous Evaluations of LLM Capabilities</span>
+            </a>
+            <br>
+              <a href="https://zora-che.com/">Zora Che</a>*, <a href="https://stephencasper.com/">Stephen Casper</a>*, ..., <strong>Rohit Gandikota</strong>, ..., Dylan Hadfield-Menell (15 authors)
+            <br>
+            <em>TMLR</em>, 2025
+            <br>
+            <a href="https://arxiv.org/abs/2502.05209">arXiv</a>
+            /
+            <a href="https://huggingface.co/LLM-GAT">models</a>
+            <p></p>
+            <p>
+                Input-output testing is the standard way we evaluate LLM risks - but it's not rigorous. We propose model tampering (modifying latent activations or weights) as a complementary evaluation. Under this lens, state-of-the-art unlearning methods can be reversed in under 16 fine-tuning steps.
+            </p>
+          </td>
+        </tr>
+
+
+    </tbody>
+</table>
+
 <table style="width:100%; margin:0 auto; border:0; border-spacing:0; padding:16px;">
     <tbody>
         <tr>
@@ -539,9 +733,19 @@
 								 </div>
               </td>
               <td style="padding:8px;width:80%;vertical-align:middle">
-                <a href="https://www.cbsnews.com/boston/news/i-team-deepfake-videos-artificial-intelligence/"> CBS: Our work on generative text-to-image unlearning (ESD and UCE) is covered by reporter Christina Hager</a>
+                Agents of Chaos (red-teaming autonomous LLM agents) is covered by <a href="https://www.science.org/content/article/scienceadviser-ai-agents-chaos-violate-privacy">Science</a>, <a href="https://www.wired.com/story/openclaw-ai-agent-manipulation-security-northeastern-study/">WIRED</a>, <a href="https://spectrum.ieee.org/amp/ai-agent-phishing-2674209687">IEEE Spectrum</a>, <a href="https://www.zeit.de/digital/datenschutz/2026-03/ki-agenten-studie-software-daten-sicherheit/komplettansicht">Die Zeit</a>, <a href="https://futurism.com/artificial-intelligence/openclaw-bots-security-disaster">Futurism</a>, <a href="https://timesofindia.indiatimes.com/city/bengaluru/when-ai-gets-keys-agents-of-chaos-leak-secrets-wipe-systems/articleshow/128804037.cms">Times of India</a>, <a href="https://news.northeastern.edu/2026/03/09/autonomous-ai-agents-of-chaos/">Northeastern Global News</a>, and <a href="https://jack-clark.net/#:~:text=manipulation).-,Why%20this%20matters%20%E2%80%93%20agent,of%20Chaos%20official%20website.">Jack Clark (Anthropic co-founder)</a>
                 <br>
-                <a href="https://research.adobe.com/news/discover-the-hidden-knowledge-inside-ai-image-generation-models/"> Adobe Research: Our work on extracting hidden knowledge from diffusion models into controllable user controls (SliderSpace) is covered by Adobe Research Blogs</a>
+                Concept Sliders (precise control in diffusion models) is covered by <a href="https://www.marktechpost.com/2023/12/02/this-ai-paper-from-northeastern-university-and-mit-develop-interpretable-concept-sliders-for-enhanced-image-generation-control-in-diffusion-models/">MarkTechPost</a>, featured in YouTube tutorials (<a href="https://www.youtube.com/watch?v=GaVuQEWqEoM">1</a>, <a href="https://www.youtube.com/watch?v=e-4HGqN6CWU">2</a>), a <a href="https://civitai.com/articles/3068/concept-sliders-lora-adaptors-for-precise-control-in-diffusion-models">Civitai community article</a>, and discussed on <a href="https://news.ycombinator.com/item?id=38615521">Hacker News</a>
+                <br>
+                Concept Sliders has been integrated into open-source tools including <a href="https://github.com/ostris/ai-toolkit">ai-toolkit</a>, <a href="https://github.com/Comfy-Org/ComfyUI/issues/2028">ComfyUI</a>, and <a href="https://github.com/AUTOMATIC1111/stable-diffusion-webui/issues/14064">AUTOMATIC1111</a>; community-trained sliders are publicly hosted on <a href="https://sliders.ntcai.xyz/sliders/app/loras">SliderFactory</a> and <a href="https://civitai.com/search/models?sortBy=models_v9&query=sliders">Civitai</a>
+                <br>
+                Discovering Forbidden Topics (political censorship in language models) is featured by <a href="https://www.khoury.northeastern.edu/khoury-researchers-find-political-censorship-in-chinese-ai-model-and-explain-how-to-get-around-it/">Northeastern Khoury News</a>
+                <br>
+                Model Tampering Attacks (rigorous LLM capability evaluations) is featured in a <a href="https://www.far.ai/events/sessions/stephen-casper-powering-up-ai-capability-evaluations-with-model-tampering-attacks">FAR.AI talk</a> by Stephen Casper
+                <br>
+                ESD and UCE (generative text-to-image unlearning) is covered on <a href="https://www.cbsnews.com/boston/news/i-team-deepfake-videos-artificial-intelligence/">CBS News</a> by reporter Christina Hager, and explained on <a href="https://www.marktechpost.com/2023/07/14/this-ai-paper-proposes-a-new-method-for-fine-tuning-model-weights-to-erase-concepts-from-diffusion-models-using-their-own-knowledge/">MarkTechPost</a>
+                <br>
+                SliderSpace (discovering hidden knowledge inside diffusion models) is featured on <a href="https://research.adobe.com/news/discover-the-hidden-knowledge-inside-ai-image-generation-models/">Adobe Research Blog</a>
               </td>
 
 
