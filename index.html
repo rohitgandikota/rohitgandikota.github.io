@@ -57,6 +57,56 @@
 <table style="width:100%;border:0px;border-spacing:0px;border-collapse:separate;margin-right:auto;margin-left:auto;">
     <tbody>
 
+        <!-- Gaze Heads Entry -->
+        <tr onmouseout="gaze_stop()" onmouseover="gaze_start()">
+          <td style="padding:16px;width:20%;vertical-align:middle">
+            <div class="one">
+              <div class="two" id='gaze_image'><video width=100% muted autoplay loop playsinline>
+              <source src="images/gazeheads.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+              </video></div>
+              <img src='images/gazeheads.png' width=100%>
+            </div>
+            <script type="text/javascript">
+              function gaze_start() {
+                document.getElementById('gaze_image').style.opacity = "1";
+                // For Safari compatibility
+               document.querySelector('#gaze_image video').setAttribute('playsinline', '');
+               document.querySelector('#gaze_image video').play();
+              }
+
+              function gaze_stop() {
+                document.getElementById('gaze_image').style.opacity = "0";
+              }
+              gaze_stop()
+            </script>
+          </td>
+          <td style="padding:8px;width:80%;vertical-align:middle">
+            <a href="https://gaze.baulab.info/">
+              <span class="papertitle">Gaze Heads: How VLMs Look at What They Describe</span>
+            </a>
+            <br>
+            <strong>Rohit Gandikota</strong>,
+            <a href="https://baulab.info">David Bau</a>
+            <br>
+            <em>arXiv</em>, 2026
+            <br>
+            <a href="https://gaze.baulab.info/">project page</a>
+            /
+            <a href="https://arxiv.org/abs/2606.14703">arXiv</a>
+            /
+            <a href="https://github.com/rohitgandikota/gaze-heads">code</a>
+            /
+            <a href="https://huggingface.co/datasets/baulab/openai-comic-strips">dataset</a>
+            /
+            <a href="https://gaze.baulab.info/#demo">demo</a>
+            <p></p>
+            <p>
+            Where do VLMs look when they describe an image? We find a small set of "gaze heads" (fewer than 9% of all heads in Qwen3-VL-8B) that track the region currently being narrated, much like human eye gaze during speech. Redirecting them at inference time causally steers what the model describes, no retraining, just attention-mask editing.
+            </p>
+          </td>
+        </tr>
+
         <!-- Distillation Entry -->
         <tr onmouseout="distillation_stop()" onmouseover="distillation_start()">
           <td style="padding:16px;width:20%;vertical-align:middle">
@@ -365,6 +415,54 @@
     <table style="width:100%;border:0px;border-spacing:0px;border-collapse:separate;margin-right:auto;margin-left:auto;">
     <tbody>
 
+
+        <!-- Vision-Language Binding Entry -->
+        <tr onmouseout="binding_stop()" onmouseover="binding_start()">
+          <td style="padding:16px;width:20%;vertical-align:middle">
+            <div class="one">
+              <div class="two" id='binding_image'><video width=100% muted autoplay loop playsinline>
+              <source src="images/binding.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+              </video></div>
+              <img src='images/binding.png' width=100%>
+            </div>
+            <script type="text/javascript">
+              function binding_start() {
+                document.getElementById('binding_image').style.opacity = "1";
+                // For Safari compatibility
+               document.querySelector('#binding_image video').setAttribute('playsinline', '');
+               document.querySelector('#binding_image video').play();
+              }
+
+              function binding_stop() {
+                document.getElementById('binding_image').style.opacity = "0";
+              }
+              binding_stop()
+            </script>
+          </td>
+          <td style="padding:8px;width:80%;vertical-align:middle">
+            <a href="https://chrisg777.github.io/i2i-interp/">
+              <span class="papertitle">Vision-Language Binding in In-Context Image Generation</span>
+            </a>
+            <br>
+            <a href="https://github.com/ChrisG777">Chris Ge</a>,
+            <strong>Rohit Gandikota</strong>,
+            <a href="https://groups.csail.mit.edu/vision/torralbalab/">Antonio Torralba</a>,
+            <a href="https://tamarott.github.io">Tamar Rott Shaham</a>
+            <br>
+            <em>arXiv</em>, 2026
+            <br>
+            <a href="https://chrisg777.github.io/i2i-interp/">project page</a>
+            /
+            <a href="https://arxiv.org/abs/2605.24624">arXiv</a>
+            /
+            <a href="https://github.com/ChrisG777/i2i-interp">code</a>
+            <p></p>
+            <p>
+                FLUX.2's text tokens aren't just holding your prompt. During image editing, they quietly absorb the reference image's color and style, which then causally drive what the output looks like. Through causal interventions, we trace this surprising routing: reference info flows through text tokens to the output, instead of directly from reference to noise.
+            </p>
+          </td>
+        </tr>
 
         <!-- When are concepts erased Entry -->
         <tr onmouseout="where_stop()" onmouseover="where_start()">
