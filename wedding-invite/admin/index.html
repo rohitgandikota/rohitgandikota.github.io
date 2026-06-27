@@ -467,7 +467,7 @@
         '<td>'+(s==='yes'?(esc(g.guests)||'1'):'<span class="muted">—</span>')+'</td>'+
         '<td>'+(esc(g.events)||'<span class="muted">—</span>')+'</td>'+
         '<td>'+(esc(g.meal)||'<span class="muted">—</span>')+'</td>'+
-        '<td>'+(g.song?esc(String(g.song).replace(/\n/g,', ')):'<span class="muted">—</span>')+'</td>'+
+        '<td>'+(g.song?'<div class="noteclip" data-full="'+esc(String(g.song))+'">'+esc(String(g.song).replace(/\n/g,', '))+'</div>':'<span class="muted">—</span>')+'</td>'+
         '<td>'+(g.message?'<div class="noteclip" data-full="'+esc(g.message)+'">'+esc(g.message)+'</div>':'<span class="muted">—</span>')+'</td>'+
         '<td>'+when+'</td>'+
         '<td><span class="act">'+acts+'</span></td>'+
