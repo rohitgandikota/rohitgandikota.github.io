@@ -63,10 +63,12 @@
     #backdrop{background-size:cover !important;background-position:center top !important}
     /* India map: stop the location pills (nowrap, absolutely placed) from
        overflowing — drop them below the map as a centered stack instead */
-    .mapwrap{width:min(320px,86vw) !important}
+    .mapwrap{width:min(320px,86vw) !important;display:flex !important;flex-direction:column;align-items:center}
     .maplabel{position:static !important;left:auto !important;top:auto !important;
-              display:flex !important;justify-content:center;width:auto;
-              margin:8px auto 0 !important;white-space:normal !important}
+              display:inline-flex !important;justify-content:center;width:auto;
+              margin:8px 0 !important;white-space:normal !important}
+    .maplabel:first-of-type{order:-1;align-self:flex-end;margin-bottom:10px !important}  /* Patna (north-east) nudged right, above the map */
+    .maplabel:last-of-type{align-self:flex-start}  /* Palasamudram (south) nudged left, below the map */
     .maplabel span:last-child{font-size:14px !important}
   }
 </style>
