@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+<title>RSVP Dashboard · Rohit & Aditi</title>
+
+<!-- Same Apps Script Web App URL as the invite page (ends /exec). -->
+<script>
+  const API_URL = "https://script.google.com/macros/s/AKfycbwm8VPVZllFB7M8Y9-ryF896OKMKhObWXoGXHzpDE6AmdoZZunA8hgY9phxZXQFfM7sOQ/exec";
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,600&family=Mukta:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  :root{ --bg:#F5F0E7; --surface:#FFFCF6; --ink:#5C3540; --ink-soft:#9E7680; --primary:#CE8678; --accent:#B5646A; --gold:#C0A07E; --petal:#E6A89F; --halo:rgba(206,134,120,.14);
+         --yes:#5a8f63; --no:#c0726c; --pending:#bba36a; }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:'Mukta',sans-serif;-webkit-font-smoothing:antialiased}
+  .hidden{display:none !important}
+  a{color:inherit}
+  .wrap{max-width:1140px;margin:0 auto;padding:28px 20px 80px}
+  .serif{font-family:'Cormorant Garamond',serif}
+  .kicker{font-family:'Marcellus',serif;letter-spacing:.3em;text-transform:uppercase;font-size:11px;color:var(--gold)}
+
+  /* gate */
+  #gate{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 38%,var(--surface),var(--bg));z-index:50;padding:24px}
+  .gate-card{background:var(--surface);border:1px solid rgba(0,0,0,.08);border-radius:20px;padding:34px;max-width:380px;width:100%;text-align:center;box-shadow:0 34px 80px -50px rgba(90,22,32,.6)}
+  input.key{width:100%;padding:13px 15px;border-radius:12px;border:1px solid rgba(0,0,0,.16);background:var(--bg);font-size:16px;margin-top:18px}
+  input.key:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px var(--halo)}
+  .btn{cursor:pointer;background:var(--ink);color:var(--bg);padding:13px 20px;border-radius:12px;text-align:center;font-family:'Marcellus',serif;letter-spacing:.14em;text-transform:uppercase;font-size:12px;border:none;font-weight:600}
+  .btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--gold)}
+  .btn:hover{filter:brightness(1.08)}
+
+  /* header */
+  .head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:26px}
+  h1.title{margin:6px 0 0;font-family:'Cormorant Garamond',serif;font-weight:600;font-size:clamp(34px,6vw,52px)}
+
+  /* stat cards */
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-bottom:22px}
+  .stat{background:var(--surface);border:1px solid rgba(0,0,0,.06);border-radius:16px;padding:18px 20px;box-shadow:0 22px 50px -42px rgba(90,22,32,.6)}
+  .stat .n{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:42px;line-height:1}
+  .stat .l{margin-top:6px;font-family:'Marcellus',serif;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-soft)}
+
+  .panels{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:22px}
+  @media(max-width:760px){.panels{grid-template-columns:1fr}}
+  .panel{background:var(--surface);border:1px solid rgba(0,0,0,.06);border-radius:18px;padding:22px;box-shadow:0 22px 50px -42px rgba(90,22,32,.6)}
+  .panel h3{margin:0 0 16px;font-family:'Marcellus',serif;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-soft);font-weight:600}
+
+  .barrow{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+  .barrow .name{width:110px;font-size:14px}
+  .bartrack{flex:1;display:block;height:14px;background:rgba(0,0,0,.06);border-radius:999px;overflow:hidden}
+  .barfill{display:block;height:100%;border-radius:999px}
+  .barrow .v{width:64px;text-align:right;font-size:13px;color:var(--ink-soft)}
+
+  /* table */
+  .toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:14px}
+  .search{flex:1;min-width:180px;padding:11px 14px;border-radius:10px;border:1px solid rgba(0,0,0,.14);background:var(--surface);font-size:15px}
+  .search:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px var(--halo)}
+  .filter{cursor:pointer;padding:9px 14px;border-radius:999px;border:1px solid rgba(0,0,0,.14);font-size:13px;background:var(--surface);user-select:none}
+  .filter.active{background:var(--ink);color:var(--bg);border-color:transparent}
+  .tablewrap{background:var(--surface);border:1px solid rgba(0,0,0,.06);border-radius:18px;overflow:hidden;box-shadow:0 22px 50px -42px rgba(90,22,32,.6)}
+  table{width:100%;border-collapse:collapse;font-size:14px}
+  th,td{text-align:left;padding:12px 14px;border-bottom:1px solid rgba(0,0,0,.05);vertical-align:top}
+  th{font-family:'Marcellus',serif;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft);font-weight:600;background:var(--bg);position:sticky;top:0}
+  tr:last-child td{border-bottom:none}
+  .badge{display:inline-block;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:700;letter-spacing:.04em}
+  .badge.yes{background:rgba(90,143,99,.16);color:var(--yes)}
+  .badge.no{background:rgba(192,114,108,.16);color:var(--no)}
+  .badge.pending{background:rgba(187,163,106,.18);color:#917b3f}
+  .act{display:inline-flex;gap:6px;flex-wrap:wrap}
+  .act a{text-decoration:none;font-size:12px;border:1px solid var(--gold);border-radius:999px;padding:4px 9px;white-space:nowrap}
+  .act a:hover{background:var(--halo)}
+  .muted{color:var(--ink-soft)}
+  .err{color:var(--no);font-size:13px;margin-top:10px;min-height:18px}
+  .spinner{width:30px;height:30px;border:3px solid rgba(0,0,0,.12);border-top-color:var(--primary);border-radius:50%;animation:spin .8s linear infinite;margin:60px auto}
+  @keyframes spin{to{transform:rotate(360deg)}}
+
+  /* add-guest modal */
+  #addModal{position:fixed;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(60,30,40,.45);backdrop-filter:blur(2px)}
+  .modal{background:var(--surface);border:1px solid rgba(0,0,0,.08);border-radius:20px;padding:28px;width:100%;max-width:440px;box-shadow:0 40px 90px -40px rgba(90,22,32,.7);max-height:90vh;overflow-y:auto}
+  .modal h3{margin:0 0 4px;font-family:'Cormorant Garamond',serif;font-weight:700;font-size:30px;color:var(--ink)}
+  .modal .sub{color:var(--ink-soft);font-size:14px;margin-bottom:18px}
+  .modal label{display:block;font-family:'Marcellus',serif;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);margin:14px 0 6px;font-weight:600}
+  .modal input,.modal textarea{width:100%;padding:11px 13px;border-radius:10px;border:1px solid rgba(0,0,0,.16);background:var(--bg);font-size:15px;font-family:'Mukta',sans-serif}
+  .modal input:focus,.modal textarea:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px var(--halo)}
+  .modal textarea{resize:vertical}
+  .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+  .row .btn{flex:1;min-width:120px}
+  .copied{color:var(--yes);font-size:13px;margin-top:8px;min-height:16px}
+</style>
+</head>
+<body>
+
+<!-- ===== KEY GATE ===== -->
+<div id="gate">
+  <div class="gate-card">
+    <div class="kicker">Rohit &amp; Aditi</div>
+    <div class="serif" style="font-weight:700;font-size:30px;margin-top:6px">RSVP Dashboard</div>
+    <div class="muted" style="font-size:14px;margin-top:8px">Enter the admin key to view responses.</div>
+    <input id="keyInput" class="key" type="password" placeholder="Admin key" autocomplete="off">
+    <div class="err" id="gateErr"></div>
+    <button class="btn" id="enterBtn" style="width:100%;margin-top:8px">Unlock</button>
+  </div>
+</div>
+
+<!-- ===== DASHBOARD ===== -->
+<div id="dash" class="hidden">
+  <div class="wrap">
+    <div class="head">
+      <div>
+        <div class="kicker">Rohit &amp; Aditi · 12 · 12 · 2026</div>
+        <h1 class="title">RSVP Dashboard</h1>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button class="btn" id="addBtn">＋ Add guest</button>
+        <button class="btn ghost" id="refreshBtn">↻ Refresh</button>
+        <button class="btn ghost" id="csvBtn">⬇ Export CSV</button>
+        <button class="btn ghost" id="lockBtn">Lock</button>
+      </div>
+    </div>
+
+    <div id="loading"><div class="spinner"></div></div>
+
+    <div id="content" class="hidden">
+      <div class="stats" id="statCards"></div>
+
+      <div class="panels">
+        <div class="panel">
+          <h3>Response breakdown</h3>
+          <div style="display:flex;align-items:center;gap:24px;flex-wrap:wrap">
+            <svg id="donut" width="150" height="150" viewBox="0 0 42 42"></svg>
+            <div id="donutLegend" style="display:flex;flex-direction:column;gap:8px"></div>
+          </div>
+        </div>
+        <div class="panel">
+          <h3>Attendance by event &amp; meal</h3>
+          <div id="bars"></div>
+        </div>
+      </div>
+
+      <div class="toolbar">
+        <input class="search" id="search" placeholder="Search by name…">
+        <div class="filter active" data-f="all">All</div>
+        <div class="filter" data-f="yes">Attending</div>
+        <div class="filter" data-f="no">Declined</div>
+        <div class="filter" data-f="pending">Pending</div>
+      </div>
+
+      <div class="tablewrap">
+        <table>
+          <thead><tr>
+            <th>Name</th><th>Status</th><th>Guests</th><th>Events</th><th>Meal</th><th>Song</th><th>Note</th><th>Responded</th><th>Reach out</th>
+          </tr></thead>
+          <tbody id="rows"></tbody>
+        </table>
+      </div>
+      <div class="muted" id="tableFoot" style="margin-top:12px;font-size:13px"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ADD GUEST MODAL ===== -->
+<div id="addModal" class="hidden">
+  <div class="modal">
+    <!-- form view -->
+    <div id="addForm">
+      <h3>Add a guest</h3>
+      <div class="sub">Creates their row, personal link, and a copy-paste invite.</div>
+      <label>Name <span style="color:var(--no)">*</span></label>
+      <input id="gName" placeholder="e.g. Priya & Arjun" autocomplete="off">
+      <label>Email <span style="font-weight:400;text-transform:none;letter-spacing:0">(optional)</span></label>
+      <input id="gEmail" placeholder="priya@example.com" autocomplete="off">
+      <label>WhatsApp <span style="font-weight:400;text-transform:none;letter-spacing:0">(intl digits, no + or spaces)</span></label>
+      <input id="gPhone" placeholder="919876543210" inputmode="numeric" autocomplete="off">
+      <label>Party size <span style="font-weight:400;text-transform:none;letter-spacing:0">(max people on this invite)</span></label>
+      <input id="gParty" type="number" min="1" value="1">
+      <div class="err" id="addErr"></div>
+      <div class="row">
+        <button class="btn ghost" id="addCancel">Cancel</button>
+        <button class="btn" id="addCreate">Create invite</button>
+      </div>
+    </div>
+
+    <!-- result view -->
+    <div id="addResult" class="hidden">
+      <h3>Invite ready ✦</h3>
+      <div class="sub">Personal link created for <b id="resName"></b>. Copy the message below and send it.</div>
+      <label>Invite message</label>
+      <textarea id="resMsg" rows="4"></textarea>
+      <div class="copied" id="copiedMsg"></div>
+      <div class="row">
+        <button class="btn" id="copyMsg">⧉ Copy message</button>
+        <button class="btn ghost" id="copyLink">⧉ Copy link only</button>
+      </div>
+      <div class="row" id="sendRow">
+        <a class="btn ghost" id="openWa" target="_blank" rel="noopener" style="text-decoration:none">Open in WhatsApp</a>
+        <a class="btn ghost" id="openEmail" target="_blank" rel="noopener" style="text-decoration:none">Open Email</a>
+      </div>
+      <div class="row">
+        <button class="btn ghost" id="addAnother">＋ Add another</button>
+        <button class="btn" id="addDone">Done</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var $ = function(id){ return document.getElementById(id); };
+  var KEY_LS = 'ra_admin_key';
+  var data = [];          // all guests
+  var filter = 'all';
+  var search = '';
+
+  // ---------- auth ----------
+  function unlock(key){
+    $('gateErr').textContent = '';
+    $('enterBtn').textContent = 'Checking…';
+    fetch(API_URL + '?action=admin&key=' + encodeURIComponent(key))
+      .then(function(r){ return r.json(); })
+      .then(function(res){
+        $('enterBtn').textContent = 'Unlock';
+        if (res && res.ok){
+          try{ localStorage.setItem(KEY_LS, key); }catch(_){}
+          $('gate').classList.add('hidden');
+          $('dash').classList.remove('hidden');
+          render(res.guests || []);
+        } else {
+          $('gateErr').textContent = 'That key was not accepted.';
+        }
+      })
+      .catch(function(){ $('enterBtn').textContent='Unlock'; $('gateErr').textContent = 'Network error — try again.'; });
+  }
+  function load(){
+    var key = (function(){ try{ return localStorage.getItem(KEY_LS); }catch(_){ return null; } })();
+    if (key){ $('gate').classList.add('hidden'); $('dash').classList.remove('hidden'); fetchData(key); }
+  }
+  function fetchData(key){
+    $('loading').classList.remove('hidden'); $('content').classList.add('hidden');
+    fetch(API_URL + '?action=admin&key=' + encodeURIComponent(key))
+      .then(function(r){ return r.json(); })
+      .then(function(res){
+        if (res && res.ok){ render(res.guests || []); }
+        else { lock(); }
+      })
+      .catch(function(){ $('loading').innerHTML = '<p style="text-align:center" class="muted">Could not load data.</p>'; });
+  }
+  function lock(){ try{ localStorage.removeItem(KEY_LS); }catch(_){} location.reload(); }
+
+  $('enterBtn').onclick = function(){ unlock($('keyInput').value.trim()); };
+  $('keyInput').addEventListener('keydown', function(e){ if(e.key==='Enter') unlock($('keyInput').value.trim()); });
+  $('lockBtn').onclick = lock;
+  $('refreshBtn').onclick = function(){ var key; try{ key=localStorage.getItem(KEY_LS);}catch(_){ } if(key) fetchData(key); };
+
+  // ---------- render ----------
+  function statusOf(g){ var s=String(g.status||'').toLowerCase(); return s==='yes'?'yes':(s==='no'?'no':'pending'); }
+
+  function render(guests){
+    data = guests;
+    $('loading').classList.add('hidden'); $('content').classList.remove('hidden');
+    renderStats(); renderDonut(); renderBars(); renderTable();
+  }
+
+  function renderStats(){
+    var total=data.length, yes=0, no=0, pending=0, head=0;
+    data.forEach(function(g){ var s=statusOf(g); if(s==='yes'){yes++; head+=Number(g.guests)||1;} else if(s==='no'){no++;} else {pending++;} });
+    var cards=[
+      ['Invited', total, 'var(--ink)'],
+      ['Attending', yes, 'var(--yes)'],
+      ['Declined', no, 'var(--no)'],
+      ['Pending', pending, '#917b3f'],
+      ['Total headcount', head, 'var(--primary)']
+    ];
+    $('statCards').innerHTML = cards.map(function(c){
+      return '<div class="stat"><div class="n" style="color:'+c[2]+'">'+c[1]+'</div><div class="l">'+c[0]+'</div></div>';
+    }).join('');
+  }
+
+  function renderDonut(){
+    var yes=0,no=0,pending=0;
+    data.forEach(function(g){ var s=statusOf(g); if(s==='yes')yes++; else if(s==='no')no++; else pending++; });
+    var total=Math.max(1,yes+no+pending);
+    var segs=[['Attending',yes,'var(--yes)'],['Declined',no,'var(--no)'],['Pending',pending,'var(--pending)']];
+    var svg='<circle cx="21" cy="21" r="15.915" fill="none" stroke="var(--halo)" stroke-width="6"></circle>';
+    var off=25; // start at top
+    segs.forEach(function(s){
+      var pct = s[1]/total*100;
+      if (pct>0){
+        svg+='<circle cx="21" cy="21" r="15.915" fill="none" stroke="'+s[2]+'" stroke-width="6" '+
+             'stroke-dasharray="'+pct.toFixed(2)+' '+(100-pct).toFixed(2)+'" stroke-dashoffset="'+off.toFixed(2)+'"></circle>';
+      }
+      off = (off - pct + 100) % 100;
+    });
+    svg+='<text x="21" y="20.5" text-anchor="middle" font-size="7" font-family="Cormorant Garamond,serif" font-weight="700" fill="var(--ink)">'+(yes+no)+'</text>';
+    svg+='<text x="21" y="26" text-anchor="middle" font-size="2.6" font-family="Marcellus,serif" letter-spacing=".1" fill="var(--ink-soft)">REPLIED</text>';
+    $('donut').innerHTML = svg;
+    $('donutLegend').innerHTML = segs.map(function(s){
+      return '<div style="display:flex;align-items:center;gap:8px;font-size:14px">'+
+        '<span style="width:11px;height:11px;border-radius:50%;background:'+s[2]+';display:inline-block"></span>'+
+        s[0]+' <b style="margin-left:4px">'+s[1]+'</b></div>';
+    }).join('');
+  }
+
+  function renderBars(){
+    var ev={sangeet:0,wedding:0,reception:0};
+    var meal={veg:0,nonveg:0};
+    data.forEach(function(g){
+      if (statusOf(g)!=='yes') return;
+      var n=Number(g.guests)||1;
+      var e=String(g.events||'').toLowerCase();
+      if(e.indexOf('sangeet')>=0)ev.sangeet+=n;
+      if(e.indexOf('wedding')>=0)ev.wedding+=n;
+      if(e.indexOf('reception')>=0)ev.reception+=n;
+      var m=String(g.meal||'').toLowerCase();
+      if(m.indexOf('non')>=0)meal.nonveg+=n; else if(m.indexOf('veg')>=0)meal.veg+=n;
+    });
+    var rows=[
+      ['Sangeet',ev.sangeet,'var(--primary)'],
+      ['Wedding',ev.wedding,'var(--accent)'],
+      ['Reception',ev.reception,'var(--gold)'],
+      ['Veg',meal.veg,'var(--yes)'],
+      ['Non-veg',meal.nonveg,'var(--no)']
+    ];
+    var max=Math.max(1,Math.max.apply(null,rows.map(function(r){return r[1];})));
+    $('bars').innerHTML = rows.map(function(r){
+      var w=(r[1]/max*100).toFixed(1);
+      return '<div class="barrow"><span class="name">'+r[0]+'</span>'+
+        '<span class="bartrack"><span class="barfill" style="width:'+w+'%;background:'+r[2]+'"></span></span>'+
+        '<span class="v">'+r[1]+' guests</span></div>';
+    }).join('');
+  }
+
+  function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
+
+  function renderTable(){
+    var rows = data.filter(function(g){
+      var s=statusOf(g);
+      if (filter==='yes'&&s!=='yes') return false;
+      if (filter==='no'&&s!=='no') return false;
+      if (filter==='pending'&&s!=='pending') return false;
+      if (search && String(g.name||'').toLowerCase().indexOf(search)<0) return false;
+      return true;
+    });
+    $('rows').innerHTML = rows.map(function(g){
+      var s=statusOf(g);
+      var badge='<span class="badge '+s+'">'+(s==='yes'?'Attending':s==='no'?'Declined':'Pending')+'</span>';
+      var when = g.respondedAt ? new Date(g.respondedAt).toLocaleDateString(undefined,{month:'short',day:'numeric'}) : '<span class="muted">—</span>';
+      var acts='';
+      if (g.whatsappSend) acts+='<a href="'+esc(g.whatsappSend)+'" target="_blank" rel="noopener">WhatsApp</a>';
+      if (g.emailSend) acts+='<a href="'+esc(g.emailSend)+'" target="_blank" rel="noopener">Email</a>';
+      if (g.inviteLink) acts+='<a href="'+esc(g.inviteLink)+'" target="_blank" rel="noopener">Link</a>';
+      return '<tr>'+
+        '<td><b>'+esc(g.name)+'</b>'+(g.email?'<br><span class="muted" style="font-size:12px">'+esc(g.email)+'</span>':'')+'</td>'+
+        '<td>'+badge+'</td>'+
+        '<td>'+(s==='yes'?(esc(g.guests)||'1'):'<span class="muted">—</span>')+'</td>'+
+        '<td>'+(esc(g.events)||'<span class="muted">—</span>')+'</td>'+
+        '<td>'+(esc(g.meal)||'<span class="muted">—</span>')+'</td>'+
+        '<td>'+(g.song?esc(g.song):'<span class="muted">—</span>')+'</td>'+
+        '<td style="max-width:200px">'+(g.message?esc(g.message):'<span class="muted">—</span>')+'</td>'+
+        '<td>'+when+'</td>'+
+        '<td><span class="act">'+(acts||'<span class="muted">—</span>')+'</span></td>'+
+      '</tr>';
+    }).join('') || '<tr><td colspan="9" class="muted" style="text-align:center;padding:30px">No guests match.</td></tr>';
+    $('tableFoot').textContent = 'Showing '+rows.length+' of '+data.length+' guests.';
+  }
+
+  $('search').addEventListener('input', function(e){ search=e.target.value.toLowerCase().trim(); renderTable(); });
+  Array.prototype.forEach.call(document.querySelectorAll('.filter'), function(f){
+    f.onclick=function(){
+      Array.prototype.forEach.call(document.querySelectorAll('.filter'),function(x){x.classList.remove('active');});
+      f.classList.add('active'); filter=f.getAttribute('data-f'); renderTable();
+    };
+  });
+
+  // ---------- CSV ----------
+  $('csvBtn').onclick = function(){
+    var cols=['name','email','whatsapp','status','guests','events','meal','song','message','respondedAt'];
+    var head=cols.join(',');
+    var body=data.map(function(g){
+      return cols.map(function(c){
+        var v=g[c]==null?'':String(g[c]);
+        if(c==='respondedAt'&&v) v=new Date(v).toLocaleString();
+        return '"'+v.replace(/"/g,'""')+'"';
+      }).join(',');
+    }).join('\n');
+    var blob=new Blob([head+'\n'+body],{type:'text/csv'});
+    var a=document.createElement('a');
+    a.href=URL.createObjectURL(blob); a.download='rsvp-export.csv'; a.click();
+    setTimeout(function(){ URL.revokeObjectURL(a.href); },1000);
+  };
+
+  // ---------- add guest ----------
+  function adminKey(){ try{ return localStorage.getItem(KEY_LS) || ''; }catch(_){ return ''; } }
+  var lastLink = '';
+
+  function showForm(){
+    $('addResult').classList.add('hidden');
+    $('addForm').classList.remove('hidden');
+    $('gName').value=''; $('gEmail').value=''; $('gPhone').value=''; $('gParty').value='1';
+    $('addErr').textContent=''; $('copiedMsg').textContent='';
+    setTimeout(function(){ $('gName').focus(); }, 30);
+  }
+  function openAdd(){ $('addModal').classList.remove('hidden'); showForm(); }
+  function closeAdd(){ $('addModal').classList.add('hidden'); }
+
+  $('addBtn').onclick = openAdd;
+  $('addCancel').onclick = closeAdd;
+  $('addDone').onclick = closeAdd;
+  $('addAnother').onclick = showForm;
+  $('addModal').addEventListener('click', function(e){ if(e.target===$('addModal')) closeAdd(); });
+
+  $('addCreate').onclick = function(){
+    var name = $('gName').value.trim();
+    if (!name){ $('addErr').textContent = 'Please enter a name.'; $('gName').focus(); return; }
+    var btn = $('addCreate'); if (btn.dataset.busy) return;
+    btn.dataset.busy='1'; var orig=btn.textContent; btn.textContent='Creating…'; btn.style.opacity='.6';
+    $('addErr').textContent='';
+
+    var payload = {
+      action:'addGuest', key: adminKey(),
+      name: name, email: $('gEmail').value.trim(),
+      whatsapp: $('gPhone').value.trim(), partySize: Math.max(1, Number($('gParty').value)||1)
+    };
+    fetch(API_URL, { method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body: JSON.stringify(payload) })
+      .then(function(r){ return r.json(); })
+      .then(function(res){
+        btn.dataset.busy=''; btn.textContent=orig; btn.style.opacity='1';
+        if (!res || !res.ok){ $('addErr').textContent = (res && res.error) ? res.error : 'Could not add guest.'; return; }
+        lastLink = res.link;
+        $('resName').textContent = res.name;
+        $('resMsg').value = res.message;
+        if (res.whatsappUrl){ $('openWa').href = res.whatsappUrl; $('openWa').style.display=''; }
+        else { $('openWa').style.display='none'; }
+        if (res.emailUrl){ $('openEmail').href = res.emailUrl; $('openEmail').style.display=''; }
+        else { $('openEmail').style.display='none'; }
+        $('addForm').classList.add('hidden');
+        $('addResult').classList.remove('hidden');
+        var key = adminKey(); if (key) fetchData(key);  // refresh dashboard with the new guest
+      })
+      .catch(function(){ btn.dataset.busy=''; btn.textContent=orig; btn.style.opacity='1'; $('addErr').textContent='Network error — try again.'; });
+  };
+
+  function copyText(text, okMsg){
+    var done=function(){ $('copiedMsg').textContent = okMsg; setTimeout(function(){ $('copiedMsg').textContent=''; }, 2200); };
+    if (navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(text).then(done, fallback); }
+    else fallback();
+    function fallback(){ var t=$('resMsg'); t.focus(); t.select(); try{ document.execCommand('copy'); }catch(_){} done(); }
+  }
+  $('copyMsg').onclick = function(){ copyText($('resMsg').value, '✓ Message copied — paste into WhatsApp or email.'); };
+  $('copyLink').onclick = function(){ copyText(lastLink, '✓ Link copied.'); };
+
+  load();
+})();
+</script>
+</body>
+</html>
