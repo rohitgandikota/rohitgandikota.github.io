@@ -56,27 +56,29 @@
   .songchip button{border:none;background:transparent;color:var(--ink-soft);cursor:pointer;font-size:17px;line-height:1;padding:0 2px}
   .songchip button:hover{color:var(--accent)}
 
+  /* Backdrop size locked to the SMALL viewport so it never re-scales when the
+     mobile URL bar shows/hides on scroll (no zoom jump). Falls back to vh. */
+  #backdrop{width:100%;height:100vh;height:100svh}
+
   /* ---------- mobile-only tweaks (desktop untouched) ---------- */
   @media (max-width:640px){
     html,body{overflow-x:clip}
     /* backdrop: correct aspect ratio, stays fixed/stationary */
     #backdrop{background-size:cover !important;background-position:center top !important}
-    /* India map: stop the location pills (nowrap, absolutely placed) from
-       overflowing — drop them below the map as a centered stack instead */
-    .mapwrap{width:min(320px,86vw) !important;display:flex !important;flex-direction:column;align-items:center}
-    .maplabel{position:static !important;left:auto !important;top:auto !important;
-              display:inline-flex !important;justify-content:center;width:auto;
-              margin:8px 0 !important;white-space:normal !important}
-    .maplabel:first-of-type{order:-1;align-self:flex-end;margin-bottom:10px !important}  /* Patna (north-east) nudged right, above the map */
-    .maplabel:last-of-type{align-self:flex-start}  /* Palasamudram (south) nudged left, below the map */
-    .maplabel span:last-child{font-size:14px !important}
+    /* India map: place each pill right by its own dot (Patna above its dot,
+       Palasamudram below its dot), centered on the dot and sized to fit */
+    .mapwrap{width:min(340px,90vw) !important}
+    .maplabel{padding:5px 9px !important;white-space:nowrap !important}
+    .maplabel span:last-child{font-size:11.5px !important}
+    .maplabel:first-of-type{left:58% !important;top:25% !important;transform:translateX(-50%) !important}   /* Patna — just above its dot */
+    .maplabel:last-of-type{left:34% !important;top:83% !important;transform:translateX(-50%) !important}     /* Palasamudram — just below its dot */
   }
 </style>
 </head>
 <body>
 
 <!-- backdrop artwork -->
-<div id="backdrop" style="position:fixed;inset:0;z-index:0;pointer-events:none;background-image:url('assets/backdrop.png');background-size:cover;background-position:center top;background-repeat:no-repeat;background-color:var(--bg);opacity:.30"></div>
+<div id="backdrop" style="position:fixed;top:0;left:0;z-index:0;pointer-events:none;background-image:url('assets/backdrop.png');background-size:cover;background-position:center top;background-repeat:no-repeat;background-color:var(--bg);opacity:.30"></div>
 <!-- falling petals -->
 <div id="petals" style="position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden"></div>
 <!-- confetti -->
@@ -204,7 +206,7 @@
         <div style="padding:34px 30px 32px">
           <div style="font-family:'Noto Serif Telugu',serif;font-weight:600;font-size:18px;color:var(--accent)">వివాహ వేడుక</div>
           <h3 style="margin:6px 0 2px;font-family:'Cormorant Garamond',serif;font-weight:700;font-size:34px;color:var(--ink)">The Reception</h3>
-          <div style="font-family:'Marcellus',serif;letter-spacing:.16em;text-transform:uppercase;font-size:12px;color:#83493E;margin-bottom:22px;font-weight:800">The feast &amp; the dancing</div>
+          <div style="font-family:'Marcellus',serif;letter-spacing:.16em;text-transform:uppercase;font-size:12px;color:#83493E;margin-bottom:22px;font-weight:800">The post wedding party</div>
           <div style="display:flex;flex-direction:column;gap:13px;font-size:19px;color:var(--ink)">
             <div style="display:flex;gap:12px;align-items:baseline"><span style="font-family:'Marcellus',serif;font-size:14px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);min-width:62px">When</span><span>Saturday, December 19, 2026 · 7:00 PM</span></div>
             <div style="display:flex;gap:12px;align-items:baseline"><span style="font-family:'Marcellus',serif;font-size:14px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);min-width:62px">Where</span><span>Palasamudram, Andhra Pradesh, India</span></div>
