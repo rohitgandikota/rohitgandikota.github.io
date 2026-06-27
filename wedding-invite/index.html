@@ -76,16 +76,11 @@
 <body>
 
 <!-- backdrop artwork -->
-<div id="backdrop" style="position:fixed;inset:0;z-index:0;pointer-events:none;background-image:url('assets/backdrop.png');background-size:114%;background-position:50% 0%;background-repeat:no-repeat;background-color:var(--bg);opacity:.30"></div>
+<div id="backdrop" style="position:fixed;inset:0;z-index:0;pointer-events:none;background-image:url('assets/backdrop.png');background-size:cover;background-position:center;background-repeat:no-repeat;background-color:var(--bg);opacity:.30"></div>
 <!-- falling petals -->
 <div id="petals" style="position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden"></div>
 <!-- confetti -->
 <div id="confetti" style="position:fixed;inset:0;z-index:70;pointer-events:none;overflow:hidden"></div>
-
-<!-- theme switcher -->
-<div id="themeBar" style="position:fixed;top:18px;right:18px;z-index:40;display:flex;align-items:center;gap:10px;background:var(--surface);padding:8px 12px;border-radius:999px;box-shadow:0 12px 30px -16px rgba(90,22,32,.55);border:1px solid rgba(0,0,0,.06)">
-  <span style="font-family:'Marcellus',serif;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--ink-soft)">Theme</span>
-</div>
 
 <!-- ===================== LOADING ===================== -->
 <div id="loading" style="position:fixed;inset:0;z-index:80;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 38%,var(--surface),var(--bg))">
@@ -140,7 +135,7 @@
 
   <!-- COUNTDOWN -->
   <section style="padding:18px 22px 64px;display:flex;flex-direction:column;align-items:center">
-    <div style="font-family:'Marcellus',serif;letter-spacing:.34em;text-transform:uppercase;font-size:24px;color:#7D3F35;margin-bottom:26px">The countdown to forever</div>
+    <div style="font-family:'Marcellus',serif;letter-spacing:.34em;text-transform:uppercase;font-size:24px;color:#7D3F35;margin-bottom:26px;text-align:center">The countdown to forever</div>
     <div style="display:flex;gap:14px;flex-wrap:wrap;justify-content:center">
       <div style="min-width:96px;background:var(--surface);border:1px solid rgba(0,0,0,.06);border-radius:16px;padding:22px 14px;text-align:center;box-shadow:0 22px 50px -38px rgba(90,22,32,.6)">
         <div id="cdDays" style="font-family:'Cormorant Garamond',serif;font-weight:700;font-size:46px;line-height:1;color:var(--ink)">—</div>
@@ -333,45 +328,6 @@
   "use strict";
   var $ = function(id){ return document.getElementById(id); };
   var token = new URLSearchParams(location.search).get('t');
-
-  // ---------- themes ----------
-  var THEMES = {
-    terracotta:{bg:'#F7F0E6',surface:'#FFFBF4',ink:'#5E3327','ink-soft':'#9C7A66',primary:'#C77B5E',accent:'#B0594A',gold:'#B89072',petal:'#E2A07F',halo:'rgba(199,123,94,.16)'},
-    sage:{bg:'#EFF1E7',surface:'#FBFCF6',ink:'#3D4A33','ink-soft':'#778169',primary:'#7C8F5C',accent:'#C77B5E',gold:'#A89F6A',petal:'#9FB07C',halo:'rgba(124,143,92,.16)'},
-    rosewater:{bg:'#F5F0E7',surface:'#FFFCF6',ink:'#5C3540','ink-soft':'#9E7680',primary:'#CE8678',accent:'#B5646A',gold:'#C0A07E',petal:'#E6A89F',halo:'rgba(206,134,120,.12)'}
-  };
-  var THEME_DOTS = { terracotta:['#C77B5E','#7C8F5C','#5E3327'], sage:['#7C8F5C','#C77B5E','#3D4A33'], rosewater:['#CE8678','#B5646A','#5C3540'] };
-  var curTheme = (function(){ try{ return localStorage.getItem('ra_theme') || 'rosewater'; }catch(_){ return 'rosewater'; } })();
-  function applyTheme(name){
-    curTheme = name;
-    var c = THEMES[name] || THEMES.rosewater;
-    for (var k in c){ document.documentElement.style.setProperty('--'+k, c[k]); }
-    try{ localStorage.setItem('ra_theme', name); }catch(_){}
-    Array.prototype.forEach.call(document.querySelectorAll('[data-theme]'), function(el){
-      var active = el.getAttribute('data-theme') === name;
-      el.style.border = '2px solid ' + (active ? 'var(--primary)' : 'transparent');
-      el.style.background = active ? 'var(--halo)' : 'transparent';
-    });
-  }
-  (function buildThemeBar(){
-    var bar = $('themeBar');
-    Object.keys(THEME_DOTS).forEach(function(name){
-      var sw = document.createElement('div');
-      sw.setAttribute('data-theme', name);
-      sw.title = name;
-      sw.style.cssText = 'display:flex;gap:3px;padding:5px;border-radius:999px;cursor:pointer;align-items:center;transition:transform .2s;border:2px solid transparent';
-      sw.onmouseenter = function(){ sw.style.transform='scale(1.12)'; };
-      sw.onmouseleave = function(){ sw.style.transform='scale(1)'; };
-      THEME_DOTS[name].forEach(function(hex){
-        var d = document.createElement('span');
-        d.style.cssText = 'width:11px;height:11px;border-radius:50%;display:block;background:'+hex;
-        sw.appendChild(d);
-      });
-      sw.onclick = function(){ applyTheme(name); };
-      bar.appendChild(sw);
-    });
-  })();
-  applyTheme(curTheme);
 
   // ---------- petals ----------
   (function petals(){
