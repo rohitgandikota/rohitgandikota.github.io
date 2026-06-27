@@ -58,7 +58,7 @@
 
   /* table */
   .toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:14px}
-  .search{flex:1;min-width:180px;padding:11px 14px;border-radius:10px;border:1px solid rgba(0,0,0,.14);background:var(--surface);font-size:15px}
+  .search{flex:1;min-width:180px;padding:11px 14px;border-radius:10px;border:1px solid rgba(0,0,0,.14);background:var(--surface);font-size:15px;font-family:inherit;color:var(--ink);height:44px}
   .search:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px var(--halo)}
   .filter{cursor:pointer;padding:9px 14px;border-radius:999px;border:1px solid rgba(0,0,0,.14);font-size:13px;background:var(--surface);user-select:none}
   .filter.active{background:var(--ink);color:var(--bg);border-color:transparent}
@@ -152,9 +152,19 @@
         <div class="filter" data-f="pending">Pending</div>
       </div>
       <div class="toolbar">
-        <span style="font-family:'Marcellus',serif;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft);align-self:center">Coming to</span>
-        <div id="fEvents" style="display:flex;gap:6px;align-self:center"></div>
-        <select class="search" id="fMeal" style="flex:0 1 auto;min-width:140px">
+        <select class="search" id="fAttending" style="flex:0 1 auto;min-width:155px">
+          <option value="">Attending: any</option>
+          <option value="sangeet">Attending Sangeet</option>
+          <option value="wedding">Attending Wedding</option>
+          <option value="reception">Attending Reception</option>
+        </select>
+        <select class="search" id="fInvited" style="flex:0 1 auto;min-width:155px">
+          <option value="">Invited: any</option>
+          <option value="sangeet">Invited to Sangeet</option>
+          <option value="wedding">Invited to Wedding</option>
+          <option value="reception">Invited to Reception</option>
+        </select>
+        <select class="search" id="fMeal" style="flex:0 1 auto;min-width:155px">
           <option value="">Meal: any</option>
           <option value="veg">Vegetarian</option>
           <option value="nonveg">Non-vegetarian</option>
@@ -358,35 +368,19 @@
 
   function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
 
-  // multi-select event filter (match guests coming to ANY selected event)
-  var fEventSel = {sangeet:false, wedding:false, reception:false};
-  var EV_FILTER = [['sangeet','Sangeet'],['wedding','Wedding'],['reception','Reception']];
-  function renderEventFilter(){
-    var box=$('fEvents'); box.innerHTML='';
-    EV_FILTER.forEach(function(e){
-      var c=document.createElement('div');
-      c.className='evpick'+(fEventSel[e[0]]?' on':'');
-      c.textContent=e[1];
-      c.onclick=function(){ fEventSel[e[0]]=!fEventSel[e[0]]; renderEventFilter(); renderTable(); };
-      box.appendChild(c);
-    });
-  }
-
   var lastRows = [];   // currently displayed (filtered) rows
   function filteredData(){
-    var ml=$('fMeal').value, mn=$('fMin').value, mx=$('fMax').value;
-    var selEvents = Object.keys(fEventSel).filter(function(k){ return fEventSel[k]; });
+    var at=$('fAttending').value, iv=$('fInvited').value, ml=$('fMeal').value, mn=$('fMin').value, mx=$('fMax').value;
     return data.filter(function(g){
       var s=statusOf(g);
       if (filter==='yes'&&s!=='yes') return false;
       if (filter==='no'&&s!=='no') return false;
       if (filter==='pending'&&s!=='pending') return false;
       if (search && String(g.name||'').toLowerCase().indexOf(search)<0) return false;
-      if (selEvents.length){
-        if (s!=='yes') return false;
-        var evs=String(g.events||'').toLowerCase();
-        if (!selEvents.some(function(k){ return evs.indexOf(k)>=0; })) return false;
-      }
+      // Attending a specific event (must have RSVP'd yes and ticked it)
+      if (at){ if (s!=='yes' || String(g.events||'').toLowerCase().indexOf(at)<0) return false; }
+      // Invited to a specific event (blank Invited = invited to everything)
+      if (iv){ var invs=String(g.invited||'').toLowerCase(); if (invs && invs.indexOf(iv)<0) return false; }
       if (ml){ var m=String(g.meal||'').toLowerCase(); var mk = m.indexOf('non')>=0 ? 'nonveg' : (m.indexOf('veg')>=0 ? 'veg' : ''); if (mk!==ml) return false; }
       var gc=Number(g.guests)||0;
       if (mn!=='' && gc<Number(mn)) return false;
@@ -439,14 +433,12 @@
       f.classList.add('active'); filter=f.getAttribute('data-f'); renderTable();
     };
   });
-  $('fMeal').addEventListener('change', renderTable);
+  ['fAttending','fInvited','fMeal'].forEach(function(id){ $(id).addEventListener('change', renderTable); });
   ['fMin','fMax'].forEach(function(id){ $(id).addEventListener('input', renderTable); });
-  renderEventFilter();
   $('clearF').onclick = function(){
     $('search').value=''; search=''; filter='all';
     Array.prototype.forEach.call(document.querySelectorAll('.filter[data-f]'), function(x){ x.classList.toggle('active', x.getAttribute('data-f')==='all'); });
-    fEventSel = {sangeet:false, wedding:false, reception:false}; renderEventFilter();
-    $('fMeal').value=''; $('fMin').value=''; $('fMax').value='';
+    $('fAttending').value=''; $('fInvited').value=''; $('fMeal').value=''; $('fMin').value=''; $('fMax').value='';
     renderTable();
   };
 
