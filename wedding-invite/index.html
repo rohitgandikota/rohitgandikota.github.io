@@ -150,7 +150,7 @@
     </div>
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(285px,1fr));gap:24px">
 
-      <div style="position:relative;background:var(--surface);border:1px solid rgba(0,0,0,.07);border-radius:22px;box-shadow:0 30px 70px -46px rgba(90,22,32,.6);overflow:hidden">
+      <div data-ev="sangeet" style="position:relative;background:var(--surface);border:1px solid rgba(0,0,0,.07);border-radius:22px;box-shadow:0 30px 70px -46px rgba(90,22,32,.6);overflow:hidden">
         <div style="padding:34px 30px 32px">
           <div style="font-family:'Mukta',sans-serif;font-weight:600;font-size:18px;color:var(--accent)">संगीत</div>
           <h3 style="margin:6px 0 2px;font-family:'Cormorant Garamond',serif;font-weight:700;font-size:34px;color:var(--ink)">The Sangeet</h3>
@@ -168,7 +168,7 @@
         </div>
       </div>
 
-      <div style="position:relative;background:var(--surface);border:1px solid rgba(0,0,0,.07);border-radius:22px;box-shadow:0 30px 70px -46px rgba(90,22,32,.6);overflow:hidden">
+      <div data-ev="wedding" style="position:relative;background:var(--surface);border:1px solid rgba(0,0,0,.07);border-radius:22px;box-shadow:0 30px 70px -46px rgba(90,22,32,.6);overflow:hidden">
         <div style="padding:34px 30px 32px">
           <div style="font-family:'Mukta',sans-serif;font-weight:600;font-size:18px;color:var(--accent)">विवाह</div>
           <h3 style="margin:6px 0 2px;font-family:'Cormorant Garamond',serif;font-weight:700;font-size:34px;color:var(--ink)">The Wedding</h3>
@@ -186,7 +186,7 @@
         </div>
       </div>
 
-      <div style="position:relative;background:var(--surface);border:1px solid rgba(0,0,0,.07);border-radius:22px;box-shadow:0 30px 70px -46px rgba(90,22,32,.6);overflow:hidden">
+      <div data-ev="reception" style="position:relative;background:var(--surface);border:1px solid rgba(0,0,0,.07);border-radius:22px;box-shadow:0 30px 70px -46px rgba(90,22,32,.6);overflow:hidden">
         <div style="padding:34px 30px 32px">
           <div style="font-family:'Noto Serif Telugu',serif;font-weight:600;font-size:18px;color:var(--accent)">వివాహ వేడుక</div>
           <h3 style="margin:6px 0 2px;font-family:'Cormorant Garamond',serif;font-weight:700;font-size:34px;color:var(--ink)">The Reception</h3>
@@ -416,9 +416,16 @@
   $('envBtn').onclick = openEnvelope;
 
   // ===================== RSVP =====================
-  var EVENTS = [['sangeet','Sangeet · Dec 11'],['wedding','Wedding · Dec 12'],['reception','Reception · Dec 19']];
+  var ALL_EVENTS = [['sangeet','Sangeet · Dec 11'],['wedding','Wedding · Dec 12'],['reception','Reception · Dec 19']];
+  var EVENTS = ALL_EVENTS.slice();
   var MEALS  = [['veg','Vegetarian'],['nonveg','Non-vegetarian']];
   var state = { attending:'yes', ev:{sangeet:true,wedding:true,reception:true}, guests:1, meal:'veg', partyMax:1 };
+  function hideUninvitedCards(invited){
+    ['sangeet','wedding','reception'].forEach(function(k){
+      var el = document.querySelector('[data-ev="'+k+'"]');
+      if (el) el.style.display = invited.indexOf(k) >= 0 ? '' : 'none';
+    });
+  }
 
   function makeChip(label, active, onClick, extraClass){
     var el = document.createElement('div');
@@ -474,6 +481,14 @@
       $('heroGreeting').textContent = 'Dear ' + name + ', we would be honoured by your presence.';
       state.partyMax = Math.max(1, Number(d.partyMax)||1);
       $('partyHint').textContent = '(up to ' + state.partyMax + ')';
+
+      // restrict to the events this guest is invited to
+      var invited = (Array.isArray(d.invited) && d.invited.length) ? d.invited : ['sangeet','wedding','reception'];
+      EVENTS = ALL_EVENTS.filter(function(e){ return invited.indexOf(e[0]) >= 0; });
+      state.ev = {sangeet:false, wedding:false, reception:false};
+      invited.forEach(function(k){ state.ev[k] = true; });
+      hideUninvitedCards(invited);
+      renderEvents();
 
       // prefill prior response
       if (d.attending === 'yes' || d.attending === 'no'){
