@@ -72,8 +72,8 @@
   .badge.no{background:rgba(192,114,108,.16);color:var(--no)}
   .badge.pending{background:rgba(187,163,106,.18);color:#917b3f}
   .act{display:inline-flex;gap:6px;flex-wrap:wrap}
-  .act a{text-decoration:none;font-size:12px;border:1px solid var(--gold);border-radius:999px;padding:4px 9px;white-space:nowrap}
-  .act a:hover{background:var(--halo)}
+  .act a,.act button{text-decoration:none;font-size:12px;border:1px solid var(--gold);border-radius:999px;padding:4px 9px;white-space:nowrap;background:transparent;color:var(--ink);cursor:pointer;font-family:inherit}
+  .act a:hover,.act button:hover{background:var(--halo)}
   .muted{color:var(--ink-soft)}
   .err{color:var(--no);font-size:13px;margin-top:10px;min-height:18px}
   .spinner{width:30px;height:30px;border:3px solid rgba(0,0,0,.12);border-top-color:var(--primary);border-radius:50%;animation:spin .8s linear infinite;margin:60px auto}
@@ -91,6 +91,8 @@
   .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
   .row .btn{flex:1;min-width:120px}
   .copied{color:var(--yes);font-size:13px;margin-top:8px;min-height:16px}
+  .evpick{cursor:pointer;padding:8px 14px;border-radius:999px;border:1px solid rgba(0,0,0,.16);font-size:13px;user-select:none;background:var(--bg);color:var(--ink-soft)}
+  .evpick.on{background:var(--ink);color:var(--surface);border-color:transparent}
 </style>
 </head>
 <body>
@@ -149,6 +151,18 @@
         <div class="filter" data-f="no">Declined</div>
         <div class="filter" data-f="pending">Pending</div>
       </div>
+      <div class="toolbar">
+        <span style="font-family:'Marcellus',serif;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft);align-self:center">Coming to</span>
+        <div id="fEvents" style="display:flex;gap:6px;align-self:center"></div>
+        <select class="search" id="fMeal" style="flex:0 1 auto;min-width:140px">
+          <option value="">Meal: any</option>
+          <option value="veg">Vegetarian</option>
+          <option value="nonveg">Non-vegetarian</option>
+        </select>
+        <input class="search" id="fMin" type="number" min="0" placeholder="Min guests" style="flex:0 1 auto;width:130px">
+        <input class="search" id="fMax" type="number" min="0" placeholder="Max guests" style="flex:0 1 auto;width:130px">
+        <div class="filter" id="clearF">✕ Clear</div>
+      </div>
 
       <div class="tablewrap">
         <table>
@@ -178,6 +192,10 @@
       <input id="gPhone" placeholder="919876543210" inputmode="numeric" autocomplete="off">
       <label>Party size <span style="font-weight:400;text-transform:none;letter-spacing:0">(max people on this invite)</span></label>
       <input id="gParty" type="number" min="1" value="1">
+      <label>Invited to <span style="font-weight:400;text-transform:none;letter-spacing:0">(tap to toggle)</span></label>
+      <div id="gInvited" style="display:flex;gap:8px;flex-wrap:wrap"></div>
+      <label>Personal message <span style="font-weight:400;text-transform:none;letter-spacing:0">(optional — link added automatically)</span></label>
+      <textarea id="gMessage" rows="3" placeholder="Add a personal note for this guest…"></textarea>
       <div class="err" id="addErr"></div>
       <div class="row">
         <button class="btn ghost" id="addCancel">Cancel</button>
@@ -213,6 +231,7 @@
   "use strict";
   var $ = function(id){ return document.getElementById(id); };
   var KEY_LS = 'ra_admin_key';
+  var sessionKey = '';    // the key that actually unlocked this session (in-memory, reliable)
   var data = [];          // all guests
   var filter = 'all';
   var search = '';
@@ -226,6 +245,7 @@
       .then(function(res){
         $('enterBtn').textContent = 'Unlock';
         if (res && res.ok){
+          sessionKey = key;
           try{ localStorage.setItem(KEY_LS, key); }catch(_){}
           $('gate').classList.add('hidden');
           $('dash').classList.remove('hidden');
@@ -241,6 +261,7 @@
     if (key){ $('gate').classList.add('hidden'); $('dash').classList.remove('hidden'); fetchData(key); }
   }
   function fetchData(key){
+    sessionKey = key;
     $('loading').classList.remove('hidden'); $('content').classList.add('hidden');
     fetch(API_URL + '?action=admin&key=' + encodeURIComponent(key))
       .then(function(r){ return r.json(); })
@@ -337,20 +358,52 @@
 
   function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
 
-  function renderTable(){
-    var rows = data.filter(function(g){
+  // multi-select event filter (match guests coming to ANY selected event)
+  var fEventSel = {sangeet:false, wedding:false, reception:false};
+  var EV_FILTER = [['sangeet','Sangeet'],['wedding','Wedding'],['reception','Reception']];
+  function renderEventFilter(){
+    var box=$('fEvents'); box.innerHTML='';
+    EV_FILTER.forEach(function(e){
+      var c=document.createElement('div');
+      c.className='evpick'+(fEventSel[e[0]]?' on':'');
+      c.textContent=e[1];
+      c.onclick=function(){ fEventSel[e[0]]=!fEventSel[e[0]]; renderEventFilter(); renderTable(); };
+      box.appendChild(c);
+    });
+  }
+
+  var lastRows = [];   // currently displayed (filtered) rows
+  function filteredData(){
+    var ml=$('fMeal').value, mn=$('fMin').value, mx=$('fMax').value;
+    var selEvents = Object.keys(fEventSel).filter(function(k){ return fEventSel[k]; });
+    return data.filter(function(g){
       var s=statusOf(g);
       if (filter==='yes'&&s!=='yes') return false;
       if (filter==='no'&&s!=='no') return false;
       if (filter==='pending'&&s!=='pending') return false;
       if (search && String(g.name||'').toLowerCase().indexOf(search)<0) return false;
+      if (selEvents.length){
+        if (s!=='yes') return false;
+        var evs=String(g.events||'').toLowerCase();
+        if (!selEvents.some(function(k){ return evs.indexOf(k)>=0; })) return false;
+      }
+      if (ml){ var m=String(g.meal||'').toLowerCase(); var mk = m.indexOf('non')>=0 ? 'nonveg' : (m.indexOf('veg')>=0 ? 'veg' : ''); if (mk!==ml) return false; }
+      var gc=Number(g.guests)||0;
+      if (mn!=='' && gc<Number(mn)) return false;
+      if (mx!=='' && gc>Number(mx)) return false;
       return true;
     });
-    $('rows').innerHTML = rows.map(function(g){
+  }
+
+  function msgFor(g){ return g.inviteMessage || ("Hi "+(g.name||'friend')+"! 💍 Rohit & Aditi are getting married and would love for you to join the celebrations. Here's your personal invitation & RSVP: "+(g.inviteLink||'')); }
+
+  function renderTable(){
+    var rows = filteredData(); lastRows = rows;
+    $('rows').innerHTML = rows.map(function(g, i){
       var s=statusOf(g);
       var badge='<span class="badge '+s+'">'+(s==='yes'?'Attending':s==='no'?'Declined':'Pending')+'</span>';
       var when = g.respondedAt ? new Date(g.respondedAt).toLocaleDateString(undefined,{month:'short',day:'numeric'}) : '<span class="muted">—</span>';
-      var acts='';
+      var acts='<button class="rowcopy" data-i="'+i+'">⧉ Msg</button>';
       if (g.whatsappSend) acts+='<a href="'+esc(g.whatsappSend)+'" target="_blank" rel="noopener">WhatsApp</a>';
       if (g.emailSend) acts+='<a href="'+esc(g.emailSend)+'" target="_blank" rel="noopener">Email</a>';
       if (g.inviteLink) acts+='<a href="'+esc(g.inviteLink)+'" target="_blank" rel="noopener">Link</a>';
@@ -363,25 +416,46 @@
         '<td>'+(g.song?esc(g.song):'<span class="muted">—</span>')+'</td>'+
         '<td style="max-width:200px">'+(g.message?esc(g.message):'<span class="muted">—</span>')+'</td>'+
         '<td>'+when+'</td>'+
-        '<td><span class="act">'+(acts||'<span class="muted">—</span>')+'</span></td>'+
+        '<td><span class="act">'+acts+'</span></td>'+
       '</tr>';
     }).join('') || '<tr><td colspan="9" class="muted" style="text-align:center;padding:30px">No guests match.</td></tr>';
     $('tableFoot').textContent = 'Showing '+rows.length+' of '+data.length+' guests.';
   }
 
+  // copy a row's invite message (event delegation)
+  $('rows').addEventListener('click', function(e){
+    var btn = e.target.closest('.rowcopy'); if (!btn) return;
+    var g = lastRows[Number(btn.getAttribute('data-i'))]; if (!g) return;
+    var text = msgFor(g);
+    var done=function(){ var o=btn.textContent; btn.textContent='✓ Copied'; setTimeout(function(){ btn.textContent=o; }, 1500); };
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(done, done);
+    else { var ta=document.createElement('textarea'); ta.value=text; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy');}catch(_){} document.body.removeChild(ta); done(); }
+  });
+
   $('search').addEventListener('input', function(e){ search=e.target.value.toLowerCase().trim(); renderTable(); });
-  Array.prototype.forEach.call(document.querySelectorAll('.filter'), function(f){
+  Array.prototype.forEach.call(document.querySelectorAll('.filter[data-f]'), function(f){
     f.onclick=function(){
-      Array.prototype.forEach.call(document.querySelectorAll('.filter'),function(x){x.classList.remove('active');});
+      Array.prototype.forEach.call(document.querySelectorAll('.filter[data-f]'),function(x){x.classList.remove('active');});
       f.classList.add('active'); filter=f.getAttribute('data-f'); renderTable();
     };
   });
+  $('fMeal').addEventListener('change', renderTable);
+  ['fMin','fMax'].forEach(function(id){ $(id).addEventListener('input', renderTable); });
+  renderEventFilter();
+  $('clearF').onclick = function(){
+    $('search').value=''; search=''; filter='all';
+    Array.prototype.forEach.call(document.querySelectorAll('.filter[data-f]'), function(x){ x.classList.toggle('active', x.getAttribute('data-f')==='all'); });
+    fEventSel = {sangeet:false, wedding:false, reception:false}; renderEventFilter();
+    $('fMeal').value=''; $('fMin').value=''; $('fMax').value='';
+    renderTable();
+  };
 
-  // ---------- CSV ----------
+  // ---------- CSV (exports the currently filtered rows) ----------
   $('csvBtn').onclick = function(){
-    var cols=['name','email','whatsapp','status','guests','events','meal','song','message','respondedAt'];
+    var rows = filteredData();
+    var cols=['name','email','whatsapp','status','guests','invited','events','meal','song','message','respondedAt'];
     var head=cols.join(',');
-    var body=data.map(function(g){
+    var body=rows.map(function(g){
       return cols.map(function(c){
         var v=g[c]==null?'':String(g[c]);
         if(c==='respondedAt'&&v) v=new Date(v).toLocaleString();
@@ -395,13 +469,27 @@
   };
 
   // ---------- add guest ----------
-  function adminKey(){ try{ return localStorage.getItem(KEY_LS) || ''; }catch(_){ return ''; } }
-  var lastLink = '';
+  function adminKey(){ if (sessionKey) return sessionKey; try{ return localStorage.getItem(KEY_LS) || ''; }catch(_){ return ''; } }
+  var lastLink = '', lastPhone = '', lastEmail = '';
+  var INV_EVENTS = [['sangeet','Sangeet'],['wedding','Wedding'],['reception','Reception']];
+  var invitedState = {sangeet:true, wedding:true, reception:true};
+
+  function renderInvited(){
+    var box = $('gInvited'); box.innerHTML='';
+    INV_EVENTS.forEach(function(e){
+      var c = document.createElement('div');
+      c.className = 'evpick' + (invitedState[e[0]] ? ' on' : '');
+      c.textContent = e[1];
+      c.onclick = function(){ invitedState[e[0]] = !invitedState[e[0]]; renderInvited(); };
+      box.appendChild(c);
+    });
+  }
 
   function showForm(){
     $('addResult').classList.add('hidden');
     $('addForm').classList.remove('hidden');
-    $('gName').value=''; $('gEmail').value=''; $('gPhone').value=''; $('gParty').value='1';
+    $('gName').value=''; $('gEmail').value=''; $('gPhone').value=''; $('gParty').value='1'; $('gMessage').value='';
+    invitedState = {sangeet:true, wedding:true, reception:true}; renderInvited();
     $('addErr').textContent=''; $('copiedMsg').textContent='';
     setTimeout(function(){ $('gName').focus(); }, 30);
   }
@@ -417,33 +505,45 @@
   $('addCreate').onclick = function(){
     var name = $('gName').value.trim();
     if (!name){ $('addErr').textContent = 'Please enter a name.'; $('gName').focus(); return; }
+    var invited = Object.keys(invitedState).filter(function(k){ return invitedState[k]; });
+    if (!invited.length){ $('addErr').textContent = 'Pick at least one event they are invited to.'; return; }
     var btn = $('addCreate'); if (btn.dataset.busy) return;
     btn.dataset.busy='1'; var orig=btn.textContent; btn.textContent='Creating…'; btn.style.opacity='.6';
     $('addErr').textContent='';
 
+    var phone = $('gPhone').value.replace(/[^0-9]/g,'');
+    var email = $('gEmail').value.trim();
     var payload = {
       action:'addGuest', key: adminKey(),
-      name: name, email: $('gEmail').value.trim(),
-      whatsapp: $('gPhone').value.trim(), partySize: Math.max(1, Number($('gParty').value)||1)
+      name: name, email: email, whatsapp: phone,
+      partySize: Math.max(1, Number($('gParty').value)||1),
+      invited: invited, message: $('gMessage').value.trim()
     };
     fetch(API_URL, { method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body: JSON.stringify(payload) })
       .then(function(r){ return r.json(); })
       .then(function(res){
         btn.dataset.busy=''; btn.textContent=orig; btn.style.opacity='1';
         if (!res || !res.ok){ $('addErr').textContent = (res && res.error) ? res.error : 'Could not add guest.'; return; }
-        lastLink = res.link;
+        lastLink = res.link; lastPhone = phone; lastEmail = email;
         $('resName').textContent = res.name;
         $('resMsg').value = res.message;
-        if (res.whatsappUrl){ $('openWa').href = res.whatsappUrl; $('openWa').style.display=''; }
-        else { $('openWa').style.display='none'; }
-        if (res.emailUrl){ $('openEmail').href = res.emailUrl; $('openEmail').style.display=''; }
-        else { $('openEmail').style.display='none'; }
+        refreshSendLinks();              // build WhatsApp/Email links from the (editable) message
         $('addForm').classList.add('hidden');
         $('addResult').classList.remove('hidden');
-        var key = adminKey(); if (key) fetchData(key);  // refresh dashboard with the new guest
+        if (adminKey()) fetchData(adminKey());   // refresh dashboard with the new guest
       })
       .catch(function(){ btn.dataset.busy=''; btn.textContent=orig; btn.style.opacity='1'; $('addErr').textContent='Network error — try again.'; });
   };
+
+  // rebuild WhatsApp/Email links from the current message text so edits are honored
+  function refreshSendLinks(){
+    var text = $('resMsg').value;
+    if (lastPhone){ $('openWa').href = 'https://wa.me/'+lastPhone+'?text='+encodeURIComponent(text); $('openWa').style.display=''; }
+    else { $('openWa').style.display='none'; }
+    if (lastEmail){ $('openEmail').href = 'mailto:'+lastEmail+'?subject='+encodeURIComponent("You're invited to Rohit & Aditi's wedding 💍")+'&body='+encodeURIComponent(text); $('openEmail').style.display=''; }
+    else { $('openEmail').style.display='none'; }
+  }
+  $('resMsg').addEventListener('input', refreshSendLinks);
 
   function copyText(text, okMsg){
     var done=function(){ $('copiedMsg').textContent = okMsg; setTimeout(function(){ $('copiedMsg').textContent=''; }, 2200); };

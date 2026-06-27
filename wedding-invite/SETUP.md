@@ -22,9 +22,14 @@ own row**.
 ## Step 1 — Create the guest Sheet
 
 1. New Google Sheet → rename the tab to **`Guests`**.
-2. In **row 1**, paste these 15 headers across columns A–O (exact spelling):
+2. In **row 1**, paste these 17 headers across columns A–Q (exact spelling):
 
-   `Name` · `Email` · `WhatsApp` · `PartySize` · `Token` · `InviteLink` · `WhatsAppSend` · `EmailSend` · `Status` · `Guests` · `Events` · `Meal` · `Song` · `Message` · `RespondedAt`
+   `Name` · `Email` · `WhatsApp` · `PartySize` · `Invited` · `Token` · `InviteLink` · `WhatsAppSend` · `EmailSend` · `Status` · `Guests` · `Events` · `Meal` · `Song` · `Message` · `InviteMessage` · `RespondedAt`
+
+   > **Already created the sheet earlier?** Just add any missing headers — **`Invited`**
+   > and **`InviteMessage`** — in the next empty columns. Columns are matched by name,
+   > so they can go anywhere. Blank `Invited` = invited to everything. `InviteMessage`
+   > is filled automatically and powers the dashboard's per-guest "Copy message" button.
 
 3. Add guests — you only fill the **first four** columns:
    - **Name** — shown to the guest ("Dear ___"). e.g. `Priya & Arjun`
@@ -38,8 +43,10 @@ own row**.
 
 1. In the Sheet: **Extensions → Apps Script**.
 2. Delete the boilerplate, paste all of `apps-script/Code.gs`.
-3. **Near the top, change `ADMIN_KEY`** from `'CHANGE-ME-...'` to your own long random
-   string (this is the password for your dashboard — keep it private).
+3. **Near the top, change `ADMIN_KEY`** to your own long random string — **do this
+   here in the Apps Script editor, not in the repo's `Code.gs` file.** Apps Script
+   runs on Google's servers and is never public, so your real key stays private.
+   Leave the placeholder in the repo copy; never commit your real key.
 4. **Save**, then reload the Sheet — you'll see a **💍 Wedding** menu.
 
 ## Step 3 — Deploy as a Web App
