@@ -166,28 +166,35 @@
         <div class="filter" data-f="pending">Pending</div>
       </div>
       <div class="toolbar">
-        <select class="search" id="fAttending" style="flex:0 1 auto;min-width:155px">
+        <select class="search" id="fAttending" style="flex:0 1 auto;min-width:175px">
           <option value="">Attending: any</option>
-          <option value="sangeet">Attending Sangeet</option>
-          <option value="wedding">Attending Wedding</option>
-          <option value="reception">Attending Reception</option>
+          <optgroup label="By city">
+            <option value="patna">Attending Patna (Sangeet &amp; Wedding)</option>
+            <option value="palasamudram">Attending Palasamudram (Reception)</option>
+          </optgroup>
+          <optgroup label="By event">
+            <option value="sangeet">Attending Sangeet</option>
+            <option value="wedding">Attending Wedding</option>
+            <option value="reception">Attending Reception</option>
+          </optgroup>
         </select>
-        <select class="search" id="fInvited" style="flex:0 1 auto;min-width:155px">
+        <select class="search" id="fInvited" style="flex:0 1 auto;min-width:175px">
           <option value="">Invited: any</option>
-          <option value="sangeet">Invited to Sangeet</option>
-          <option value="wedding">Invited to Wedding</option>
-          <option value="reception">Invited to Reception</option>
+          <optgroup label="By city">
+            <option value="patna">Invited to Patna (Sangeet &amp; Wedding)</option>
+            <option value="palasamudram">Invited to Palasamudram (Reception)</option>
+          </optgroup>
+          <optgroup label="By event">
+            <option value="sangeet">Invited to Sangeet</option>
+            <option value="wedding">Invited to Wedding</option>
+            <option value="reception">Invited to Reception</option>
+          </optgroup>
         </select>
         <select class="search" id="fSide" style="flex:0 1 auto;min-width:155px">
           <option value="">Side: any</option>
           <option value="Bride &amp; Groom">Bride &amp; Groom</option>
           <option value="Groom's side">Groom's side</option>
           <option value="Bride's side">Bride's side</option>
-        </select>
-        <select class="search" id="fLocation" style="flex:0 1 auto;min-width:170px">
-          <option value="">Location: any</option>
-          <option value="patna">Patna (Sangeet &amp; Wedding)</option>
-          <option value="palasamudram">Palasamudram (Reception)</option>
         </select>
         <select class="search" id="fMeal" style="flex:0 1 auto;min-width:155px">
           <option value="">Meal: any</option>
@@ -410,9 +417,11 @@
   function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
 
   var lastRows = [];   // currently displayed (filtered) rows
+  // a filter value can be a single event or a city (which maps to its events)
   var CITY_EVENTS = { patna:['sangeet','wedding'], palasamudram:['reception'] };
+  function eventsForVal(v){ return CITY_EVENTS[v] || (v ? [v] : []); }
   function filteredData(){
-    var at=$('fAttending').value, iv=$('fInvited').value, sd=$('fSide').value, loc=$('fLocation').value,
+    var at=$('fAttending').value, iv=$('fInvited').value, sd=$('fSide').value,
         ml=$('fMeal').value, mn=$('fMin').value, mx=$('fMax').value;
     return data.filter(function(g){
       var s=statusOf(g);
@@ -420,21 +429,18 @@
       if (filter==='no'&&s!=='no') return false;
       if (filter==='pending'&&s!=='pending') return false;
       if (search && String(g.name||'').toLowerCase().indexOf(search)<0) return false;
-      // Attending a specific event (must have RSVP'd yes and ticked it)
-      if (at){ if (s!=='yes' || String(g.events||'').toLowerCase().indexOf(at)<0) return false; }
-      // Invited to a specific event (blank Invited = invited to everything)
-      if (iv){ var invs=String(g.invited||'').toLowerCase(); if (invs && invs.indexOf(iv)<0) return false; }
+      // Attending: RSVP'd yes and ticked any of the target events (event or city)
+      if (at){
+        var aKeys=eventsForVal(at), evs=String(g.events||'').toLowerCase();
+        if (s!=='yes' || !aKeys.some(function(k){ return evs.indexOf(k)>=0; })) return false;
+      }
+      // Invited: invited to any of the target events (blank Invited = invited to everything)
+      if (iv){
+        var iKeys=eventsForVal(iv), invs=String(g.invited||'').toLowerCase();
+        if (invs && !iKeys.some(function(k){ return invs.indexOf(k)>=0; })) return false;
+      }
       // Side
       if (sd){ if (String(g.side||'') !== sd) return false; }
-      // Location: attending OR invited to any event in that city (blank Invited = invited to all)
-      if (loc){
-        var cityEv = CITY_EVENTS[loc] || [];
-        var evs2=String(g.events||'').toLowerCase();
-        var invs2=String(g.invited||'').toLowerCase();
-        var invitedAll = !invs2;
-        var hit = cityEv.some(function(k){ return evs2.indexOf(k)>=0 || invitedAll || invs2.indexOf(k)>=0; });
-        if (!hit) return false;
-      }
       if (ml){ var m=String(g.meal||'').toLowerCase(); var mk = m.indexOf('non')>=0 ? 'nonveg' : (m.indexOf('veg')>=0 ? 'veg' : ''); if (mk!==ml) return false; }
       var gc=Number(g.guests)||0;
       if (mn!=='' && gc<Number(mn)) return false;
@@ -504,12 +510,12 @@
       f.classList.add('active'); filter=f.getAttribute('data-f'); renderTable();
     };
   });
-  ['fAttending','fInvited','fSide','fLocation','fMeal'].forEach(function(id){ $(id).addEventListener('change', renderTable); });
+  ['fAttending','fInvited','fSide','fMeal'].forEach(function(id){ $(id).addEventListener('change', renderTable); });
   ['fMin','fMax'].forEach(function(id){ $(id).addEventListener('input', renderTable); });
   $('clearF').onclick = function(){
     $('search').value=''; search=''; filter='all';
     Array.prototype.forEach.call(document.querySelectorAll('.filter[data-f]'), function(x){ x.classList.toggle('active', x.getAttribute('data-f')==='all'); });
-    $('fAttending').value=''; $('fInvited').value=''; $('fSide').value=''; $('fLocation').value=''; $('fMeal').value=''; $('fMin').value=''; $('fMax').value='';
+    $('fAttending').value=''; $('fInvited').value=''; $('fSide').value=''; $('fMeal').value=''; $('fMin').value=''; $('fMax').value='';
     renderTable();
   };
 
