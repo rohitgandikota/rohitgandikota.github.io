@@ -85,8 +85,8 @@
   .modal h3{margin:0 0 4px;font-family:'Cormorant Garamond',serif;font-weight:700;font-size:30px;color:var(--ink)}
   .modal .sub{color:var(--ink-soft);font-size:14px;margin-bottom:18px}
   .modal label{display:block;font-family:'Marcellus',serif;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);margin:14px 0 6px;font-weight:600}
-  .modal input,.modal textarea{width:100%;padding:11px 13px;border-radius:10px;border:1px solid rgba(0,0,0,.16);background:var(--bg);font-size:15px;font-family:'Mukta',sans-serif}
-  .modal input:focus,.modal textarea:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px var(--halo)}
+  .modal input,.modal textarea,.modal select{width:100%;padding:11px 13px;border-radius:10px;border:1px solid rgba(0,0,0,.16);background:var(--bg);font-size:15px;font-family:'Mukta',sans-serif;color:var(--ink)}
+  .modal input:focus,.modal textarea:focus,.modal select:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px var(--halo)}
   .modal textarea{resize:vertical}
   .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
   .row .btn{flex:1;min-width:120px}
@@ -139,7 +139,6 @@
           </div>
         </div>
         <div class="panel">
-          <h3>Attendance by event &amp; meal</h3>
           <div id="bars"></div>
         </div>
       </div>
@@ -163,6 +162,17 @@
           <option value="sangeet">Invited to Sangeet</option>
           <option value="wedding">Invited to Wedding</option>
           <option value="reception">Invited to Reception</option>
+        </select>
+        <select class="search" id="fSide" style="flex:0 1 auto;min-width:155px">
+          <option value="">Side: any</option>
+          <option value="Bride &amp; Groom">Bride &amp; Groom</option>
+          <option value="Groom's side">Groom's side</option>
+          <option value="Bride's side">Bride's side</option>
+        </select>
+        <select class="search" id="fLocation" style="flex:0 1 auto;min-width:170px">
+          <option value="">Location: any</option>
+          <option value="patna">Patna (Sangeet &amp; Wedding)</option>
+          <option value="palasamudram">Palasamudram (Reception)</option>
         </select>
         <select class="search" id="fMeal" style="flex:0 1 auto;min-width:155px">
           <option value="">Meal: any</option>
@@ -202,6 +212,12 @@
       <input id="gPhone" placeholder="919876543210" inputmode="numeric" autocomplete="off">
       <label>Party size <span style="font-weight:400;text-transform:none;letter-spacing:0">(max people on this invite)</span></label>
       <input id="gParty" type="number" min="1" value="1">
+      <label>Side</label>
+      <select id="gSide">
+        <option value="Bride &amp; Groom">Bride &amp; Groom</option>
+        <option value="Groom's side">Groom's side</option>
+        <option value="Bride's side">Bride's side</option>
+      </select>
       <label>Invited to <span style="font-weight:400;text-transform:none;letter-spacing:0">(tap to toggle)</span></label>
       <div id="gInvited" style="display:flex;gap:8px;flex-wrap:wrap"></div>
       <label>Personal message <span style="font-weight:400;text-transform:none;letter-spacing:0">(optional — link added automatically)</span></label>
@@ -350,27 +366,36 @@
       var m=String(g.meal||'').toLowerCase();
       if(m.indexOf('non')>=0)meal.nonveg+=n; else if(m.indexOf('veg')>=0)meal.veg+=n;
     });
-    var rows=[
+    var evRows=[
       ['Sangeet',ev.sangeet,'var(--primary)'],
       ['Wedding',ev.wedding,'var(--accent)'],
-      ['Reception',ev.reception,'var(--gold)'],
-      ['Veg',meal.veg,'var(--yes)'],
-      ['Non-veg',meal.nonveg,'var(--no)']
+      ['Reception',ev.reception,'var(--gold)']
     ];
-    var max=Math.max(1,Math.max.apply(null,rows.map(function(r){return r[1];})));
-    $('bars').innerHTML = rows.map(function(r){
-      var w=(r[1]/max*100).toFixed(1);
-      return '<div class="barrow"><span class="name">'+r[0]+'</span>'+
-        '<span class="bartrack"><span class="barfill" style="width:'+w+'%;background:'+r[2]+'"></span></span>'+
-        '<span class="v">'+r[1]+' guests</span></div>';
-    }).join('');
+    var mealRows=[
+      ['Vegetarian',meal.veg,'var(--yes)'],
+      ['Non-vegetarian',meal.nonveg,'var(--no)']
+    ];
+    function barsHtml(rows){
+      var max=Math.max(1,Math.max.apply(null,rows.map(function(r){return r[1];})));
+      return rows.map(function(r){
+        var w=(r[1]/max*100).toFixed(1);
+        return '<div class="barrow"><span class="name">'+r[0]+'</span>'+
+          '<span class="bartrack"><span class="barfill" style="width:'+w+'%;background:'+r[2]+'"></span></span>'+
+          '<span class="v">'+r[1]+' guests</span></div>';
+      }).join('');
+    }
+    $('bars').innerHTML =
+      '<h3 style="margin-top:0">Attendance by event</h3>' + barsHtml(evRows) +
+      '<h3 style="margin-top:26px">Attendance by meal</h3>' + barsHtml(mealRows);
   }
 
   function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
 
   var lastRows = [];   // currently displayed (filtered) rows
+  var CITY_EVENTS = { patna:['sangeet','wedding'], palasamudram:['reception'] };
   function filteredData(){
-    var at=$('fAttending').value, iv=$('fInvited').value, ml=$('fMeal').value, mn=$('fMin').value, mx=$('fMax').value;
+    var at=$('fAttending').value, iv=$('fInvited').value, sd=$('fSide').value, loc=$('fLocation').value,
+        ml=$('fMeal').value, mn=$('fMin').value, mx=$('fMax').value;
     return data.filter(function(g){
       var s=statusOf(g);
       if (filter==='yes'&&s!=='yes') return false;
@@ -381,6 +406,17 @@
       if (at){ if (s!=='yes' || String(g.events||'').toLowerCase().indexOf(at)<0) return false; }
       // Invited to a specific event (blank Invited = invited to everything)
       if (iv){ var invs=String(g.invited||'').toLowerCase(); if (invs && invs.indexOf(iv)<0) return false; }
+      // Side
+      if (sd){ if (String(g.side||'') !== sd) return false; }
+      // Location: attending OR invited to any event in that city (blank Invited = invited to all)
+      if (loc){
+        var cityEv = CITY_EVENTS[loc] || [];
+        var evs2=String(g.events||'').toLowerCase();
+        var invs2=String(g.invited||'').toLowerCase();
+        var invitedAll = !invs2;
+        var hit = cityEv.some(function(k){ return evs2.indexOf(k)>=0 || invitedAll || invs2.indexOf(k)>=0; });
+        if (!hit) return false;
+      }
       if (ml){ var m=String(g.meal||'').toLowerCase(); var mk = m.indexOf('non')>=0 ? 'nonveg' : (m.indexOf('veg')>=0 ? 'veg' : ''); if (mk!==ml) return false; }
       var gc=Number(g.guests)||0;
       if (mn!=='' && gc<Number(mn)) return false;
@@ -433,19 +469,19 @@
       f.classList.add('active'); filter=f.getAttribute('data-f'); renderTable();
     };
   });
-  ['fAttending','fInvited','fMeal'].forEach(function(id){ $(id).addEventListener('change', renderTable); });
+  ['fAttending','fInvited','fSide','fLocation','fMeal'].forEach(function(id){ $(id).addEventListener('change', renderTable); });
   ['fMin','fMax'].forEach(function(id){ $(id).addEventListener('input', renderTable); });
   $('clearF').onclick = function(){
     $('search').value=''; search=''; filter='all';
     Array.prototype.forEach.call(document.querySelectorAll('.filter[data-f]'), function(x){ x.classList.toggle('active', x.getAttribute('data-f')==='all'); });
-    $('fAttending').value=''; $('fInvited').value=''; $('fMeal').value=''; $('fMin').value=''; $('fMax').value='';
+    $('fAttending').value=''; $('fInvited').value=''; $('fSide').value=''; $('fLocation').value=''; $('fMeal').value=''; $('fMin').value=''; $('fMax').value='';
     renderTable();
   };
 
   // ---------- CSV (exports the currently filtered rows) ----------
   $('csvBtn').onclick = function(){
     var rows = filteredData();
-    var cols=['name','email','whatsapp','status','guests','invited','events','meal','song','message','respondedAt'];
+    var cols=['name','email','whatsapp','side','status','guests','invited','events','meal','song','message','respondedAt'];
     var head=cols.join(',');
     var body=rows.map(function(g){
       return cols.map(function(c){
@@ -480,7 +516,7 @@
   function showForm(){
     $('addResult').classList.add('hidden');
     $('addForm').classList.remove('hidden');
-    $('gName').value=''; $('gEmail').value=''; $('gPhone').value=''; $('gParty').value='1'; $('gMessage').value='';
+    $('gName').value=''; $('gEmail').value=''; $('gPhone').value=''; $('gParty').value='1'; $('gMessage').value=''; $('gSide').value="Bride & Groom";
     invitedState = {sangeet:true, wedding:true, reception:true}; renderInvited();
     $('addErr').textContent=''; $('copiedMsg').textContent='';
     setTimeout(function(){ $('gName').focus(); }, 30);
@@ -509,6 +545,7 @@
       action:'addGuest', key: adminKey(),
       name: name, email: email, whatsapp: phone,
       partySize: Math.max(1, Number($('gParty').value)||1),
+      side: $('gSide').value,
       invited: invited, message: $('gMessage').value.trim()
     };
     fetch(API_URL, { method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body: JSON.stringify(payload) })

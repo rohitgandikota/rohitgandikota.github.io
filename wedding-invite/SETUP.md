@@ -22,14 +22,17 @@ own row**.
 ## Step 1 — Create the guest Sheet
 
 1. New Google Sheet → rename the tab to **`Guests`**.
-2. In **row 1**, paste these 17 headers across columns A–Q (exact spelling):
+2. In **row 1**, paste these 18 headers across columns A–R (exact spelling):
 
-   `Name` · `Email` · `WhatsApp` · `PartySize` · `Invited` · `Token` · `InviteLink` · `WhatsAppSend` · `EmailSend` · `Status` · `Guests` · `Events` · `Meal` · `Song` · `Message` · `InviteMessage` · `RespondedAt`
+   `Name` · `Email` · `WhatsApp` · `PartySize` · `Side` · `Invited` · `Token` · `InviteLink` · `WhatsAppSend` · `EmailSend` · `Status` · `Guests` · `Events` · `Meal` · `Song` · `Message` · `InviteMessage` · `RespondedAt`
 
-   > **Already created the sheet earlier?** Just add any missing headers — **`Invited`**
-   > and **`InviteMessage`** — in the next empty columns. Columns are matched by name,
-   > so they can go anywhere. Blank `Invited` = invited to everything. `InviteMessage`
-   > is filled automatically and powers the dashboard's per-guest "Copy message" button.
+   > **Already created the sheet earlier?** Just add any missing headers — **`Side`**,
+   > **`Invited`**, **`InviteMessage`** — in the next empty columns. Columns are matched
+   > by name, so they can go anywhere. `Side` is Bride & Groom / Groom's side / Bride's
+   > side. Blank `Invited` = invited to everything. `InviteMessage` is filled
+   > automatically and powers the dashboard's per-guest "Copy message" button.
+   > **Location** (Patna = Sangeet & Wedding, Palasamudram = Reception) is computed from
+   > events — no column needed.
 
 3. Add guests — you only fill the **first four** columns:
    - **Name** — shown to the guest ("Dear ___"). e.g. `Priya & Arjun`
