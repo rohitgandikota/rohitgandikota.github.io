@@ -56,9 +56,10 @@
   .songchip button{border:none;background:transparent;color:var(--ink-soft);cursor:pointer;font-size:17px;line-height:1;padding:0 2px}
   .songchip button:hover{color:var(--accent)}
 
-  /* Backdrop size locked to the SMALL viewport so it never re-scales when the
-     mobile URL bar shows/hides on scroll (no zoom jump). Falls back to vh. */
-  #backdrop{width:100%;height:100vh;height:100svh}
+  /* Backdrop locked to the LARGE viewport height: a fixed size (so it never
+     re-scales/jumps when the mobile URL bar shows/hides) that's always tall
+     enough to cover the screen (so no gap appears at the bottom). Falls back to vh. */
+  #backdrop{width:100%;height:100vh;height:100lvh}
 
   /* ---------- mobile-only tweaks (desktop untouched) ---------- */
   @media (max-width:640px){
