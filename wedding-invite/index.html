@@ -105,7 +105,7 @@
   <div id="envelope" style="position:relative;width:340px;height:226px;cursor:pointer;perspective:1100px">
     <div style="position:absolute;inset:0;border-radius:12px;background:linear-gradient(155deg,var(--surface),var(--bg));border:1px solid var(--gold);box-shadow:0 30px 60px -28px rgba(90,22,32,.6)"></div>
     <div id="envCard" style="position:absolute;left:18px;right:18px;top:20px;height:150px;border-radius:8px;background:#fff;box-shadow:0 8px 20px -8px rgba(0,0,0,.35);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:3">
-      <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:600;font-size:30px;color:var(--ink);line-height:1">Rohit <span style="color:var(--primary)">&amp;</span> Aditi</div>
+      <div id="envNames" style="font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:600;font-size:30px;color:var(--ink);line-height:1">Rohit <span style="color:var(--primary)">&amp;</span> Aditi</div>
       <div style="margin-top:6px;font-family:'Marcellus',serif;letter-spacing:.28em;font-size:10px;text-transform:uppercase;color:var(--ink-soft)">12 · 12 · 2026</div>
     </div>
     <div style="position:absolute;left:0;right:0;bottom:0;height:120px;border-radius:0 0 12px 12px;background:linear-gradient(165deg,var(--surface),#F2E6CF);clip-path:polygon(0 38%,50% 100%,100% 38%,100% 100%,0 100%);border:1px solid var(--gold);border-top:none"></div>
@@ -122,9 +122,9 @@
   <section style="position:relative;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:88px 22px 60px">
     <div style="font-family:'Noto Serif Telugu','Mukta',serif;font-size:24px;color:var(--accent);letter-spacing:.04em;margin-bottom:10px;margin-top:8px">॥ शुभ विवाह ॥</div>
     <div style="font-family:'Marcellus',serif;letter-spacing:.34em;text-transform:uppercase;font-size:24px;color:#7d3f35;margin-bottom:22px;font-weight:900">Together with their families</div>
-    <h1 style="margin:0;font-family:'Cormorant Garamond',serif;font-weight:600;line-height:.95;font-size:clamp(56px,11vw,128px);color:var(--ink)">Rohit</h1>
+    <h1 id="heroName1" style="margin:0;font-family:'Cormorant Garamond',serif;font-weight:600;line-height:.95;font-size:clamp(56px,11vw,128px);color:var(--ink)">Rohit</h1>
     <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(34px,6vw,62px);color:var(--primary);margin:2px 0;line-height:1">&amp;</div>
-    <h1 style="margin:0;font-family:'Cormorant Garamond',serif;font-weight:600;line-height:.95;font-size:clamp(56px,11vw,128px);color:var(--ink)">Aditi</h1>
+    <h1 id="heroName2" style="margin:0;font-family:'Cormorant Garamond',serif;font-weight:600;line-height:.95;font-size:clamp(56px,11vw,128px);color:var(--ink)">Aditi</h1>
     <div style="margin-top:26px;font-family:'Marcellus',serif;letter-spacing:.18em;text-transform:uppercase;font-size:24px;color:#7D3F35;font-weight:900">are getting married</div>
     <div style="display:flex;align-items:center;gap:16px;margin-top:18px;color:var(--gold)">
       <span style="height:1px;width:46px;background:currentColor;opacity:.6"></span>
@@ -133,6 +133,28 @@
     </div>
     <div id="heroGreeting" style="margin-top:30px;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(22px,3.4vw,30px);color:var(--ink)"></div>
     <div style="margin-top:46px;font-family:'Marcellus',serif;font-size:13px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-soft);display:flex;flex-direction:column;align-items:center;gap:6px;animation:bob 2.6s ease-in-out infinite">Scroll<span style="font-size:14px">↓</span></div>
+  </section>
+
+  <!-- FAMILIES -->
+  <section style="padding:30px 22px 54px;max-width:760px;margin:0 auto">
+    <div style="text-align:center;margin-bottom:30px">
+      <div style="font-family:'Marcellus',serif;letter-spacing:.3em;text-transform:uppercase;font-size:13px;color:#7D3F35">With the blessings of</div>
+      <h2 style="margin:10px 0 0;font-family:'Cormorant Garamond',serif;font-weight:600;font-size:clamp(34px,6vw,52px);color:var(--ink)">Our Families</h2>
+    </div>
+    <div id="famRow" style="display:flex;gap:20px;flex-wrap:wrap">
+      <div id="famGandikota" style="flex:1;min-width:250px;background:var(--surface);border:1px solid rgba(0,0,0,.07);border-radius:18px;padding:28px 22px;text-align:center;box-shadow:0 26px 60px -46px rgba(90,22,32,.6)">
+        <div style="font-family:'Marcellus',serif;letter-spacing:.2em;text-transform:uppercase;font-size:12px;color:var(--accent)">The Gandikotas</div>
+        <div style="height:1px;width:54px;background:var(--gold);opacity:.55;margin:14px auto"></div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:clamp(15px,4.4vw,21px);color:var(--ink);line-height:1.7;white-space:nowrap">Ananda Hari Gopal Gandikota</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:clamp(15px,4.4vw,21px);color:var(--ink);line-height:1.7;white-space:nowrap">Prameela Rani Gandikota</div>
+      </div>
+      <div id="famSingh" style="flex:1;min-width:250px;background:var(--surface);border:1px solid rgba(0,0,0,.07);border-radius:18px;padding:28px 22px;text-align:center;box-shadow:0 26px 60px -46px rgba(90,22,32,.6)">
+        <div style="font-family:'Marcellus',serif;letter-spacing:.2em;text-transform:uppercase;font-size:12px;color:var(--accent)">The Singhs</div>
+        <div style="height:1px;width:54px;background:var(--gold);opacity:.55;margin:14px auto"></div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:clamp(15px,4.4vw,21px);color:var(--ink);line-height:1.7">Balkrishna Singh</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:clamp(15px,4.4vw,21px);color:var(--ink);line-height:1.7">Shipra Singh</div>
+      </div>
+    </div>
   </section>
 
   <!-- COUNTDOWN -->
@@ -319,7 +341,7 @@
 
   <!-- FOOTER -->
   <footer style="text-align:center;padding:64px 22px 90px;border-top:1px solid rgba(0,0,0,.06)">
-    <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:600;font-size:40px;color:var(--ink)">Rohit <span style="color:var(--primary)">&amp;</span> Aditi</div>
+    <div id="footName" style="font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:600;font-size:40px;color:var(--ink)">Rohit <span style="color:var(--primary)">&amp;</span> Aditi</div>
     <div style="margin-top:34px;font-family:'Marcellus',serif;letter-spacing:.28em;text-transform:uppercase;font-size:14px;color:var(--gold)">#RohitWedsAditi</div>
     <div style="margin-top:34px;color:var(--ink-soft);font-size:15px">With love &amp; gratitude · December 2026</div>
   </footer>
@@ -330,6 +352,21 @@
   "use strict";
   var $ = function(id){ return document.getElementById(id); };
   var token = new URLSearchParams(location.search).get('t');
+
+  // ---------- bride's-side guests see Aditi's name first ----------
+  function applyNameOrder(side){
+    var brideSide = (side === "Bride's side");
+    var first = brideSide ? 'Aditi' : 'Rohit';
+    var second = brideSide ? 'Rohit' : 'Aditi';
+    var amp = ' <span style="color:var(--primary)">&amp;</span> ';
+    if ($('heroName1')) $('heroName1').textContent = first;
+    if ($('heroName2')) $('heroName2').textContent = second;
+    if ($('envNames')) $('envNames').innerHTML = first + amp + second;
+    if ($('footName')) $('footName').innerHTML = first + amp + second;
+    document.title = first + ' & ' + second + " · You're Invited";
+    // bride's family card first for bride's-side guests
+    if ($('famSingh')) $('famSingh').style.order = brideSide ? '-1' : '';
+  }
 
   // ---------- petals ----------
   (function petals(){
@@ -480,6 +517,7 @@
       var name = d.name || 'friend';
       $('lockedName').textContent = name;
       $('heroGreeting').textContent = 'Dear ' + name + ', we would be honoured by your presence.';
+      applyNameOrder(d.side);
       state.partyMax = Math.max(1, Number(d.partyMax)||1);
       $('partyHint').textContent = '(up to ' + state.partyMax + ')';
 
