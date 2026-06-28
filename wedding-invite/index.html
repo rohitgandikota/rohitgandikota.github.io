@@ -62,8 +62,10 @@
   /* ---------- mobile-only tweaks (desktop untouched) ---------- */
   @media (max-width:640px){
     html,body{overflow-x:clip}
-    /* backdrop: correct aspect ratio, stays fixed/stationary */
-    #backdrop{background-size:cover !important;background-position:center top !important}
+    /* backdrop (mobile only): fixed small-viewport height + ~90px so it never
+       re-scales on scroll (no zoom jump) yet still reaches past the URL-bar
+       area when it hides (no cream gap at the bottom). Desktop is untouched. */
+    #backdrop{background-size:cover !important;background-position:center top !important;height:calc(100svh + 90px) !important}
     /* India map: place each pill right by its own dot (Patna above its dot,
        Palasamudram below its dot), centered on the dot and sized to fit */
     .mapwrap{width:min(340px,90vw) !important}
