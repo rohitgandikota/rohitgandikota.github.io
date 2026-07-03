@@ -124,7 +124,7 @@
   .corner.bl{bottom:16px;left:16px;transform:rotate(270deg)}
 
   /* ==================== toran (marigold garland) ==================== */
-  .toran{position:absolute;top:0;left:0;width:100%;height:126px;pointer-events:none;overflow:visible}
+  .toran{position:absolute;top:0;left:0;width:100%;pointer-events:none;overflow:visible}
 
   /* ==================== hero ==================== */
   .hero{position:relative;min-height:100vh;min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:150px 22px 64px}
@@ -220,8 +220,7 @@
   #envelopeOverlay{position:fixed;inset:0;z-index:60;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:30px;padding:24px;background:radial-gradient(circle at 50% 36%,var(--surface),var(--bg));transition:opacity .55s ease .72s}
   #envelope{position:relative;width:360px;height:246px;cursor:pointer;perspective:1100px}
   .env-body{position:absolute;inset:0;border-radius:14px;background:linear-gradient(160deg,var(--surface),#F6ECD6);border:1px solid var(--gold);box-shadow:0 36px 70px -30px rgba(71,22,31,.65)}
-  #envCard{position:absolute;left:26px;right:26px;top:30px;height:148px;border-radius:9px;background:var(--surface);border:1px solid var(--gold-pale);box-shadow:0 10px 24px -10px rgba(71,22,31,.4);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:2}
-  #envCard .env-lotus{color:var(--gold)}
+  #envCard{position:absolute;left:26px;right:26px;top:30px;height:148px;border-radius:9px;background:var(--surface);border:1px solid var(--gold-pale);box-shadow:0 10px 24px -10px rgba(71,22,31,.4);display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding-bottom:8px;z-index:2}
   .env-addr{position:absolute;left:0;right:0;bottom:16px;z-index:7;display:flex;flex-direction:column;align-items:center;gap:6px;pointer-events:none}
   #envNames{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:600;font-size:27px;color:var(--maroon);line-height:1}
   .env-date{font-family:'Marcellus',serif;letter-spacing:.3em;font-size:10.5px;text-transform:uppercase;color:var(--gold-deep)}
@@ -235,7 +234,18 @@
   .env-eyebrow{font-family:'Marcellus',serif;letter-spacing:.36em;text-transform:uppercase;font-size:12px;color:var(--gold-deep)}
 
   /* ==================== living ambience ==================== */
+  /* heritage palace backdrop, recolored into the blue-chintz family */
+  #backdrop{position:fixed;inset:0;z-index:0;pointer-events:none;
+    background:url('assets/backdrop.png') center top/cover no-repeat;
+    opacity:.12;filter:hue-rotate(168deg) saturate(.5) brightness(1.04);
+    -webkit-mask-image:linear-gradient(180deg,#000 0%,#000 52%,transparent 90%);
+    mask-image:linear-gradient(180deg,#000 0%,#000 52%,transparent 90%)}
   .petal-canvas{position:fixed;inset:0;width:100%;height:100%;pointer-events:none}
+  .chintz-crown{display:flex;justify-content:center;margin:-4px 0 14px}
+  .chintz-crown svg{width:min(250px,72%);height:auto}
+  .env-sprig svg{width:132px;height:auto;display:block}
+  .foot-sprig{display:flex;justify-content:center;margin-bottom:12px}
+  .foot-sprig svg{width:230px;height:auto}
   .branch{position:fixed;top:-26px;width:clamp(130px,23vw,330px);z-index:0;pointer-events:none;will-change:transform}
   .branch.left{left:-20px}
   .branch.right{right:-20px}
@@ -245,6 +255,7 @@
   @keyframes swayL{from{transform:rotate(-.6deg)}to{transform:rotate(1.1deg)}}
   @keyframes swayR{from{transform:rotate(.6deg)}to{transform:rotate(-1.1deg)}}
   .toran .toran-sway{animation:toranSway 12s ease-in-out infinite alternate;transform-origin:top center}
+  .toran .toran-sway.t2{animation-duration:16s;animation-delay:-5s}
   @keyframes toranSway{from{transform:rotate(-.25deg)}to{transform:rotate(.25deg)}}
 
   /* marigold garland scroll rail (wide screens only) */
@@ -255,8 +266,8 @@
   .rail-fill::before{content:'';position:absolute;left:0;top:0;width:100%;height:200vh;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='30' viewBox='0 0 24 30'%3E%3Ccircle cx='12' cy='15' r='5.4' fill='%23CE7420'/%3E%3Ccircle cx='12' cy='15' r='5.4' fill='none' stroke='%23E89A3C' stroke-width='1.8' stroke-dasharray='1.6 2'/%3E%3Ccircle cx='12' cy='15' r='2.4' fill='%23F2B04B'/%3E%3Cpath d='M12 4 Q8 8 12 10 Q16 8 12 4z' fill='%2375804D'/%3E%3C/svg%3E");background-repeat:repeat-y;background-position:center top;background-size:24px 30px}
   .rail-dot{position:absolute;left:50%;top:0%;width:9px;height:9px;transform:translate(-50%,-50%) rotate(45deg);background:var(--gold);box-shadow:0 0 0 3px var(--bg),0 0 0 4px var(--gold-soft)}
 
-  /* ghost paisley watermarks */
-  .ghost{position:absolute;color:var(--gold-deep);opacity:.07;pointer-events:none;z-index:0;will-change:transform}
+  /* ghost paisley watermarks (slate blue, ties the chintz corners to the sections) */
+  .ghost{position:absolute;color:#5B7A94;opacity:.075;pointer-events:none;z-index:0;will-change:transform}
   .ghost svg{width:100%;height:auto;display:block}
   @media (max-width:900px){.ghost{display:none}}
 
@@ -274,7 +285,6 @@
   /* ==================== mobile ==================== */
   @media (max-width:640px){
     html,body{overflow-x:clip}
-    .toran{height:104px}
     .hero{padding-top:128px}
     .rsvp-card{padding:30px 22px}
     .done-card{padding:38px 22px}
@@ -391,43 +401,29 @@
         <ellipse cx="18.4" cy="10.2" rx="2.1" ry="2.4"/>
       </g>
     </symbol>
-    <!-- marigold garland building blocks -->
-    <g id="mg-flower">
-      <circle r="8.6" fill="#CE7420"/>
-      <circle r="8.6" fill="none" stroke="#E89A3C" stroke-width="2.6" stroke-dasharray="2 2.4"/>
-      <circle r="5" fill="#E89A3C"/>
-      <circle r="5" fill="none" stroke="#F6BE68" stroke-width="1.9" stroke-dasharray="1.7 2"/>
-      <circle r="1.7" fill="#8F4E12"/>
-    </g>
-    <g id="mg-leaves">
-      <path d="M0 0 Q-7 -1 -11.5 5 Q-4 6.5 0 0 Z" fill="#75804D"/>
-      <path d="M0 0 Q7 -1 11.5 5 Q4 6.5 0 0 Z" fill="#66713F"/>
-    </g>
-    <pattern id="toranP" width="58" height="126" patternUnits="userSpaceOnUse">
-      <!-- long strand -->
-      <g transform="translate(15,0)">
-        <line x1="0" y1="0" x2="0" y2="66" stroke="#8C6F35" stroke-width="1.1"/>
-        <use href="#mg-leaves" y="7"/>
-        <use href="#mg-flower" y="22"/>
-        <use href="#mg-flower" y="40"/>
-        <use href="#mg-leaves" y="52"/>
-        <use href="#mg-flower" y="66"/>
-        <path d="M0 74 L-3.4 82 L0 80 L3.4 82 Z" fill="#B08D4A"/>
-      </g>
-      <!-- short strand -->
-      <g transform="translate(44,0)">
-        <line x1="0" y1="0" x2="0" y2="44" stroke="#8C6F35" stroke-width="1.1"/>
-        <use href="#mg-leaves" y="6"/>
-        <use href="#mg-flower" y="20"/>
-        <use href="#mg-leaves" y="32"/>
-        <use href="#mg-flower" y="44"/>
-        <path d="M0 52 L-3.4 60 L0 58 L3.4 60 Z" fill="#B08D4A"/>
-      </g>
-    </pattern>
+    <!-- painterly gradients for the garland, greenery & bells -->
+    <radialGradient id="gradMgA" cx="0.42" cy="0.38" r="0.75">
+      <stop offset="0" stop-color="#FFC968"/><stop offset="0.42" stop-color="#F5A02C"/>
+      <stop offset="0.76" stop-color="#DD7A12"/><stop offset="1" stop-color="#B85B06"/>
+    </radialGradient>
+    <radialGradient id="gradMgB" cx="0.42" cy="0.38" r="0.75">
+      <stop offset="0" stop-color="#F5B14E"/><stop offset="0.42" stop-color="#E08818"/>
+      <stop offset="0.76" stop-color="#C26509"/><stop offset="1" stop-color="#94430A"/>
+    </radialGradient>
+    <linearGradient id="gradMango" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#4E6032"/><stop offset="1" stop-color="#87995C"/>
+    </linearGradient>
+    <linearGradient id="gradBell" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#EAD394"/><stop offset="0.55" stop-color="#C6A35C"/><stop offset="1" stop-color="#8A6B32"/>
+    </linearGradient>
+    <radialGradient id="gradJasBud" cx="0.4" cy="0.35" r="0.8">
+      <stop offset="0" stop-color="#FFFEF6"/><stop offset="1" stop-color="#EDE0BE"/>
+    </radialGradient>
   </defs>
 </svg>
 
-<!-- living ambience: far petals → palash branches → content → near petals → garland rail -->
+<!-- living ambience: backdrop → far petals → chintz corners → content → near petals → garland rail -->
+<div id="backdrop" aria-hidden="true"></div>
 <canvas id="petalsBack" class="petal-canvas" style="z-index:0" aria-hidden="true"></canvas>
 <div id="branchL" class="branch left" aria-hidden="true"><div class="sway"></div></div>
 <div id="branchR" class="branch right" aria-hidden="true"><div class="sway"></div></div>
@@ -465,7 +461,7 @@
   <div id="envelope">
     <div class="env-body"></div>
     <div id="envCard">
-      <svg class="env-lotus orn" width="86" height="23" aria-hidden="true"><use href="#sym-lotus"/></svg>
+      <div id="envSprig" class="env-sprig" aria-hidden="true"></div>
     </div>
     <div class="env-vee"></div>
     <div id="envFlap"></div>
@@ -483,7 +479,7 @@
 
   <!-- HERO -->
   <section class="hero">
-    <svg class="toran" aria-hidden="true"><g class="toran-sway"><rect width="100%" height="3" y="0" fill="#B08D4A" opacity=".55"/><rect width="100%" height="126" fill="url(#toranP)"/></g></svg>
+    <svg class="toran" aria-hidden="true" preserveAspectRatio="xMidYMin meet"><g class="toran-sway" id="toranBack"></g><g class="toran-sway t2" id="toranFront"></g></svg>
     <div class="hero-mandala" id="heroMandala" aria-hidden="true"></div>
     <div class="hero-inner">
       <div class="shubh" lang="hi">॥ शुभ विवाह ॥</div>
@@ -687,6 +683,7 @@
 
     <!-- FORM -->
     <div id="rsvpForm" class="card rsvp-card reveal">
+      <div id="rsvpCrown" class="chintz-crown" aria-hidden="true"></div>
       <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap">
         <span class="lbl">RSVP for</span>
         <span id="lockedName" style="font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:700;font-size:28px;color:var(--maroon)">friend</span>
@@ -748,6 +745,7 @@
 
   <!-- FOOTER -->
   <footer>
+    <div id="footSprig" class="foot-sprig" aria-hidden="true"></div>
     <div class="foot-medal" id="footMedal">
       <div class="foot-mono">R <span class="amp" style="font-size:24px;margin:0 2px">&amp;</span> A</div>
     </div>
@@ -869,69 +867,379 @@
                u*u*u*p0[1] + 3*u*u*t*p1[1] + 3*u*t*t*p2[1] + t*t*t*p3[1] ];
     }
 
-    // ---- palash "flame of the forest" corner branches ----
-    function blossom(rnd, s, deep){
-      var g = document.createElementNS(NS,'g');
-      for (var p=0;p<5;p++){
-        var pe = document.createElementNS(NS,'path');
-        pe.setAttribute('d','M0 0 C 3.4 -3.2 4.6 -9 0 -13 C -4.6 -9 -3.4 -3.2 0 0 Z');
-        pe.setAttribute('transform','rotate('+(p*72 + (rnd()*14-7)).toFixed(1)+') scale('+s.toFixed(2)+')');
-        pe.setAttribute('fill', p%2 ? (deep?'#C24726':'#D95B33') : (deep?'#B03D1F':'#C64B28'));
-        g.appendChild(pe);
+    function el(name, attrs){
+      var e = document.createElementNS(NS,name);
+      for (var k in attrs) e.setAttribute(k, attrs[k]);
+      return e;
+    }
+    function bezTan(p0,p1,p2,p3,t){
+      var u = 1-t;
+      var x = 3*u*u*(p1[0]-p0[0]) + 6*u*t*(p2[0]-p1[0]) + 3*t*t*(p3[0]-p2[0]);
+      var y = 3*u*u*(p1[1]-p0[1]) + 6*u*t*(p2[1]-p1[1]) + 3*t*t*(p3[1]-p2[1]);
+      var m = Math.sqrt(x*x+y*y)||1;
+      return [x/m, y/m];
+    }
+
+    // ==== marigold pompom templates (scalloped ruffles + gradient, from photo refs) ====
+    function scallopPath(rnd, R, n, amp){
+      var d = '';
+      for (var i=0;i<n;i++){
+        var a0 = (i/n)*6.2832, a1 = ((i+1)/n)*6.2832, am = (a0+a1)/2;
+        var r0 = R*(1+(rnd()*0.09-0.045));
+        var rm = R + amp*(0.7+rnd()*0.6);
+        d += (i ? '' : 'M'+(Math.cos(a0)*r0).toFixed(1)+' '+(Math.sin(a0)*r0).toFixed(1))
+           + ' Q'+(Math.cos(am)*rm).toFixed(1)+' '+(Math.sin(am)*rm).toFixed(1)
+           + ' '+(Math.cos(a1)*R).toFixed(1)+' '+(Math.sin(a1)*R).toFixed(1);
       }
-      var c = document.createElementNS(NS,'circle');
-      c.setAttribute('r',(2.4*s).toFixed(2)); c.setAttribute('fill','#F2B04B');
-      g.appendChild(c);
+      return d+' Z';
+    }
+    function marigold(rnd, R, deepTone){
+      var g = el('g',{});
+      var grad = deepTone ? 'url(#gradMgB)' : 'url(#gradMgA)';
+      var line = deepTone ? '#8A3E05' : '#A44E08';
+      g.appendChild(el('path',{d:scallopPath(rnd,R,11,R*0.17), fill:grad, stroke:line,'stroke-width':'0.7','stroke-linejoin':'round'}));
+      g.appendChild(el('path',{d:scallopPath(rnd,R*0.64,8,R*0.13), fill: deepTone?'#E08F2B':'#F7AF43', stroke:line,'stroke-width':'0.55','stroke-linejoin':'round', opacity:'0.95'}));
+      g.appendChild(el('path',{d:scallopPath(rnd,R*0.36,6,R*0.10), fill: deepTone?'#EFA94A':'#FCC565', stroke:line,'stroke-width':'0.5','stroke-linejoin':'round'}));
+      for (var i=0;i<8;i++){
+        var a = (i/8)*6.2832 + rnd()*0.4;
+        g.appendChild(el('path',{d:'M'+(Math.cos(a)*R*0.72).toFixed(1)+' '+(Math.sin(a)*R*0.72).toFixed(1)+' L'+(Math.cos(a)*R*0.92).toFixed(1)+' '+(Math.sin(a)*R*0.92).toFixed(1),
+          stroke:line,'stroke-width':'0.45', opacity:'0.55'}));
+      }
+      g.appendChild(el('circle',{r:(R*0.1).toFixed(1), fill:line, opacity:'0.9'}));
       return g;
     }
-    function makeBranch(host, seed){
+    // 3 pre-baked variants per tone, reused via <use> to keep the DOM light
+    var genDefs = el('svg',{width:'0', height:'0', style:'position:absolute','aria-hidden':'true'});
+    var defsRoot = el('defs',{});
+    genDefs.appendChild(defsRoot);
+    document.body.appendChild(genDefs);
+    (function bakeMarigolds(){
+      var r = lcg(777);
+      for (var v=0; v<3; v++){
+        [0,1].forEach(function(tone){
+          var t = marigold(r, 10, tone); // unit radius 10
+          t.setAttribute('id','mg'+(tone?'B':'A')+v);
+          defsRoot.appendChild(t);
+        });
+      }
+    })();
+
+    // ---- lanceolate mango leaf with gradient + veins ----
+    function mangoLeaf(rnd){
+      var g = el('g',{});
+      var L = 21+rnd()*8, Wd = 6.2+rnd()*2.2, bend = rnd()*6-3;
+      g.appendChild(el('path',{d:
+        'M0 0 C '+Wd.toFixed(1)+' '+(L*0.22).toFixed(1)+' '+(Wd*0.9+bend).toFixed(1)+' '+(L*0.62).toFixed(1)+' '+bend.toFixed(1)+' '+L.toFixed(1)+
+        ' C '+(-Wd*0.9+bend).toFixed(1)+' '+(L*0.62).toFixed(1)+' '+(-Wd).toFixed(1)+' '+(L*0.22).toFixed(1)+' 0 0 Z',
+        fill:'url(#gradMango)', stroke:'#41522B','stroke-width':'0.6'}));
+      g.appendChild(el('path',{d:'M0 1.5 Q '+(bend*0.5).toFixed(1)+' '+(L*0.55).toFixed(1)+' '+(bend*0.9).toFixed(1)+' '+(L-2).toFixed(1),
+        stroke:'#3C4D27','stroke-width':'0.8', fill:'none'}));
+      for (var i=1;i<=3;i++){
+        var ty = L*0.18*i + 2;
+        g.appendChild(el('path',{d:'M'+(bend*0.1*i).toFixed(1)+' '+ty.toFixed(1)+' q '+(Wd*0.45).toFixed(1)+' '+(L*0.06).toFixed(1)+' '+(Wd*0.6).toFixed(1)+' '+(L*0.16).toFixed(1),
+          stroke:'#4B5D31','stroke-width':'0.4', fill:'none', opacity:'0.8'}));
+      }
+      return g;
+    }
+
+    // ==== chintz block-print florals (indigo blues, sage greens, gold dots) ====
+    var CH = { blueMid:'#4A7BA6', blueDeep:'#2E5E8C', blueLight:'#9FBEDC', blueLine:'#24455F',
+               green:'#71813F', greenDeep:'#4E5F33', greenLight:'#98A968', stem:'#6B5B39', gold:'#B08D4A' };
+    function chPetal(w,l){
+      return 'M0 0 C '+(w*0.85).toFixed(1)+' '+(-l*0.22).toFixed(1)+' '+(w*0.95).toFixed(1)+' '+(-l*0.7).toFixed(1)+' 0 '+(-l).toFixed(1)+
+             ' C '+(-w*0.95).toFixed(1)+' '+(-l*0.7).toFixed(1)+' '+(-w*0.85).toFixed(1)+' '+(-l*0.22).toFixed(1)+' 0 0 Z';
+    }
+    function chFaceBloom(rnd, R){
+      var g = el('g',{});
+      for (var i=0;i<8;i++){
+        var pg = el('g',{transform:'rotate('+((i/8)*360 + rnd()*6-3).toFixed(1)+')'});
+        pg.appendChild(el('path',{d:chPetal(R*0.34, R), fill: i%2 ? CH.blueMid : CH.blueDeep, stroke:CH.blueLine,'stroke-width':'1'}));
+        pg.appendChild(el('path',{d:chPetal(R*0.18, R*0.6), fill:CH.blueLight, transform:'translate(0 '+(-R*0.08).toFixed(1)+')', opacity:'0.92'}));
+        pg.appendChild(el('path',{d:'M0 '+(-R*0.3).toFixed(1)+' L0 '+(-R*0.8).toFixed(1), stroke:CH.blueLine,'stroke-width':'0.6', opacity:'0.7'}));
+        g.appendChild(pg);
+      }
+      for (var j=0;j<6;j++){
+        g.appendChild(el('path',{d:chPetal(R*0.15, R*0.44), fill:CH.blueDeep, stroke:CH.blueLine,'stroke-width':'0.6',
+          transform:'rotate('+((j/6)*360+30).toFixed(1)+')'}));
+      }
+      g.appendChild(el('circle',{r:(R*0.2).toFixed(1), fill:'#F2E8D0', stroke:CH.blueLine,'stroke-width':'0.8'}));
+      for (var k=0;k<8;k++){
+        var a = (k/8)*6.2832;
+        g.appendChild(el('circle',{cx:(Math.cos(a)*R*0.13).toFixed(1), cy:(Math.sin(a)*R*0.13).toFixed(1), r:Math.max(0.7,R*0.028).toFixed(1), fill:CH.blueLine}));
+      }
+      g.appendChild(el('circle',{r:(R*0.06).toFixed(1), fill:CH.gold}));
+      return g;
+    }
+    function chProfileBloom(rnd, S){
+      var g = el('g',{});
+      [-52,-26,0,26,52].forEach(function(a, idx){
+        g.appendChild(el('path',{d:chPetal(S*0.17, S*(idx===2 ? 1.05 : 0.9-Math.abs(a)/300)),
+          fill: idx%2 ? CH.blueMid : CH.blueLight, stroke:CH.blueLine,'stroke-width':'0.8', transform:'rotate('+a+')'}));
+      });
+      g.appendChild(el('path',{d:chPetal(S*0.19, S*0.7), fill:CH.blueDeep, stroke:CH.blueLine,'stroke-width':'0.8'}));
+      g.appendChild(el('path',{d:'M'+(-S*0.34).toFixed(1)+' 0 Q 0 '+(S*0.42).toFixed(1)+' '+(S*0.34).toFixed(1)+' 0 L '+(S*0.2).toFixed(1)+' '+(-S*0.08).toFixed(1)+' L '+(-S*0.2).toFixed(1)+' '+(-S*0.08).toFixed(1)+' Z',
+        fill:CH.greenDeep, stroke:CH.blueLine,'stroke-width':'0.8'}));
+      for (var d3=0; d3<3; d3++){
+        g.appendChild(el('circle',{cx:((d3-1)*S*0.2).toFixed(1), cy:(-S*(1.04+(d3===1?0.14:0.02))).toFixed(1), r:Math.max(0.8,S*0.05).toFixed(1), fill:CH.gold}));
+      }
+      return g;
+    }
+    function chBud(rnd, S){
+      var g = el('g',{});
+      g.appendChild(el('path',{d:chPetal(S*0.3, S), fill:CH.blueMid, stroke:CH.blueLine,'stroke-width':'0.8'}));
+      g.appendChild(el('path',{d:chPetal(S*0.15, S*0.78), fill:CH.blueLight, transform:'rotate(13)'}));
+      g.appendChild(el('path',{d:'M'+(-S*0.26).toFixed(1)+' 0 Q 0 '+(S*0.32).toFixed(1)+' '+(S*0.26).toFixed(1)+' 0 Q 0 '+(S*0.14).toFixed(1)+' '+(-S*0.26).toFixed(1)+' 0 Z',
+        fill:CH.greenDeep, stroke:CH.blueLine,'stroke-width':'0.6'}));
+      return g;
+    }
+    function chLeaf(rnd, L){
+      var g = el('g',{});
+      var Wd = L*0.34;
+      function edge(sign){
+        var pts = 'M0 0', n = 6;
+        for (var i=1;i<=n;i++){
+          var t = i/n, y = -L*t;
+          var wx = sign*Wd*Math.sin(Math.PI*Math.min(1,t*1.05));
+          pts += ' Q '+(wx+sign*L*0.05).toFixed(1)+' '+(y+L/(n*2)).toFixed(1)+' '+wx.toFixed(1)+' '+y.toFixed(1);
+        }
+        return pts;
+      }
+      g.appendChild(el('path',{d:edge(1)+' L0 '+(-L).toFixed(1)+' Z', fill:CH.green, stroke:CH.greenDeep,'stroke-width':'0.7'}));
+      g.appendChild(el('path',{d:edge(-1)+' L0 '+(-L).toFixed(1)+' Z', fill:CH.greenLight, stroke:CH.greenDeep,'stroke-width':'0.7'}));
+      g.appendChild(el('path',{d:'M0 0 L0 '+(-L).toFixed(1), stroke:CH.greenDeep,'stroke-width':'0.9'}));
+      for (var i=1;i<=4;i++){
+        var ty = -L*0.18*i;
+        [1,-1].forEach(function(s){
+          g.appendChild(el('path',{d:'M0 '+ty.toFixed(1)+' q '+(s*Wd*0.45).toFixed(1)+' '+(-L*0.03).toFixed(1)+' '+(s*Wd*0.6).toFixed(1)+' '+(-L*0.1).toFixed(1),
+            stroke:CH.greenDeep,'stroke-width':'0.45', fill:'none', opacity:'0.75'}));
+        });
+      }
+      return g;
+    }
+
+    // ---- corner spray: curling stems, face blooms, profile blooms, buds, gold dots ----
+    function chintzSpray(host, seed){
       if (!host) return;
       var rnd = lcg(seed);
-      var svg = document.createElementNS(NS,'svg');
-      svg.setAttribute('viewBox','0 0 330 560');
-      svg.setAttribute('aria-hidden','true');
-      var TWIGS = [
-        [[6,-8],[90,90],[120,210],[86,340]],
-        [[14,-4],[130,60],[190,150],[210,250]],
-        [[2,10],[40,120],[46,230],[20,330]],
-        [[10,0],[150,30],[240,70],[300,96]]
-      ];
-      TWIGS.forEach(function(tw,ti){
-        var b1 = document.createElementNS(NS,'path');
-        b1.setAttribute('d','M'+tw[0][0]+' '+tw[0][1]+' C '+tw[1][0]+' '+tw[1][1]+', '+tw[2][0]+' '+tw[2][1]+', '+tw[3][0]+' '+tw[3][1]);
-        b1.setAttribute('fill','none');
-        b1.setAttribute('stroke','#7C4A33');
-        b1.setAttribute('stroke-width',(5 - ti*0.7).toFixed(1));
-        b1.setAttribute('stroke-linecap','round');
-        svg.appendChild(b1);
-        var n = 6 + Math.floor(rnd()*3);
-        for (var i=0;i<n;i++){
-          var t = Math.min(0.99, Math.max(0.05, 0.30 + (i/(n-1))*0.68 + (rnd()*0.05-0.025)));
-          var pt = bez(tw[0],tw[1],tw[2],tw[3],t);
-          var jx = rnd()*18-9, jy = rnd()*18-9;
-          if (rnd() > 0.78){
-            var lf = document.createElementNS(NS,'path');
-            lf.setAttribute('d','M0 0 Q 5 -7 14 -7 Q 8 2 0 0 Z');
-            lf.setAttribute('fill', rnd()>0.5 ? '#75804D' : '#66713F');
-            lf.setAttribute('transform','translate('+(pt[0]+jx).toFixed(1)+' '+(pt[1]+jy).toFixed(1)+') rotate('+(rnd()*360).toFixed(0)+') scale('+(0.9+rnd()*0.5).toFixed(2)+')');
-            svg.appendChild(lf);
-          } else {
-            var bl = blossom(rnd, 0.78 + rnd()*0.75 + t*0.25, rnd()>0.6);
-            bl.setAttribute('transform','translate('+(pt[0]+jx).toFixed(1)+' '+(pt[1]+jy).toFixed(1)+')');
-            svg.appendChild(bl);
-          }
-        }
-        var tip = document.createElementNS(NS,'circle');
-        tip.setAttribute('cx',tw[3][0]); tip.setAttribute('cy',tw[3][1]); tip.setAttribute('r','3.2');
-        tip.setAttribute('fill','#C64B28');
-        svg.appendChild(tip);
-      });
+      var svg = el('svg',{viewBox:'0 0 340 430','aria-hidden':'true'});
       host.appendChild(svg);
+      var stems = el('g',{fill:'none', stroke:CH.stem,'stroke-linecap':'round'});
+      var flora = el('g',{});
+      svg.appendChild(stems); svg.appendChild(flora);
+      function place(node, x, y, rot, scale){
+        node.setAttribute('transform','translate('+x.toFixed(1)+' '+y.toFixed(1)+') rotate('+rot.toFixed(1)+') scale('+(scale||1).toFixed(2)+')');
+        flora.appendChild(node);
+      }
+      var MAIN = [
+        [[18,-6],[120,60],[150,170],[92,302]],
+        [[8,4],[120,26],[210,54],[302,66]],
+        [[20,-2],[70,90],[60,180],[26,260]]
+      ];
+      MAIN.forEach(function(P, pi){
+        stems.appendChild(el('path',{d:'M'+P[0][0]+' '+P[0][1]+' C '+P[1][0]+' '+P[1][1]+', '+P[2][0]+' '+P[2][1]+', '+P[3][0]+' '+P[3][1],
+          'stroke-width':(2.6-pi*0.5).toFixed(1)}));
+        var nl = 3 + Math.floor(rnd()*2);
+        for (var i=0;i<nl;i++){
+          var t = 0.2 + (i/nl)*0.62 + rnd()*0.06;
+          var pt = bez(P[0],P[1],P[2],P[3],t), tg = bezTan(P[0],P[1],P[2],P[3],t);
+          var side = i%2 ? 1 : -1;
+          place(chLeaf(rnd, 32+rnd()*22), pt[0], pt[1], Math.atan2(tg[1],tg[0])*57.3 + 90 + side*(40+rnd()*20), 0.9+rnd()*0.35);
+        }
+        var tt = 0.5+rnd()*0.3, tp = bez(P[0],P[1],P[2],P[3],tt);
+        stems.appendChild(el('path',{d:'M'+tp[0].toFixed(1)+' '+tp[1].toFixed(1)+' q 14 8 12 22 q -2 12 -13 12 q -8 0 -7 -8','stroke-width':'1'}));
+        var end = P[3], eT = bezTan(P[0],P[1],P[2],P[3],0.98);
+        var rotE = Math.atan2(eT[1],eT[0])*57.3 + 90;
+        if (pi===2) place(chBud(rnd, 20+rnd()*6), end[0], end[1], rotE+172, 1);
+        else place(chProfileBloom(rnd, (pi===0?33:29)+rnd()*4), end[0], end[1], rotE+180, 1);
+        var mb = bez(P[0],P[1],P[2],P[3], 0.58+rnd()*0.16);
+        if (rnd()>0.4) place(chBud(rnd, 13+rnd()*6), mb[0]+rnd()*10-5, mb[1]+rnd()*10-5, rnd()*40-20, 1);
+      });
+      place(chFaceBloom(rnd, 44+rnd()*6), 66+rnd()*10, 66+rnd()*10, rnd()*30, 1);
+      place(chFaceBloom(rnd, 25), 152+rnd()*14, 32+rnd()*8, rnd()*40, 1);
+      for (var gd=0; gd<12; gd++){
+        flora.appendChild(el('circle',{cx:(20+rnd()*260).toFixed(0), cy:(rnd()*310).toFixed(0), r:(1.2+rnd()*1.4).toFixed(1), fill:CH.gold, opacity:'0.8'}));
+      }
     }
-    makeBranch(document.querySelector('#branchL .sway'), 20261212);
-    makeBranch(document.querySelector('#branchR .sway'), 12122026);
+    chintzSpray(document.querySelector('#branchL .sway'), 20261212);
+    chintzSpray(document.querySelector('#branchR .sway'), 12122026);
     var brRsvg = document.querySelector('#branchR svg');
     if (brRsvg) brRsvg.style.transform = 'scaleX(-1)';
+
+    // ---- small symmetric sprigs: RSVP crown, footer, envelope card ----
+    function chintzSprig(host, seed){
+      if (!host) return;
+      var rnd = lcg(seed);
+      var svg = el('svg',{viewBox:'0 0 240 86','aria-hidden':'true'});
+      host.appendChild(svg);
+      var g = el('g',{transform:'translate(120 62)'});
+      svg.appendChild(g);
+      var stems = el('g',{fill:'none', stroke:CH.stem,'stroke-linecap':'round','stroke-width':'1.5'});
+      g.appendChild(stems);
+      [1,-1].forEach(function(s){
+        stems.appendChild(el('path',{d:'M0 0 C '+(s*34)+' -6 '+(s*62)+' -2 '+(s*90)+' -20'}));
+        var lf = chLeaf(rnd, 25); lf.setAttribute('transform','translate('+(s*40)+' -3) rotate('+(s*62)+')'); g.appendChild(lf);
+        var lf2 = chLeaf(rnd, 19); lf2.setAttribute('transform','translate('+(s*64)+' -7) rotate('+(s*98)+') scale(0.9)'); g.appendChild(lf2);
+        var pb = chProfileBloom(rnd, 19); pb.setAttribute('transform','translate('+(s*92)+' -22) rotate('+(s*56)+')'); g.appendChild(pb);
+        var bd = chBud(rnd, 11); bd.setAttribute('transform','translate('+(s*20)+' -9) rotate('+(s*-28)+')'); g.appendChild(bd);
+        g.appendChild(el('circle',{cx:(s*(46+rnd()*30)).toFixed(0), cy:(-26-rnd()*10).toFixed(0), r:(1.1+rnd()).toFixed(1), fill:CH.gold}));
+        g.appendChild(el('circle',{cx:(s*(70+rnd()*20)).toFixed(0), cy:(-34-rnd()*8).toFixed(0), r:(1+rnd()).toFixed(1), fill:CH.gold}));
+      });
+      var fb = chFaceBloom(rnd, 21); fb.setAttribute('transform','translate(0 -20)'); g.appendChild(fb);
+    }
+    chintzSprig(document.getElementById('rsvpCrown'), 55501);
+    chintzSprig(document.getElementById('footSprig'), 55502);
+    chintzSprig(document.getElementById('envSprig'), 55503);
+
+    // ---- natural thoranam: sagging thread, mango leaves, irregular garland strands ----
+    function makeToran(){
+      var gBack = document.getElementById('toranBack'), gFront = document.getElementById('toranFront');
+      if (!gBack || !gFront) return;
+      var W = document.documentElement.clientWidth || innerWidth || 0;
+      if (W < 300) return; // viewport not ready yet — initToran/resize will call again
+      var mobile = W <= 640;
+      var H = mobile ? 148 : 178;
+      var svg = gBack.ownerSVGElement;
+      svg.setAttribute('viewBox','0 0 '+W+' '+H);
+      svg.style.height = H+'px';
+      while (gBack.firstChild) gBack.removeChild(gBack.firstChild);
+      while (gFront.firstChild) gFront.removeChild(gFront.firstChild);
+      var rnd = lcg(121226);
+
+      // sagging double thread across the top
+      var anchors = [[0, 3+rnd()*5]], ax = 0;
+      while (ax < W){ ax += 150 + rnd()*130; anchors.push([Math.min(ax,W), 2 + rnd()*8]); }
+      var segs = [];
+      for (var i=1;i<anchors.length;i++){
+        var a = anchors[i-1], b = anchors[i];
+        segs.push({a:a, b:b, c:[(a[0]+b[0])/2, Math.max(a[1],b[1]) + 9 + rnd()*9]});
+      }
+      if (!segs.length) return;
+      function swagY(px){
+        for (var i=0;i<segs.length;i++){
+          var s = segs[i];
+          if (px >= s.a[0] && px <= s.b[0]){
+            var t = (px-s.a[0])/((s.b[0]-s.a[0])||1), u = 1-t;
+            return u*u*s.a[1] + 2*u*t*s.c[1] + t*t*s.b[1];
+          }
+        }
+        return 6;
+      }
+      function threadD(off){
+        var d = 'M'+segs[0].a[0]+' '+(segs[0].a[1]+off).toFixed(1);
+        segs.forEach(function(s){ d += ' Q '+s.c[0].toFixed(0)+' '+(s.c[1]+off).toFixed(1)+' '+s.b[0].toFixed(0)+' '+(s.b[1]+off).toFixed(1); });
+        return d;
+      }
+      gBack.appendChild(el('path',{d:threadD(0), fill:'none', stroke:'#8C6F35','stroke-width':'1.6'}));
+      gBack.appendChild(el('path',{d:threadD(2.6), fill:'none', stroke:'#B08D4A','stroke-width':'1'}));
+
+      // mango leaves strung along the thread (aam patta)
+      var lx = 6 + rnd()*22;
+      while (lx < W-6){
+        var n = 1 + Math.floor(rnd()*3);
+        for (var li=0; li<n; li++){
+          var ox = lx + li*(6+rnd()*4);
+          var s = (mobile?0.78:1)*(0.8+rnd()*0.55);
+          var lf = mangoLeaf(rnd);
+          lf.setAttribute('transform','translate('+ox.toFixed(1)+' '+swagY(ox).toFixed(1)+') rotate('+(rnd()*40-20).toFixed(0)+') scale('+s.toFixed(2)+')');
+          gBack.appendChild(lf);
+        }
+        lx += 22 + rnd()*34;
+      }
+
+      // hanging strands: marigold garlands, jasmine strings, temple bells
+      function bell(y){
+        var b = el('g',{transform:'translate(0 '+y.toFixed(1)+')'});
+        b.appendChild(el('path',{d:'M0 -8.5 Q 1.8 -8.5 1.8 -7 L 1.4 -6.2 Q 6.8 -4.6 6.8 2.2 Q 6.8 4.6 8.2 5.6 L 8.2 7 L -8.2 7 L -8.2 5.6 Q -6.8 4.6 -6.8 2.2 Q -6.8 -4.6 -1.4 -6.2 L -1.8 -7 Q -1.8 -8.5 0 -8.5 Z',
+          fill:'url(#gradBell)', stroke:'#6E522A','stroke-width':'0.8','stroke-linejoin':'round'}));
+        b.appendChild(el('path',{d:'M-8.2 7 L 8.2 7', stroke:'#6E522A','stroke-width':'1.4'}));
+        b.appendChild(el('path',{d:'M-3.4 -4.4 Q -4.8 -2 -4.6 1.6', stroke:'#F4E3B2','stroke-width':'1', fill:'none', opacity:'0.7'}));
+        b.appendChild(el('circle',{cy:'9.6', r:'2', fill:'#7E6230'}));
+        return b;
+      }
+      function leafCollar(g, y){
+        var c = el('g',{transform:'translate(0 '+y.toFixed(1)+')'});
+        c.appendChild(el('path',{d:'M0 0 Q -8.5 1 -12.5 10.5 Q -4.5 10 -1 1.5 Z', fill:'url(#gradMango)', stroke:'#41522B','stroke-width':'0.5'}));
+        c.appendChild(el('path',{d:'M0 0 Q 8.5 1 12.5 10.5 Q 4.5 10 1 1.5 Z', fill:'url(#gradMango)', stroke:'#41522B','stroke-width':'0.5'}));
+        g.appendChild(c);
+      }
+      var sx = 12 + rnd()*34, strandIdx = 0;
+      while (sx < W-10){
+        var g = el('g',{transform:'translate('+sx.toFixed(1)+' '+swagY(sx).toFixed(1)+') rotate('+(rnd()*5-2.5).toFixed(1)+')'});
+        var kind = rnd();
+        var maxLen = mobile ? 104 : 142;
+        if (kind < 0.68){
+          // marigold strand — random length, slight bend, packed flowers of two tones
+          var len = 44 + rnd()*(maxLen-44);
+          var bend = rnd()*12-6;
+          g.appendChild(el('path',{d:'M0 0 Q '+(bend*0.4).toFixed(1)+' '+(len*0.55).toFixed(1)+' '+bend.toFixed(1)+' '+len.toFixed(1), stroke:'#8C6F35','stroke-width':'1.1', fill:'none'}));
+          leafCollar(g, 5+rnd()*3);
+          var d = 15 + rnd()*7;
+          while (d < len - 2){
+            var t = d/len;
+            var bx = 2*(1-t)*t*(bend*0.4) + t*t*bend;
+            var fs = (mobile?0.58:0.67) + rnd()*0.31;
+            g.appendChild(el('use',{href:'#mg'+(rnd()>0.5?'A':'B')+Math.floor(rnd()*3),
+              transform:'translate('+(bx+rnd()*2.4-1.2).toFixed(1)+' '+d.toFixed(1)+') rotate('+(rnd()*360).toFixed(0)+') scale('+fs.toFixed(2)+')'}));
+            d += 16*fs + rnd()*2.5;
+          }
+          var endR = rnd();
+          if (endR < 0.5){
+            var tipY = len + 6;
+            g.appendChild(el('path',{d:'M'+bend.toFixed(1)+' '+len.toFixed(1)+' L'+bend.toFixed(1)+' '+tipY.toFixed(1), stroke:'#8C6F35','stroke-width':'1', fill:'none'}));
+            var tl = el('g',{transform:'translate('+bend.toFixed(1)+' '+tipY.toFixed(1)+') rotate(180)'});
+            leafCollar(tl, 0);
+            g.appendChild(tl);
+          } else if (endR < 0.72){
+            g.appendChild(el('path',{d:'M'+bend.toFixed(1)+' '+len.toFixed(1)+' L'+bend.toFixed(1)+' '+(len+5).toFixed(1), stroke:'#8C6F35','stroke-width':'1', fill:'none'}));
+            var bg2 = el('g',{transform:'translate('+bend.toFixed(1)+' 0)'});
+            bg2.appendChild(bell(len+7));
+            g.appendChild(bg2);
+          }
+        } else if (kind < 0.86){
+          // jasmine string (malligai poo): braided buds with sepals, open bloom at the tip
+          var lenJ = 34 + rnd()*(mobile?52:74);
+          g.appendChild(el('path',{d:'M0 0 L0 '+lenJ.toFixed(1), stroke:'#A69A78','stroke-width':'0.9', fill:'none'}));
+          var dj = 5, bi = 0;
+          while (dj < lenJ){
+            var side = (bi++ % 2) ? 1 : -1;
+            var bud = el('g',{transform:'translate('+(side*2).toFixed(1)+' '+dj.toFixed(1)+') rotate('+(side*16).toFixed(0)+')'});
+            bud.appendChild(el('path',{d:'M0 -3.3 C 2.4 -1.9 2.6 1.5 0 3.6 C -2.6 1.5 -2.4 -1.9 0 -3.3 Z',
+              fill:'url(#gradJasBud)', stroke:'#CBBC94','stroke-width':'0.5'}));
+            bud.appendChild(el('path',{d:'M-1.7 -2.2 L0 -4.5 L1.7 -2.2', fill:'none', stroke:'#7F8F55','stroke-width':'0.7','stroke-linejoin':'round'}));
+            g.appendChild(bud);
+            dj += 4.9;
+          }
+          var of = el('g',{transform:'translate(0 '+(lenJ+5).toFixed(1)+')'});
+          for (var p5=0; p5<5; p5++){
+            of.appendChild(el('ellipse',{cx:'0', cy:'-3.1', rx:'1.7', ry:'3.1', fill:'url(#gradJasBud)', stroke:'#CBBC94','stroke-width':'0.4',
+              transform:'rotate('+(p5*72)+')'}));
+          }
+          of.appendChild(el('circle',{r:'1.2', fill:'#D9A93F'}));
+          g.appendChild(of);
+        } else {
+          // short bare thread with a brass bell
+          var lenB = 24 + rnd()*38;
+          g.appendChild(el('path',{d:'M0 0 L0 '+lenB.toFixed(1), stroke:'#8C6F35','stroke-width':'1', fill:'none'}));
+          leafCollar(g, 3+rnd()*2);
+          g.appendChild(bell(lenB));
+        }
+        (strandIdx++ % 2 ? gFront : gBack).appendChild(g);
+        sx += (mobile?34:40) + rnd()*44;
+      }
+    }
+    var toranW = 0, toranTimer = null;
+    (function initToran(){
+      var w = document.documentElement.clientWidth || 0;
+      if (w >= 300){ toranW = w; makeToran(); }
+      else setTimeout(initToran, 120);
+    })();
+    addEventListener('resize', function(){
+      clearTimeout(toranTimer);
+      toranTimer = setTimeout(function(){
+        var w = document.documentElement.clientWidth;
+        if (Math.abs(w - toranW) > 60){ toranW = w; makeToran(); }
+      }, 250);
+    }, {passive:true});
 
     if (reduced) return; // keep the still frame — no petals, wind, or parallax
 
