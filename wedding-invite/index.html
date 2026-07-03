@@ -237,9 +237,9 @@
   /* heritage palace backdrop, recolored into the blue-chintz family */
   #backdrop{position:fixed;inset:0;z-index:0;pointer-events:none;
     background:url('assets/backdrop.png') center top/cover no-repeat;
-    opacity:.12;filter:hue-rotate(168deg) saturate(.5) brightness(1.04);
-    -webkit-mask-image:linear-gradient(180deg,#000 0%,#000 52%,transparent 90%);
-    mask-image:linear-gradient(180deg,#000 0%,#000 52%,transparent 90%)}
+    opacity:.22;filter:hue-rotate(168deg) saturate(.85) brightness(1.02) contrast(1.04);
+    -webkit-mask-image:linear-gradient(180deg,#000 0%,#000 60%,rgba(0,0,0,.4) 84%,transparent 100%);
+    mask-image:linear-gradient(180deg,#000 0%,#000 60%,rgba(0,0,0,.4) 84%,transparent 100%)}
   .petal-canvas{position:fixed;inset:0;width:100%;height:100%;pointer-events:none}
   .chintz-crown{display:flex;justify-content:center;margin:-4px 0 14px}
   .chintz-crown svg{width:min(250px,72%);height:auto}
@@ -409,6 +409,14 @@
     <radialGradient id="gradMgB" cx="0.42" cy="0.38" r="0.75">
       <stop offset="0" stop-color="#F5B14E"/><stop offset="0.42" stop-color="#E08818"/>
       <stop offset="0.76" stop-color="#C26509"/><stop offset="1" stop-color="#94430A"/>
+    </radialGradient>
+    <radialGradient id="gradRoseA" cx="0.42" cy="0.38" r="0.75">
+      <stop offset="0" stop-color="#F6AEC2"/><stop offset="0.42" stop-color="#DE5F84"/>
+      <stop offset="0.76" stop-color="#BA3A62"/><stop offset="1" stop-color="#8F2547"/>
+    </radialGradient>
+    <radialGradient id="gradRoseB" cx="0.42" cy="0.38" r="0.75">
+      <stop offset="0" stop-color="#E8809A"/><stop offset="0.42" stop-color="#C74265"/>
+      <stop offset="0.76" stop-color="#9C2B4C"/><stop offset="1" stop-color="#6E1B36"/>
     </radialGradient>
     <linearGradient id="gradMango" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0" stop-color="#4E6032"/><stop offset="1" stop-color="#87995C"/>
@@ -893,32 +901,37 @@
       }
       return d+' Z';
     }
-    function marigold(rnd, R, deepTone){
+    // pompom styles: bright genda, deep genda, pink rose, crimson rose
+    var MG_STYLES = [
+      {key:'A', grad:'url(#gradMgA)',   line:'#A44E08', r1:'#F7AF43', r2:'#FCC565'},
+      {key:'B', grad:'url(#gradMgB)',   line:'#8A3E05', r1:'#E08F2B', r2:'#EFA94A'},
+      {key:'C', grad:'url(#gradRoseA)', line:'#8F2547', r1:'#E87FA0', r2:'#F3AEC3'},
+      {key:'D', grad:'url(#gradRoseB)', line:'#6E1B36', r1:'#D15B7E', r2:'#E489A4'}
+    ];
+    function pompom(rnd, R, st){
       var g = el('g',{});
-      var grad = deepTone ? 'url(#gradMgB)' : 'url(#gradMgA)';
-      var line = deepTone ? '#8A3E05' : '#A44E08';
-      g.appendChild(el('path',{d:scallopPath(rnd,R,11,R*0.17), fill:grad, stroke:line,'stroke-width':'0.7','stroke-linejoin':'round'}));
-      g.appendChild(el('path',{d:scallopPath(rnd,R*0.64,8,R*0.13), fill: deepTone?'#E08F2B':'#F7AF43', stroke:line,'stroke-width':'0.55','stroke-linejoin':'round', opacity:'0.95'}));
-      g.appendChild(el('path',{d:scallopPath(rnd,R*0.36,6,R*0.10), fill: deepTone?'#EFA94A':'#FCC565', stroke:line,'stroke-width':'0.5','stroke-linejoin':'round'}));
+      g.appendChild(el('path',{d:scallopPath(rnd,R,11,R*0.17), fill:st.grad, stroke:st.line,'stroke-width':'0.7','stroke-linejoin':'round'}));
+      g.appendChild(el('path',{d:scallopPath(rnd,R*0.64,8,R*0.13), fill:st.r1, stroke:st.line,'stroke-width':'0.55','stroke-linejoin':'round', opacity:'0.95'}));
+      g.appendChild(el('path',{d:scallopPath(rnd,R*0.36,6,R*0.10), fill:st.r2, stroke:st.line,'stroke-width':'0.5','stroke-linejoin':'round'}));
       for (var i=0;i<8;i++){
         var a = (i/8)*6.2832 + rnd()*0.4;
         g.appendChild(el('path',{d:'M'+(Math.cos(a)*R*0.72).toFixed(1)+' '+(Math.sin(a)*R*0.72).toFixed(1)+' L'+(Math.cos(a)*R*0.92).toFixed(1)+' '+(Math.sin(a)*R*0.92).toFixed(1),
-          stroke:line,'stroke-width':'0.45', opacity:'0.55'}));
+          stroke:st.line,'stroke-width':'0.45', opacity:'0.55'}));
       }
-      g.appendChild(el('circle',{r:(R*0.1).toFixed(1), fill:line, opacity:'0.9'}));
+      g.appendChild(el('circle',{r:(R*0.1).toFixed(1), fill:st.line, opacity:'0.9'}));
       return g;
     }
-    // 3 pre-baked variants per tone, reused via <use> to keep the DOM light
+    // 3 pre-baked variants per style, reused via <use> to keep the DOM light
     var genDefs = el('svg',{width:'0', height:'0', style:'position:absolute','aria-hidden':'true'});
     var defsRoot = el('defs',{});
     genDefs.appendChild(defsRoot);
     document.body.appendChild(genDefs);
-    (function bakeMarigolds(){
+    (function bakePompoms(){
       var r = lcg(777);
       for (var v=0; v<3; v++){
-        [0,1].forEach(function(tone){
-          var t = marigold(r, 10, tone); // unit radius 10
-          t.setAttribute('id','mg'+(tone?'B':'A')+v);
+        MG_STYLES.forEach(function(st){
+          var t = pompom(r, 10, st); // unit radius 10
+          t.setAttribute('id','mg'+st.key+v);
           defsRoot.appendChild(t);
         });
       }
@@ -1146,6 +1159,19 @@
         lx += 22 + rnd()*34;
       }
 
+      // small blue chintz blossoms dotted along the thread for colour
+      var cbx = 40 + rnd()*90;
+      while (cbx < W-20){
+        var mb2 = el('g',{transform:'translate('+cbx.toFixed(1)+' '+(swagY(cbx)+2.5).toFixed(1)+') rotate('+(rnd()*30-15).toFixed(0)+') scale('+((mobile?0.82:1)*(0.75+rnd()*0.4)).toFixed(2)+')'});
+        for (var mp=0; mp<5; mp++){
+          mb2.appendChild(el('ellipse',{cx:'0', cy:'-4.2', rx:'2.3', ry:'4.2', fill: mp%2 ? CH.blueMid : CH.blueLight, stroke:CH.blueLine,'stroke-width':'0.5',
+            transform:'rotate('+(mp*72)+')'}));
+        }
+        mb2.appendChild(el('circle',{r:'1.7', fill:CH.gold}));
+        gFront.appendChild(mb2);
+        cbx += 85 + rnd()*115;
+      }
+
       // hanging strands: marigold garlands, jasmine strings, temple bells
       function bell(y){
         var b = el('g',{transform:'translate(0 '+y.toFixed(1)+')'});
@@ -1163,39 +1189,55 @@
         g.appendChild(c);
       }
       var sx = 12 + rnd()*34, strandIdx = 0;
+      // flower-run helper: packed pompoms of any colour mix down a gently bent thread
+      function flowerRun(g, pickHref){
+        var maxLen = mobile ? 104 : 142;
+        var len = 44 + rnd()*(maxLen-44);
+        var bend = rnd()*12-6;
+        g.appendChild(el('path',{d:'M0 0 Q '+(bend*0.4).toFixed(1)+' '+(len*0.55).toFixed(1)+' '+bend.toFixed(1)+' '+len.toFixed(1), stroke:'#8C6F35','stroke-width':'1.1', fill:'none'}));
+        leafCollar(g, 5+rnd()*3);
+        var d = 15 + rnd()*7, fi = 0;
+        while (d < len - 2){
+          var t = d/len;
+          var bxx = 2*(1-t)*t*(bend*0.4) + t*t*bend;
+          var fs = (mobile?0.58:0.67) + rnd()*0.31;
+          g.appendChild(el('use',{href:pickHref(fi++),
+            transform:'translate('+(bxx+rnd()*2.4-1.2).toFixed(1)+' '+d.toFixed(1)+') rotate('+(rnd()*360).toFixed(0)+') scale('+fs.toFixed(2)+')'}));
+          d += 16*fs + rnd()*2.5;
+        }
+        var endR = rnd();
+        if (endR < 0.5){
+          var tipY = len + 6;
+          g.appendChild(el('path',{d:'M'+bend.toFixed(1)+' '+len.toFixed(1)+' L'+bend.toFixed(1)+' '+tipY.toFixed(1), stroke:'#8C6F35','stroke-width':'1', fill:'none'}));
+          var tl = el('g',{transform:'translate('+bend.toFixed(1)+' '+tipY.toFixed(1)+') rotate(180)'});
+          leafCollar(tl, 0);
+          g.appendChild(tl);
+        } else if (endR < 0.72){
+          g.appendChild(el('path',{d:'M'+bend.toFixed(1)+' '+len.toFixed(1)+' L'+bend.toFixed(1)+' '+(len+5).toFixed(1), stroke:'#8C6F35','stroke-width':'1', fill:'none'}));
+          var bg2 = el('g',{transform:'translate('+bend.toFixed(1)+' 0)'});
+          bg2.appendChild(bell(len+7));
+          g.appendChild(bg2);
+        }
+      }
+      function mgPick(keys){ return function(){ return '#mg'+keys[Math.floor(rnd()*keys.length)]+Math.floor(rnd()*3); }; }
+      // balanced colour rotation with jitter — every stretch of the drape gets
+      // orange, rose, mixed, jasmine, blue pendant and gold chain strands
+      var CYCLE = ['o','r','m','j','p','o','c','r','o','m','p','j'];
       while (sx < W-10){
         var g = el('g',{transform:'translate('+sx.toFixed(1)+' '+swagY(sx).toFixed(1)+') rotate('+(rnd()*5-2.5).toFixed(1)+')'});
-        var kind = rnd();
-        var maxLen = mobile ? 104 : 142;
-        if (kind < 0.68){
-          // marigold strand — random length, slight bend, packed flowers of two tones
-          var len = 44 + rnd()*(maxLen-44);
-          var bend = rnd()*12-6;
-          g.appendChild(el('path',{d:'M0 0 Q '+(bend*0.4).toFixed(1)+' '+(len*0.55).toFixed(1)+' '+bend.toFixed(1)+' '+len.toFixed(1), stroke:'#8C6F35','stroke-width':'1.1', fill:'none'}));
-          leafCollar(g, 5+rnd()*3);
-          var d = 15 + rnd()*7;
-          while (d < len - 2){
-            var t = d/len;
-            var bx = 2*(1-t)*t*(bend*0.4) + t*t*bend;
-            var fs = (mobile?0.58:0.67) + rnd()*0.31;
-            g.appendChild(el('use',{href:'#mg'+(rnd()>0.5?'A':'B')+Math.floor(rnd()*3),
-              transform:'translate('+(bx+rnd()*2.4-1.2).toFixed(1)+' '+d.toFixed(1)+') rotate('+(rnd()*360).toFixed(0)+') scale('+fs.toFixed(2)+')'}));
-            d += 16*fs + rnd()*2.5;
-          }
-          var endR = rnd();
-          if (endR < 0.5){
-            var tipY = len + 6;
-            g.appendChild(el('path',{d:'M'+bend.toFixed(1)+' '+len.toFixed(1)+' L'+bend.toFixed(1)+' '+tipY.toFixed(1), stroke:'#8C6F35','stroke-width':'1', fill:'none'}));
-            var tl = el('g',{transform:'translate('+bend.toFixed(1)+' '+tipY.toFixed(1)+') rotate(180)'});
-            leafCollar(tl, 0);
-            g.appendChild(tl);
-          } else if (endR < 0.72){
-            g.appendChild(el('path',{d:'M'+bend.toFixed(1)+' '+len.toFixed(1)+' L'+bend.toFixed(1)+' '+(len+5).toFixed(1), stroke:'#8C6F35','stroke-width':'1', fill:'none'}));
-            var bg2 = el('g',{transform:'translate('+bend.toFixed(1)+' 0)'});
-            bg2.appendChild(bell(len+7));
-            g.appendChild(bg2);
-          }
-        } else if (kind < 0.86){
+        var kindKey = CYCLE[strandIdx % CYCLE.length];
+        if (rnd() < 0.15) kindKey = CYCLE[Math.floor(rnd()*CYCLE.length)];
+        var kind = {o:0.2, r:0.45, m:0.6, j:0.7, p:0.8, c:0.95}[kindKey];
+        if (kind < 0.34){
+          // orange genda strand
+          flowerRun(g, mgPick(['A','B']));
+        } else if (kind < 0.52){
+          // pink & crimson rose strand
+          flowerRun(g, mgPick(['C','D']));
+        } else if (kind < 0.64){
+          // mixed garland — genda and rose alternating
+          flowerRun(g, (function(){ var o = mgPick(['A','B']), r = mgPick(['C','D']); return function(fi){ return fi%2 ? r() : o(); }; })());
+        } else if (kind < 0.76){
           // jasmine string (malligai poo): braided buds with sepals, open bloom at the tip
           var lenJ = 34 + rnd()*(mobile?52:74);
           g.appendChild(el('path',{d:'M0 0 L0 '+lenJ.toFixed(1), stroke:'#A69A78','stroke-width':'0.9', fill:'none'}));
@@ -1216,15 +1258,36 @@
           }
           of.appendChild(el('circle',{r:'1.2', fill:'#D9A93F'}));
           g.appendChild(of);
+        } else if (kind < 0.9){
+          // blue chintz pendant — ties the corner florals through the drape
+          var lenP = 26 + rnd()*(mobile?32:48);
+          g.appendChild(el('path',{d:'M0 0 L0 '+lenP.toFixed(1), stroke:'#8C6F35','stroke-width':'1', fill:'none'}));
+          leafCollar(g, 4+rnd()*2);
+          for (var gb=1; gb<=2; gb++){
+            g.appendChild(el('circle',{cy:(lenP*gb/3).toFixed(1), r:'1.9', fill:'url(#gradBell)', stroke:'#6E522A','stroke-width':'0.4'}));
+          }
+          if (rnd() > 0.45){
+            var med = chFaceBloom(rnd, 12.5+rnd()*3.5);
+            med.setAttribute('transform','translate(0 '+(lenP+13).toFixed(1)+') rotate('+(rnd()*20-10).toFixed(0)+')');
+            g.appendChild(med);
+            g.appendChild(el('circle',{cy:(lenP+31+rnd()*3).toFixed(1), r:'1.6', fill:CH.gold}));
+          } else {
+            var pd = chProfileBloom(rnd, 15+rnd()*4);
+            pd.setAttribute('transform','translate(0 '+(lenP+2).toFixed(1)+') rotate(180)');
+            g.appendChild(pd);
+          }
         } else {
-          // short bare thread with a brass bell
-          var lenB = 24 + rnd()*38;
-          g.appendChild(el('path',{d:'M0 0 L0 '+lenB.toFixed(1), stroke:'#8C6F35','stroke-width':'1', fill:'none'}));
+          // gold bead chain finished with a temple bell
+          var lenB = 24 + rnd()*(mobile?28:40);
+          g.appendChild(el('path',{d:'M0 0 L0 '+lenB.toFixed(1), stroke:'#8C6F35','stroke-width':'0.8', fill:'none'}));
           leafCollar(g, 3+rnd()*2);
-          g.appendChild(bell(lenB));
+          for (var bb=6; bb<lenB-1; bb+=5.2){
+            g.appendChild(el('circle',{cy:bb.toFixed(1), r:'2', fill:'url(#gradBell)', stroke:'#6E522A','stroke-width':'0.4'}));
+          }
+          g.appendChild(bell(lenB+7));
         }
         (strandIdx++ % 2 ? gFront : gBack).appendChild(g);
-        sx += (mobile?34:40) + rnd()*44;
+        sx += (mobile?32:36) + rnd()*38;
       }
     }
     var toranW = 0, toranTimer = null;
@@ -1293,9 +1356,9 @@
       return { frame:frame, size:size, kick:function(n){ for (var i=0;i<Math.min(n,petals.length);i++) petals[i] = spawn(true); } };
     }
     var back  = PetalLayer($('petalsBack'),  {density:46000,  sMin:6,  sMax:11, speed:1,    aMin:.35, aMax:.6,
-      palette:['#E8A33D','#DD8C2B','#C9A45C','#D0622F','#B96A6E']});
+      palette:['#E8A33D','#DD8C2B','#C9A45C','#D0622F','#D66A8B','#7FA6C8']});
     var front = PetalLayer($('petalsFront'), {density:150000, sMin:10, sMax:16, speed:1.35, aMin:.42, aMax:.7,
-      palette:['#E8A33D','#D0622F','#C64B28','#DD8C2B']});
+      palette:['#E8A33D','#D0622F','#C64B28','#C2506E','#5D89B4']});
     gust = function(n){ wind += 12; if (back) back.kick(n||8); if (front) front.kick(3); };
 
     // scrolling stirs the wind
