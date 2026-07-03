@@ -127,7 +127,7 @@
   .toran{position:absolute;top:0;left:0;width:100%;pointer-events:none;overflow:visible}
 
   /* ==================== hero ==================== */
-  .hero{position:relative;min-height:100vh;min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:150px 22px 64px}
+  .hero{position:relative;min-height:100vh;min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:clamp(150px,11.5vw,300px) 22px 64px}
   .hero-mandala{position:absolute;left:50%;top:50%;transform:translate(-50%,-52%);width:min(92vw,760px);aspect-ratio:1;color:var(--gold);opacity:.20;pointer-events:none}
   .hero-mandala svg{width:100%;height:100%;animation:spinSlow 300s linear infinite}
   .hero-inner{position:relative}
@@ -222,12 +222,12 @@
   .env-body{position:absolute;inset:0;border-radius:14px;background:linear-gradient(160deg,var(--surface),#F6ECD6);border:1px solid var(--gold);box-shadow:0 36px 70px -30px rgba(71,22,31,.65)}
   #envCard{position:absolute;left:26px;right:26px;top:30px;height:148px;border-radius:9px;background:var(--surface);border:1px solid var(--gold-pale);box-shadow:0 10px 24px -10px rgba(71,22,31,.4);display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding-bottom:8px;z-index:2}
   .env-addr{position:absolute;left:0;right:0;bottom:16px;z-index:7;display:flex;flex-direction:column;align-items:center;gap:6px;pointer-events:none}
-  #envNames{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:600;font-size:27px;color:var(--maroon);line-height:1}
+  #envNames{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:600;font-size:29px;color:var(--maroon);line-height:1;text-shadow:0 1px 0 rgba(255,253,246,.8)}
   .env-date{font-family:'Marcellus',serif;letter-spacing:.3em;font-size:10.5px;text-transform:uppercase;color:var(--gold-deep)}
   .env-vee{position:absolute;left:0;right:0;bottom:0;height:120px;border-radius:0 0 14px 14px;background:linear-gradient(170deg,#F8EFDC,#EFDFBE);clip-path:polygon(0 38%,50% 100%,100% 38%,100% 100%,0 100%);filter:drop-shadow(0 -1px 0 var(--gold-soft));z-index:4}
-  #envFlap{position:absolute;top:0;left:0;right:0;height:134px;transform-origin:top center;transform-style:preserve-3d;background:linear-gradient(168deg,#83303F,var(--maroon) 62%,#571623);clip-path:polygon(0 0,100% 0,50% 100%);border-radius:14px 14px 0 0;z-index:5;box-shadow:0 5px 12px -5px rgba(0,0,0,.35)}
+  #envFlap{position:absolute;top:0;left:0;right:0;height:98px;transform-origin:top center;transform-style:preserve-3d;background:linear-gradient(168deg,#83303F,var(--maroon) 62%,#571623);clip-path:polygon(0 0,100% 0,50% 100%);border-radius:14px 14px 0 0;z-index:5;box-shadow:0 5px 12px -5px rgba(0,0,0,.35)}
   #envFlap::after{content:'';position:absolute;inset:0;clip-path:polygon(0 0,100% 0,50% 100%);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'%3E%3Cpath d='M15 3c1.9 4.1 4.9 7.1 9 9-4.1 1.9-7.1 4.9-9 9-1.9-4.1-4.9-7.1-9-9 4.1-1.9 7.1-4.9 9-9z' fill='none' stroke='%23D9C69A' stroke-opacity='.28' stroke-width='.8'/%3E%3C/svg%3E");background-size:30px 30px}
-  .env-seal{position:absolute;left:50%;top:134px;transform:translate(-50%,-50%);width:52px;height:52px;border-radius:50%;background:radial-gradient(circle at 36% 30%,#DEC489,var(--gold) 58%,#93733A);display:flex;align-items:center;justify-content:center;box-shadow:0 8px 18px -5px rgba(0,0,0,.5),inset 0 0 0 1px rgba(255,253,246,.4);z-index:6}
+  .env-seal{position:absolute;left:50%;top:98px;transform:translate(-50%,-50%);width:48px;height:48px;border-radius:50%;background:radial-gradient(circle at 36% 30%,#DEC489,var(--gold) 58%,#93733A);display:flex;align-items:center;justify-content:center;box-shadow:0 8px 18px -5px rgba(0,0,0,.5),inset 0 0 0 1px rgba(255,253,246,.4);z-index:6}
   .env-seal::before{content:'';position:absolute;inset:5px;border-radius:50%;border:1px dashed rgba(71,22,31,.5)}
   .env-seal span{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:700;font-size:17px;color:var(--maroon)}
   #envBtn{cursor:pointer;display:flex;align-items:center;gap:9px;background:var(--maroon);color:var(--gold-pale);padding:14px 28px;border-radius:999px;font-family:'Marcellus',serif;letter-spacing:.2em;text-transform:uppercase;font-size:12px;animation:bob 2.4s ease-in-out infinite;box-shadow:0 18px 38px -16px rgba(107,31,45,.9)}
@@ -246,7 +246,7 @@
   .env-sprig svg{width:132px;height:auto;display:block}
   .foot-sprig{display:flex;justify-content:center;margin-bottom:12px}
   .foot-sprig svg{width:230px;height:auto}
-  .branch{position:fixed;top:-26px;width:clamp(130px,23vw,330px);z-index:0;pointer-events:none;will-change:transform}
+  .branch{position:fixed;top:-26px;width:clamp(130px,23vw,470px);z-index:0;pointer-events:none;will-change:transform}
   .branch.left{left:-20px}
   .branch.right{right:-20px}
   .branch .sway{animation:swayL 11s ease-in-out infinite alternate;transform-origin:16% 3%}
@@ -258,13 +258,12 @@
   .toran .toran-sway.t2{animation-duration:16s;animation-delay:-5s}
   @keyframes toranSway{from{transform:rotate(-.25deg)}to{transform:rotate(.25deg)}}
 
-  /* marigold garland scroll rail (wide screens only) */
-  #rail{position:fixed;left:30px;top:13vh;bottom:13vh;width:24px;z-index:3;pointer-events:none;display:none}
-  @media (min-width:1140px){#rail{display:block}}
-  .rail-track{position:absolute;left:50%;top:0;bottom:0;width:1px;background:linear-gradient(180deg,transparent,var(--gold-soft) 10%,var(--gold-soft) 90%,transparent)}
-  .rail-fill{position:absolute;left:0;top:0;width:100%;height:0%;overflow:hidden}
-  .rail-fill::before{content:'';position:absolute;left:0;top:0;width:100%;height:200vh;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='30' viewBox='0 0 24 30'%3E%3Ccircle cx='12' cy='15' r='5.4' fill='%23CE7420'/%3E%3Ccircle cx='12' cy='15' r='5.4' fill='none' stroke='%23E89A3C' stroke-width='1.8' stroke-dasharray='1.6 2'/%3E%3Ccircle cx='12' cy='15' r='2.4' fill='%23F2B04B'/%3E%3Cpath d='M12 4 Q8 8 12 10 Q16 8 12 4z' fill='%2375804D'/%3E%3C/svg%3E");background-repeat:repeat-y;background-position:center top;background-size:24px 30px}
-  .rail-dot{position:absolute;left:50%;top:0%;width:9px;height:9px;transform:translate(-50%,-50%) rotate(45deg);background:var(--gold);box-shadow:0 0 0 3px var(--bg),0 0 0 4px var(--gold-soft)}
+  /* blooming side vines — stems draw and flowers spiral open as you scroll */
+  .vine{position:fixed;top:18px;width:120px;z-index:0;pointer-events:none}
+  .vine.left{left:0}
+  .vine.right{right:0;transform:scaleX(-1)}
+  .vine svg{display:block;width:100%}
+  @media (max-width:900px){.vine{display:none}}
 
   /* ghost paisley watermarks (slate blue, ties the chintz corners to the sections) */
   .ghost{position:absolute;color:#5B7A94;opacity:.075;pointer-events:none;z-index:0;will-change:transform}
@@ -286,6 +285,13 @@
   @media (max-width:640px){
     html,body{overflow-x:clip}
     .hero{padding-top:128px}
+    /* backdrop sized to the LARGE viewport once — no re-crop (zoom jump) when the URL bar hides */
+    #backdrop{inset:auto;top:0;left:0;width:100%;height:100vh;height:100lvh}
+    /* countdown: 2×2 medallions so numbers & labels stay inside the circles */
+    .cd-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;width:min(300px,84vw);margin:0 auto}
+    .cd-med{width:100%}
+    .cd-med .num{font-size:42px}
+    .cd-med .lab{font-size:10px;letter-spacing:.24em}
     .rsvp-card{padding:30px 22px}
     .done-card{padding:38px 22px}
     #envelope{width:316px;height:212px}
@@ -301,7 +307,7 @@
   @media (prefers-reduced-motion:reduce){
     *,*::before,*::after{animation-duration:.001s !important;animation-iteration-count:1 !important;transition-duration:.001s !important}
     html{scroll-behavior:auto}
-    #rail,.petal-canvas{display:none !important}
+    .petal-canvas{display:none !important}
   }
 </style>
 </head>
@@ -430,17 +436,14 @@
   </defs>
 </svg>
 
-<!-- living ambience: backdrop → far petals → chintz corners → content → near petals → garland rail -->
+<!-- living ambience: backdrop → far petals → chintz corners → blooming vines → content → near petals -->
 <div id="backdrop" aria-hidden="true"></div>
 <canvas id="petalsBack" class="petal-canvas" style="z-index:0" aria-hidden="true"></canvas>
 <div id="branchL" class="branch left" aria-hidden="true"><div class="sway"></div></div>
 <div id="branchR" class="branch right" aria-hidden="true"><div class="sway"></div></div>
 <canvas id="petalsFront" class="petal-canvas" style="z-index:4" aria-hidden="true"></canvas>
-<div id="rail" aria-hidden="true">
-  <div class="rail-track"></div>
-  <div id="railFill" class="rail-fill"></div>
-  <div id="railDot" class="rail-dot"></div>
-</div>
+<div id="vineL" class="vine left" aria-hidden="true"></div>
+<div id="vineR" class="vine right" aria-hidden="true"></div>
 <!-- confetti -->
 <div id="confetti" style="position:fixed;inset:0;z-index:70;pointer-events:none;overflow:hidden"></div>
 
@@ -1103,6 +1106,80 @@
     chintzSprig(document.getElementById('footSprig'), 55502);
     chintzSprig(document.getElementById('envSprig'), 55503);
 
+    // ---- blooming side vines: stems draw & flowers spiral open as you scroll ----
+    var vineDraw = [], vineBlooms = [], lastProg = 0;
+    function easeBack(u){ var c = 1.70158, v = u-1; return 1 + (c+1)*v*v*v + c*v*v; }
+    function updateVines(p){
+      for (var i=0;i<vineDraw.length;i++){
+        var s = vineDraw[i];
+        var lp = Math.max(0, Math.min(1, (p - s.t)/s.span));
+        s.el.style.strokeDashoffset = (1 - lp).toFixed(4);
+      }
+      for (var j=0;j<vineBlooms.length;j++){
+        var b = vineBlooms[j];
+        var pr = Math.max(0, Math.min(1, (p - b.t)/0.09));
+        if (Math.abs(pr - b.last) < 0.003) continue;
+        b.last = pr;
+        var e = pr<=0 ? 0 : (pr>=1 ? 1 : easeBack(pr));
+        b.g.setAttribute('transform','translate('+b.x+' '+b.y+') rotate('+(b.rot*(1-e)).toFixed(1)+') scale('+Math.max(0.001,e).toFixed(3)+')');
+      }
+    }
+    function makeVines(){
+      var hosts = [document.getElementById('vineL'), document.getElementById('vineR')];
+      if (!hosts[0] || !hosts[1]) return;
+      vineDraw = []; vineBlooms = [];
+      hosts.forEach(function(h){ while (h.firstChild) h.removeChild(h.firstChild); });
+      if ((document.documentElement.clientWidth||0) < 900) return;
+      var Hv = Math.max(480, innerHeight - 36);
+      hosts.forEach(function(host, side){
+        var rnd = lcg(4801 + side);
+        var svg = el('svg',{viewBox:'0 0 120 '+Hv,'aria-hidden':'true'});
+        svg.style.height = Hv+'px';
+        host.appendChild(svg);
+        var stemG = el('g',{fill:'none', stroke:CH.stem,'stroke-linecap':'round'});
+        var bloomG = el('g',{});
+        svg.appendChild(stemG); svg.appendChild(bloomG);
+        // winding stem down the screen edge
+        var x = 36+rnd()*14, y = 14, d = 'M'+x.toFixed(1)+' '+y.toFixed(1), dir = 1, nodes = [];
+        while (y < Hv-40){
+          var ny = y + 120 + rnd()*70;
+          var nx = 26 + rnd()*58;
+          d += ' C '+(x+dir*44).toFixed(1)+' '+(y+(ny-y)*0.34).toFixed(1)+' '+(nx-dir*44).toFixed(1)+' '+(ny-(ny-y)*0.34).toFixed(1)+' '+nx.toFixed(1)+' '+ny.toFixed(1);
+          nodes.push([nx, ny, dir]);
+          x = nx; y = ny; dir = -dir;
+        }
+        var stem = el('path',{d:d,'stroke-width':'2.2', pathLength:'1','stroke-dasharray':'1','stroke-dashoffset':'1'});
+        stemG.appendChild(stem);
+        vineDraw.push({el:stem, t:0, span:0.92});
+        // at each bend: a spiral tendril, an opening leaf, and a bloom that spirals open
+        var KINDS2 = ['chz','rose','mg','bud','chz','mg','rose','bud'];
+        nodes.forEach(function(nd, i){
+          var tt = Math.max(0.02, Math.min(0.93, 0.05 + 0.85*(nd[1]/Hv)));
+          var tg2 = el('path',{d:'M'+nd[0].toFixed(1)+' '+nd[1].toFixed(1)+' q '+(nd[2]*14).toFixed(0)+' 4 '+(nd[2]*16).toFixed(0)+' 16 q 2 12 '+(-nd[2]*9).toFixed(0)+' 14 q '+(-nd[2]*9).toFixed(0)+' 2 '+(-nd[2]*10).toFixed(0)+' -7',
+            'stroke-width':'1.1', pathLength:'1','stroke-dasharray':'1','stroke-dashoffset':'1'});
+          stemG.appendChild(tg2);
+          vineDraw.push({el:tg2, t:Math.max(0, tt-0.02), span:0.07});
+          var lg = el('g',{transform:'translate('+nd[0]+' '+nd[1]+') scale(0.001)'});
+          var lf = chLeaf(rnd, 22+rnd()*10);
+          lf.setAttribute('transform','rotate('+(nd[2]*(60+rnd()*30)).toFixed(0)+')');
+          lg.appendChild(lf);
+          bloomG.appendChild(lg);
+          vineBlooms.push({g:lg, x:nd[0], y:nd[1], rot:nd[2]*-70, t:Math.max(0.02, tt-0.015), last:-1});
+          var kind = KINDS2[i % KINDS2.length];
+          var fg = el('g',{});
+          if (kind==='chz') fg.appendChild(chFaceBloom(rnd, 15+rnd()*5));
+          else if (kind==='bud'){ var bd = chBud(rnd, 15+rnd()*5); bd.setAttribute('transform','rotate('+(rnd()*40-20).toFixed(0)+')'); fg.appendChild(bd); }
+          else fg.appendChild(el('use',{href:'#mg'+(kind==='rose' ? (rnd()>0.5?'C':'D') : (rnd()>0.5?'A':'B'))+Math.floor(rnd()*3),
+            transform:'scale('+(1.35+rnd()*0.5).toFixed(2)+')'}));
+          var wrap = el('g',{transform:'translate('+nd[0]+' '+nd[1]+') scale(0.001)'});
+          wrap.appendChild(fg);
+          bloomG.appendChild(wrap);
+          vineBlooms.push({g:wrap, x:nd[0], y:nd[1], rot:nd[2]*-130, t:tt, last:-1});
+          if (rnd()>0.4) bloomG.appendChild(el('circle',{cx:(nd[0]+nd[2]*(16+rnd()*10)).toFixed(0), cy:(nd[1]-14-rnd()*10).toFixed(0), r:(1.2+rnd()).toFixed(1), fill:CH.gold, opacity:'0.75'}));
+        });
+      });
+    }
+
     // ---- natural thoranam: sagging thread, mango leaves, irregular garland strands ----
     function makeToran(){
       var gBack = document.getElementById('toranBack'), gFront = document.getElementById('toranFront');
@@ -1110,10 +1187,13 @@
       var W = document.documentElement.clientWidth || innerWidth || 0;
       if (W < 300) return; // viewport not ready yet — initToran/resize will call again
       var mobile = W <= 640;
+      // wide monitors: scale the whole garland up so it keeps the same visual proportion
+      var k = mobile ? 1 : Math.min(1.6, Math.max(1, W/1440));
+      W = Math.round(W / k); // lay out in design units; the viewBox scales them back up
       var H = mobile ? 148 : 178;
       var svg = gBack.ownerSVGElement;
       svg.setAttribute('viewBox','0 0 '+W+' '+H);
-      svg.style.height = H+'px';
+      svg.style.height = Math.round(H*k)+'px';
       while (gBack.firstChild) gBack.removeChild(gBack.firstChild);
       while (gFront.firstChild) gFront.removeChild(gFront.firstChild);
       var rnd = lcg(121226);
@@ -1293,14 +1373,14 @@
     var toranW = 0, toranTimer = null;
     (function initToran(){
       var w = document.documentElement.clientWidth || 0;
-      if (w >= 300){ toranW = w; makeToran(); }
+      if (w >= 300){ toranW = w; makeToran(); makeVines(); if (reduced) updateVines(1); }
       else setTimeout(initToran, 120);
     })();
     addEventListener('resize', function(){
       clearTimeout(toranTimer);
       toranTimer = setTimeout(function(){
         var w = document.documentElement.clientWidth;
-        if (Math.abs(w - toranW) > 60){ toranW = w; makeToran(); }
+        if (Math.abs(w - toranW) > 60){ toranW = w; makeToran(); makeVines(); updateVines(reduced ? 1 : lastProg); }
       }, 250);
     }, {passive:true});
 
@@ -1369,11 +1449,10 @@
       prevScroll = y;
     }, {passive:true});
 
-    // ---- one rAF loop: petals + parallax + garland rail ----
+    // ---- one rAF loop: petals + parallax + blooming vines ----
     var elL = $('branchL'), elR = $('branchR'),
         heroInner = document.querySelector('.hero-inner'),
         heroMandala = $('heroMandala'),
-        railFill = $('railFill'), railDot = $('railDot'),
         ghosts = Array.prototype.slice.call(document.querySelectorAll('.ghost'));
     ghosts.forEach(function(g){
       g.__base = ((g.getAttribute('style')||'').match(/transform:([^;]+)/)||[,''])[1];
@@ -1402,9 +1481,8 @@
           ghosts[i].style.transform = 'translateY('+(-y*ghosts[i].__k).toFixed(1)+'px) '+ghosts[i].__base;
         }
         var max = (document.documentElement.scrollHeight - innerHeight) || 1;
-        var prog = Math.max(0, Math.min(1, y/max));
-        if (railFill) railFill.style.height = (prog*100).toFixed(2)+'%';
-        if (railDot)  railDot.style.top   = (prog*100).toFixed(2)+'%';
+        lastProg = Math.max(0, Math.min(1, y/max));
+        updateVines(lastProg);
       }
     }
     rafId = requestAnimationFrame(loop);
