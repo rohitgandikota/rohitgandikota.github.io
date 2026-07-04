@@ -8,11 +8,33 @@
     <meta name="author" content="Rohit Gandikota">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" href="images/favicon/favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" type="text/css" href="stylesheet.css">
+    <link rel="stylesheet" type="text/css" href="stylesheet.css?v=2">
+    <script>(function(){try{var t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
     
   </head>
 
   <body>
+    <button id="themeToggle" aria-label="Toggle dark mode" title="Toggle dark mode">🌙</button>
+    <script>
+      (function(){
+        var btn = document.getElementById('themeToggle');
+        var mq = window.matchMedia ? matchMedia('(prefers-color-scheme: dark)') : null;
+        function effective(){
+          var t = document.documentElement.getAttribute('data-theme');
+          if (t) return t;
+          return (mq && mq.matches) ? 'dark' : 'light';
+        }
+        function paint(){ btn.textContent = effective() === 'dark' ? '☀️' : '🌙'; }
+        btn.addEventListener('click', function(){
+          var next = effective() === 'dark' ? 'light' : 'dark';
+          document.documentElement.setAttribute('data-theme', next);
+          try{ localStorage.setItem('theme', next); }catch(e){}
+          paint();
+        });
+        if (mq && mq.addEventListener) mq.addEventListener('change', paint);
+        paint();
+      })();
+    </script>
     <table style="width:100%;max-width:800px;border:0px;border-spacing:0px;border-collapse:separate;margin-right:auto;margin-left:auto;"><tbody>
       <tr style="padding:0px">
         <td style="padding:0px">
@@ -824,7 +846,7 @@
     <tbody>
             <tr>
               <td align="center" style="padding:16px;width:20%;vertical-align:middle">
-						     <div class="colored-box" style="background-color: #fcb97d;">
+						     <div class="colored-box box-media">
 								 <h2>Media</h2>
 								 </div>
               </td>
@@ -850,7 +872,7 @@
             </tr>
             <tr>
               <td align="center" style="padding:16px;width:20%;vertical-align:middle">
-						     <div class="colored-box" style="background-color: #aaba9e;">
+						     <div class="colored-box box-oss">
 								 <h2>Open Source</h2>
 								 </div>
               </td>
@@ -861,7 +883,7 @@
             </tr>
             <tr>
               <td align="center" style="padding:16px;width:20%;vertical-align:middle">
-						     <div class="colored-box" style="background-color: #edd892;">
+						     <div class="colored-box box-awards">
 								 <h2>Awards</h2>
 								 </div>
               </td>

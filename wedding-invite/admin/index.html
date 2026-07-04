@@ -7,6 +7,7 @@
 <title>RSVP Dashboard · Rohit & Aditi</title>
 
 <!-- Same Apps Script Web App URL as the invite page (ends /exec). -->
+<script>(function(){try{var t=localStorage.getItem('ra_admin_theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
 <script>
   const API_URL = "https://script.google.com/macros/s/AKfycbwm8VPVZllFB7M8Y9-ryF896OKMKhObWXoGXHzpDE6AmdoZZunA8hgY9phxZXQFfM7sOQ/exec";
 </script>
@@ -16,11 +17,25 @@
 <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,600&family=Mukta:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
-  :root{ --bg:#FAF4E7; --surface:#FFFDF6; --ink:#4A1B22; --ink-soft:#96676B; --maroon:#7A2E36; --rosewood:#B4575C;
+  :root{ color-scheme:light;
+         --bg:#FAF4E7; --surface:#FFFDF6; --ink:#4A1B22; --ink-soft:#96676B; --maroon:#7A2E36; --rosewood:#B4575C;
+         --accent-ink:#7A2E36; --btn-text:#EFE3C6; --pend-ink:#8A6F2E;
          --gold:#B08D4A; --gold-deep:#7A5D1E; --gold-soft:#D9C69A; --gold-pale:#EFE3C6; --halo:rgba(176,141,74,.14);
          --yes:#58895F; --no:#B4575C; --pending:#A98A3F; }
+  html[data-theme="dark"]{ color-scheme:dark;
+         --bg:#141210; --surface:#1D1A15; --ink:#EDE6DA; --ink-soft:#A2938A; --maroon:#8E3A44; --rosewood:#C97B80;
+         --accent-ink:#E3A6AA; --btn-text:#F2E8D0; --pend-ink:#D9BC7C;
+         --gold:#C9A45C; --gold-deep:#C9AD6B; --gold-soft:#453D2C; --gold-pale:#332D1F; --halo:rgba(201,164,92,.14);
+         --yes:#7FB98A; --no:#D98A8E; --pending:#C9A45C; }
+  @media (prefers-color-scheme: dark){
+    html:not([data-theme="light"]){ color-scheme:dark;
+         --bg:#141210; --surface:#1D1A15; --ink:#EDE6DA; --ink-soft:#A2938A; --maroon:#8E3A44; --rosewood:#C97B80;
+         --accent-ink:#E3A6AA; --btn-text:#F2E8D0; --pend-ink:#D9BC7C;
+         --gold:#C9A45C; --gold-deep:#C9AD6B; --gold-soft:#453D2C; --gold-pale:#332D1F; --halo:rgba(201,164,92,.14);
+         --yes:#7FB98A; --no:#D98A8E; --pending:#C9A45C; }
+  }
   *{box-sizing:border-box}
-  body{margin:0;background:var(--bg);color:var(--ink);font-family:'Mukta',sans-serif;-webkit-font-smoothing:antialiased}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:'Mukta',sans-serif;-webkit-font-smoothing:antialiased;transition:background-color .25s ease,color .25s ease}
   .hidden{display:none !important}
   a{color:inherit}
   .wrap{max-width:1180px;margin:0 auto;padding:28px 20px 80px}
@@ -32,13 +47,13 @@
   .gate-card{background:var(--surface);border:1px solid var(--gold-soft);border-radius:20px;padding:34px;max-width:380px;width:100%;text-align:center;box-shadow:0 34px 80px -50px rgba(74,27,34,.6)}
   input.key{width:100%;padding:13px 15px;border-radius:12px;border:1px solid var(--gold-soft);background:var(--bg);font-size:16px;margin-top:18px;color:var(--ink)}
   input.key:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px var(--halo)}
-  .btn{cursor:pointer;background:var(--maroon);color:var(--gold-pale);padding:13px 20px;border-radius:12px;text-align:center;font-family:'Marcellus',serif;letter-spacing:.14em;text-transform:uppercase;font-size:12px;border:none;font-weight:600}
+  .btn{cursor:pointer;background:var(--maroon);color:var(--btn-text);padding:13px 20px;border-radius:12px;text-align:center;font-family:'Marcellus',serif;letter-spacing:.14em;text-transform:uppercase;font-size:12px;border:none;font-weight:600}
   .btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--gold)}
   .btn:hover{filter:brightness(1.08)}
 
   /* header */
   .head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:10px}
-  h1.title{margin:6px 0 0;font-family:'Cormorant Garamond',serif;font-weight:600;font-size:clamp(34px,6vw,52px);color:var(--maroon)}
+  h1.title{margin:6px 0 0;font-family:'Cormorant Garamond',serif;font-weight:600;font-size:clamp(34px,6vw,52px);color:var(--accent-ink)}
   .updated{font-size:12.5px;color:var(--ink-soft);margin:0 0 22px}
 
   /* stat cards */
@@ -71,8 +86,8 @@
   .filter{cursor:pointer;padding:9px 14px;border-radius:999px;border:1px solid var(--gold-soft);font-size:13px;background:var(--surface);user-select:none;white-space:nowrap}
   .filter b{font-weight:700}
   .filter .cnt{display:inline-block;margin-left:6px;padding:1px 7px;border-radius:999px;background:var(--halo);font-size:11.5px;color:var(--gold-deep);font-weight:700}
-  .filter.active{background:var(--maroon);color:var(--gold-pale);border-color:transparent}
-  .filter.active .cnt{background:rgba(255,253,246,.22);color:var(--gold-pale)}
+  .filter.active{background:var(--maroon);color:var(--btn-text);border-color:transparent}
+  .filter.active .cnt{background:rgba(255,253,246,.22);color:var(--btn-text)}
   #moreBtn{display:none}
 
   .tablewrap{background:var(--surface);border:1px solid var(--gold-soft);border-radius:18px;overflow:hidden;overflow-x:auto;-webkit-overflow-scrolling:touch;box-shadow:0 22px 50px -42px rgba(74,27,34,.6)}
@@ -80,7 +95,7 @@
   th,td{text-align:left;padding:12px 14px;border-bottom:1px solid rgba(0,0,0,.05);vertical-align:top}
   th{font-family:'Marcellus',serif;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-deep);font-weight:700;background:var(--bg);position:sticky;top:0;z-index:1}
   th.sortable{cursor:pointer;user-select:none}
-  th.sortable:hover{color:var(--maroon)}
+  th.sortable:hover{color:var(--accent-ink)}
   th .arrow{font-size:10px;margin-left:4px;opacity:.9}
   tbody tr:nth-child(even) td{background:rgba(176,141,74,.045)}
   tbody tr:hover td{background:var(--halo)}
@@ -88,7 +103,7 @@
   .badge{display:inline-block;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:700;letter-spacing:.04em}
   .badge.yes{background:rgba(88,137,95,.16);color:var(--yes)}
   .badge.no{background:rgba(180,87,92,.16);color:var(--no)}
-  .badge.pending{background:rgba(169,138,63,.18);color:#8A6F2E}
+  .badge.pending{background:rgba(169,138,63,.18);color:var(--pend-ink)}
   .act{display:inline-flex;gap:6px;flex-wrap:wrap}
   .act a,.act button{text-decoration:none;font-size:12px;border:1px solid var(--gold);border-radius:999px;padding:4px 9px;white-space:nowrap;background:transparent;color:var(--ink);cursor:pointer;font-family:inherit}
   .act a:hover,.act button:hover{background:var(--halo)}
@@ -97,6 +112,8 @@
   #noteTip{position:fixed;z-index:100;display:none;max-width:300px;background:var(--surface);border:1px solid var(--gold-soft);border-radius:10px;padding:11px 13px;font-size:13px;line-height:1.5;color:var(--ink);box-shadow:0 18px 42px -16px rgba(74,27,34,.55);white-space:pre-wrap}
   .err{color:var(--no);font-size:13px;margin-top:10px;min-height:18px}
   .spinner{width:30px;height:30px;border:3px solid var(--gold-pale);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite;margin:60px auto}
+  #themeToggle{position:fixed;right:16px;bottom:16px;z-index:70;width:42px;height:42px;border-radius:50%;border:1px solid var(--gold-soft);background:var(--surface);font-size:18px;line-height:1;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.18);transition:background-color .25s ease,transform .15s ease}
+  #themeToggle:hover{transform:scale(1.08)}
   @keyframes spin{to{transform:rotate(360deg)}}
 
   /* mobile guest cards (replace the wide table on phones) */
@@ -130,7 +147,7 @@
   /* add-guest modal */
   #addModal{position:fixed;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(60,25,32,.45);backdrop-filter:blur(2px)}
   .modal{background:var(--surface);border:1px solid var(--gold-soft);border-radius:20px;padding:28px;width:100%;max-width:440px;box-shadow:0 40px 90px -40px rgba(74,27,34,.7);max-height:92vh;overflow-y:auto}
-  .modal h3{margin:0 0 4px;font-family:'Cormorant Garamond',serif;font-weight:700;font-size:30px;color:var(--maroon)}
+  .modal h3{margin:0 0 4px;font-family:'Cormorant Garamond',serif;font-weight:700;font-size:30px;color:var(--accent-ink)}
   .modal .sub{color:var(--ink-soft);font-size:14px;margin-bottom:18px}
   .modal label{display:block;font-family:'Marcellus',serif;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-deep);margin:14px 0 6px;font-weight:700}
   .modal input,.modal textarea,.modal select{width:100%;padding:11px 13px;border-radius:10px;border:1px solid var(--gold-soft);background:var(--bg);font-size:15px;font-family:'Mukta',sans-serif;color:var(--ink)}
@@ -140,16 +157,53 @@
   .row .btn{flex:1;min-width:120px}
   .copied{color:var(--yes);font-size:13px;margin-top:8px;min-height:16px}
   .evpick{cursor:pointer;padding:8px 14px;border-radius:999px;border:1px solid var(--gold-soft);font-size:13px;user-select:none;background:var(--bg);color:var(--ink-soft)}
-  .evpick.on{background:var(--maroon);color:var(--gold-pale);border-color:transparent}
+  .evpick.on{background:var(--maroon);color:var(--btn-text);border-color:transparent}
+  .modal.wide{max-width:620px}
+
+  /* bulk import */
+  #dropZone{margin-top:6px;border:2px dashed var(--gold-soft);border-radius:14px;background:var(--bg);padding:22px 16px;text-align:center;cursor:pointer;font-size:14px;color:var(--ink-soft);transition:all .15s}
+  #dropZone.drag{border-color:var(--gold);background:var(--halo);color:var(--ink)}
+  #dropZone b{color:var(--ink)}
+  #dropZone .cols{display:block;margin-top:6px;font-size:12px}
+  #dropZone a{color:var(--accent-ink);text-decoration:underline;text-underline-offset:2px;cursor:pointer}
+  .bpv{margin-top:14px;border:1px solid var(--gold-soft);border-radius:12px;overflow:hidden;overflow-x:auto}
+  .bpv table{width:100%;border-collapse:collapse;font-size:12.5px;min-width:420px}
+  .bpv th{position:static;font-size:10px;padding:8px 10px}
+  .bpv td{padding:7px 10px;border-bottom:1px solid rgba(0,0,0,.05);vertical-align:top}
+  .bpv tr.bad td{background:rgba(180,87,92,.10)}
+  .bpv .why{color:var(--no);font-size:11px}
+  .bulk-count{margin-top:10px;font-size:13px;color:var(--ink-soft)}
+  .bulk-count b{color:var(--ink)}
 </style>
 </head>
 <body>
+<button id="themeToggle" aria-label="Toggle dark mode" title="Toggle dark mode">🌙</button>
+<script>
+(function(){
+  var btn = document.getElementById('themeToggle');
+  var mq = window.matchMedia ? matchMedia('(prefers-color-scheme: dark)') : null;
+  function effective(){
+    var t = document.documentElement.getAttribute('data-theme');
+    if (t) return t;
+    return (mq && mq.matches) ? 'dark' : 'light';
+  }
+  function paint(){ btn.textContent = effective() === 'dark' ? '☀️' : '🌙'; }
+  btn.addEventListener('click', function(){
+    var next = effective() === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    try{ localStorage.setItem('ra_admin_theme', next); }catch(e){}
+    paint();
+  });
+  if (mq && mq.addEventListener) mq.addEventListener('change', paint);
+  paint();
+})();
+</script>
 
 <!-- ===== KEY GATE ===== -->
 <div id="gate">
   <div class="gate-card">
     <div class="kicker">Rohit &amp; Aditi</div>
-    <div class="serif" style="font-weight:700;font-size:30px;margin-top:6px;color:var(--maroon)">RSVP Dashboard</div>
+    <div class="serif" style="font-weight:700;font-size:30px;margin-top:6px;color:var(--accent-ink)">RSVP Dashboard</div>
     <div class="muted" style="font-size:14px;margin-top:8px">Enter the admin key to view responses.</div>
     <input id="keyInput" class="key" type="password" placeholder="Admin key" autocomplete="off">
     <div class="err" id="gateErr"></div>
@@ -272,7 +326,12 @@
 
 <!-- ===== ADD GUEST MODAL ===== -->
 <div id="addModal" class="hidden">
-  <div class="modal">
+  <div class="modal" id="modalBox">
+    <!-- mode tabs -->
+    <div id="modeTabs" class="row" style="margin:0 0 16px;gap:8px">
+      <div class="evpick on" id="modeSingle" style="flex:1;text-align:center">Single guest</div>
+      <div class="evpick" id="modeBulk" style="flex:1;text-align:center">⬆ Import CSV</div>
+    </div>
     <!-- form view -->
     <div id="addForm">
       <h3>Add a guest</h3>
@@ -299,6 +358,47 @@
       <div class="row">
         <button class="btn ghost" id="addCancel">Cancel</button>
         <button class="btn" id="addCreate">Create invite</button>
+      </div>
+    </div>
+
+    <!-- bulk import view -->
+    <div id="bulkForm" class="hidden">
+      <h3>Import guests</h3>
+      <div class="sub">Drop a CSV / TSV file — or paste rows straight from Google Sheets or Excel.</div>
+      <div id="dropZone">
+        <b>⬇ Drop a file here</b> or click to browse
+        <span class="cols">columns: <b>name</b> · partysize · events · email · phone &nbsp;(<a id="tmplLink">download template</a>)</span>
+      </div>
+      <input type="file" id="csvFile" accept=".csv,.tsv,.txt,text/csv,text/tab-separated-values,text/plain" class="hidden">
+      <label>…or paste rows here</label>
+      <textarea id="csvPaste" rows="4" placeholder="name, partysize, events, email, phone&#10;Priya &amp; Arjun, 2, all, priya@example.com, 919876543210&#10;The Sharmas, 4, patna"></textarea>
+      <label>Side <span style="font-weight:400;text-transform:none;letter-spacing:0">(applies to all — a side column in the file overrides per row)</span></label>
+      <select id="bSide">
+        <option value="Bride &amp; Groom">Bride &amp; Groom</option>
+        <option value="Groom's side">Groom's side</option>
+        <option value="Bride's side">Bride's side</option>
+      </select>
+      <label>Default invite note for this side <span style="font-weight:400;text-transform:none;letter-spacing:0">({name} personalises; link is added automatically)</span></label>
+      <textarea id="bMsg" rows="3"></textarea>
+      <div id="bulkPreview"></div>
+      <div class="err" id="bulkErr"></div>
+      <div class="row">
+        <button class="btn ghost" id="bulkCancel">Cancel</button>
+        <button class="btn" id="bulkImport" disabled style="opacity:.5">Import guests</button>
+      </div>
+    </div>
+
+    <!-- bulk result view -->
+    <div id="bulkResult" class="hidden">
+      <h3>Import finished ✦</h3>
+      <div class="sub" id="bulkSummary"></div>
+      <div id="bulkFails" style="font-size:13px;color:var(--no)"></div>
+      <div class="row">
+        <button class="btn" id="bulkDownload">⬇ All invite messages (.txt)</button>
+      </div>
+      <div class="row">
+        <button class="btn ghost" id="bulkMore">⬆ Import more</button>
+        <button class="btn" id="bulkDone">Done</button>
       </div>
     </div>
 
@@ -423,8 +523,8 @@
       ['Invited', total, 'var(--ink)', 'up to '+potential+' people'],
       ['Attending', yes, 'var(--yes)', head+' people confirmed'],
       ['Declined', no, 'var(--no)', ''],
-      ['Pending', pending, '#8A6F2E', pct+'% replied so far'],
-      ['Total headcount', head, 'var(--maroon)', 'across all events']
+      ['Pending', pending, 'var(--pend-ink)', pct+'% replied so far'],
+      ['Total headcount', head, 'var(--accent-ink)', 'across all events']
     ];
     $('statCards').innerHTML = cards.map(function(c){
       return '<div class="stat"><div class="n" style="color:'+c[2]+'">'+c[1]+'</div><div class="l">'+c[0]+'</div>'+(c[3]?'<div class="s">'+c[3]+'</div>':'')+'</div>';
@@ -448,7 +548,7 @@
       }
       off = (off - pct + 100) % 100;
     });
-    svg+='<text x="21" y="20.5" text-anchor="middle" font-size="7" font-family="Cormorant Garamond,serif" font-weight="700" fill="var(--maroon)">'+(yes+no)+'</text>';
+    svg+='<text x="21" y="20.5" text-anchor="middle" font-size="7" font-family="Cormorant Garamond,serif" font-weight="700" fill="var(--accent-ink)">'+(yes+no)+'</text>';
     svg+='<text x="21" y="26" text-anchor="middle" font-size="2.6" font-family="Marcellus,serif" letter-spacing=".1" fill="var(--ink-soft)">REPLIED</text>';
     $('donut').innerHTML = svg;
     $('donutLegend').innerHTML = segs.map(function(s){
@@ -548,8 +648,8 @@
     $('timeline').innerHTML =
       '<svg viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="none">'+
         '<path d="'+area+'" fill="rgba(176,141,74,.16)"></path>'+
-        '<path d="'+pts+'" fill="none" stroke="var(--maroon)" stroke-width="2"></path>'+
-        '<circle cx="'+lastX+'" cy="'+lastY+'" r="3.4" fill="var(--maroon)"></circle>'+
+        '<path d="'+pts+'" fill="none" stroke="var(--accent-ink)" stroke-width="2"></path>'+
+        '<circle cx="'+lastX+'" cy="'+lastY+'" r="3.4" fill="var(--accent-ink)"></circle>'+
       '</svg>'+
       '<div style="display:flex;justify-content:space-between;font-size:12px;color:var(--ink-soft);margin-top:6px">'+
         '<span>'+fmt(t0)+'</span><span><b style="color:var(--ink)">'+dates.length+'</b> of '+total+' replied</span><span>'+fmt(t1)+'</span>'+
@@ -782,7 +882,135 @@
     });
   }
 
+  // ---------- per-side default invite notes ----------
+  // EDIT HERE when the final wording per side is decided.
+  // {name} is replaced with the guest's name; the personal RSVP link is appended automatically.
+  var SIDE_MESSAGES = {
+    "Bride & Groom": "Hi {name}! \ud83d\udc8d Rohit & Aditi are getting married and would love for you to join the celebrations. Here's your personal invitation & RSVP:",
+    "Groom's side":  "Hi {name}! \ud83d\udc8d Rohit & Aditi are getting married and would love for you to join the celebrations. Here's your personal invitation & RSVP:",
+    "Bride's side":  "Hi {name}! \ud83d\udc8d Rohit & Aditi are getting married and would love for you to join the celebrations. Here's your personal invitation & RSVP:"
+  };
+
+  // ---------- bulk import: parse CSV/TSV with quoted fields ----------
+  function sniffDelim(line){
+    var counts = [[',', (line.match(/,/g)||[]).length], ['\t', (line.match(/\t/g)||[]).length], [';', (line.match(/;/g)||[]).length]];
+    counts.sort(function(a,b){ return b[1]-a[1]; });
+    return counts[0][1] > 0 ? counts[0][0] : ',';
+  }
+  function parseDelimited(text){
+    var rows = [], row = [], cur = '', inQ = false;
+    var delim = sniffDelim(text.split(/\r?\n/)[0] || '');
+    for (var i=0;i<text.length;i++){
+      var ch = text[i];
+      if (inQ){
+        if (ch === '"'){ if (text[i+1] === '"'){ cur += '"'; i++; } else inQ = false; }
+        else cur += ch;
+      } else if (ch === '"'){ inQ = true; }
+      else if (ch === delim){ row.push(cur); cur=''; }
+      else if (ch === '\n' || ch === '\r'){
+        if (ch === '\r' && text[i+1] === '\n') i++;
+        row.push(cur); cur='';
+        if (row.some(function(c){ return String(c).trim() !== ''; })) rows.push(row);
+        row = [];
+      } else cur += ch;
+    }
+    row.push(cur);
+    if (row.some(function(c){ return String(c).trim() !== ''; })) rows.push(row);
+    return rows;
+  }
+  var HEADER_MAP = [
+    [/^(name|names|guest|guests?名|guest ?name)$/i, 'name'],
+    [/^(party ?size|party|size|count|people|pax|guests)$/i, 'party'],
+    [/^(events?|invited?|invite|invited ?to)$/i, 'events'],
+    [/^(e-?mail|mail)$/i, 'email'],
+    [/^(phone|whats ?app|mobile|number|contact)$/i, 'phone'],
+    [/^(side)$/i, 'side'],
+    [/^(message|note|msg)$/i, 'message']
+  ];
+  function mapHeader(h){
+    h = String(h||'').trim();
+    for (var i=0;i<HEADER_MAP.length;i++) if (HEADER_MAP[i][0].test(h)) return HEADER_MAP[i][1];
+    return null;
+  }
+  function normEvents(v){
+    var t = String(v||'').toLowerCase();
+    if (!t.trim() || /\ball\b/.test(t)) return ['sangeet','wedding','reception'];
+    var out = [];
+    if (t.indexOf('sangeet')>=0 || t.indexOf('baraat')>=0 || t.indexOf('patna')>=0) out.push('sangeet');
+    if (t.indexOf('wedding')>=0 || t.indexOf('patna')>=0) out.push('wedding');
+    if (t.indexOf('reception')>=0 || t.indexOf('palasamudram')>=0) out.push('reception');
+    return out.filter(function(x,i,a){ return a.indexOf(x)===i; });
+  }
+  function normSide(v){
+    var t = String(v||'').toLowerCase();
+    if (!t.trim()) return '';
+    if (t.indexOf('bride')>=0 && t.indexOf('groom')>=0) return 'Bride & Groom';
+    if (t.indexOf('both')>=0) return 'Bride & Groom';
+    if (t.indexOf('bride')>=0) return "Bride's side";
+    if (t.indexOf('groom')>=0) return "Groom's side";
+    return '';
+  }
+  var bulkRows = [];       // parsed guests awaiting import
+  var bulkResults = [];    // results of the last import
+  function parseBulk(text){
+    bulkRows = [];
+    var err = '';
+    var grid = parseDelimited(String(text||''));
+    if (grid.length){
+      var head = grid[0].map(mapHeader);
+      if (head.indexOf('name') < 0){
+        err = 'First row must be a header that includes a "name" column (see the template).';
+      } else {
+        for (var r=1; r<grid.length; r++){
+          var o = {name:'', party:1, events:['sangeet','wedding','reception'], email:'', phone:'', side:'', message:''};
+          for (var c=0; c<head.length; c++){
+            var k = head[c]; if (!k) continue;
+            var v = String(grid[r][c]==null?'':grid[r][c]).trim();
+            if (k==='name') o.name = v;
+            else if (k==='party') o.party = Math.max(1, parseInt(v,10)||1);
+            else if (k==='events') o.events = normEvents(v);
+            else if (k==='email') o.email = v;
+            else if (k==='phone') o.phone = v.replace(/[^0-9]/g,'');
+            else if (k==='side') o.side = normSide(v);
+            else if (k==='message') o.message = v;
+          }
+          o.valid = !!o.name && o.events.length > 0;
+          o.reason = !o.name ? 'missing name' : (!o.events.length ? 'no recognizable events' : '');
+          bulkRows.push(o);
+        }
+      }
+    }
+    renderBulkPreview(err);
+  }
+  function renderBulkPreview(err){
+    $('bulkErr').textContent = err || '';
+    var box = $('bulkPreview');
+    if (!bulkRows.length){ box.innerHTML=''; setImportEnabled(0); return; }
+    var good = bulkRows.filter(function(r){ return r.valid; }).length;
+    var show = bulkRows.slice(0, 30);
+    var EVL = {sangeet:'S&B', wedding:'W', reception:'R'};
+    box.innerHTML = '<div class="bpv"><table><thead><tr><th>Name</th><th>Party</th><th>Events</th><th>Email</th><th>Phone</th><th>Side</th></tr></thead><tbody>'+
+      show.map(function(r){
+        return '<tr'+(r.valid?'':' class="bad"')+'><td><b>'+esc(r.name||'?')+'</b>'+(r.valid?'':'<div class="why">'+esc(r.reason)+'</div>')+'</td>'+
+          '<td>'+r.party+'</td><td>'+r.events.map(function(e){return EVL[e];}).join(', ')+'</td>'+
+          '<td>'+esc(r.email||'—')+'</td><td>'+esc(r.phone||'—')+'</td><td>'+esc(r.side||'—')+'</td></tr>';
+      }).join('')+'</tbody></table></div>'+
+      '<div class="bulk-count"><b>'+good+'</b> ready to import'+(bulkRows.length-good ? ' · <span style="color:var(--no)">'+(bulkRows.length-good)+' skipped (fix &amp; re-paste)</span>' : '')+
+      (bulkRows.length>30 ? ' · previewing first 30 of '+bulkRows.length : '')+'</div>';
+    setImportEnabled(good);
+  }
+  function setImportEnabled(n){
+    var b = $('bulkImport');
+    b.disabled = !n;
+    b.style.opacity = n ? '1' : '.5';
+    b.textContent = n ? ('Import '+n+' guest'+(n===1?'':'s')) : 'Import guests';
+  }
+
   function showForm(){
+    $('modalBox').classList.remove('wide');
+    $('modeTabs').classList.remove('hidden');
+    $('modeSingle').classList.add('on'); $('modeBulk').classList.remove('on');
+    $('bulkForm').classList.add('hidden'); $('bulkResult').classList.add('hidden');
     $('addResult').classList.add('hidden');
     $('addForm').classList.remove('hidden');
     $('gName').value=''; $('gEmail').value=''; $('gPhone').value=''; $('gParty').value='1'; $('gMessage').value=''; $('gSide').value="Bride & Groom";
@@ -793,11 +1021,122 @@
   function openAdd(){ $('addModal').classList.remove('hidden'); showForm(); }
   function closeAdd(){ $('addModal').classList.add('hidden'); }
 
+  function showBulk(){
+    $('modalBox').classList.add('wide');
+    $('modeTabs').classList.remove('hidden');
+    $('modeBulk').classList.add('on'); $('modeSingle').classList.remove('on');
+    $('addForm').classList.add('hidden'); $('addResult').classList.add('hidden');
+    $('bulkResult').classList.add('hidden');
+    $('bulkForm').classList.remove('hidden');
+    $('bMsg').value = SIDE_MESSAGES[$('bSide').value] || '';
+    $('bulkErr').textContent = '';
+    renderBulkPreview('');
+  }
+  $('modeSingle').onclick = showForm;
+  $('modeBulk').onclick = showBulk;
+
   $('addBtn').onclick = openAdd;
   $('addCancel').onclick = closeAdd;
   $('addDone').onclick = closeAdd;
   $('addAnother').onclick = showForm;
+  $('bulkCancel').onclick = closeAdd;
+  $('bulkDone').onclick = closeAdd;
+  $('bulkMore').onclick = showBulk;
   $('addModal').addEventListener('click', function(e){ if(e.target===$('addModal')) closeAdd(); });
+
+  // side selector refreshes the default note for that side
+  $('bSide').addEventListener('change', function(){ $('bMsg').value = SIDE_MESSAGES[$('bSide').value] || ''; });
+
+  // drop zone + file picker + paste box all feed the same parser
+  var dz = $('dropZone');
+  dz.addEventListener('click', function(e){ if (e.target.id !== 'tmplLink') $('csvFile').click(); });
+  dz.addEventListener('dragover', function(e){ e.preventDefault(); dz.classList.add('drag'); });
+  dz.addEventListener('dragleave', function(){ dz.classList.remove('drag'); });
+  dz.addEventListener('drop', function(e){
+    e.preventDefault(); dz.classList.remove('drag');
+    var f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+    if (f) readBulkFile(f);
+  });
+  $('csvFile').addEventListener('change', function(){ if (this.files && this.files[0]) readBulkFile(this.files[0]); this.value=''; });
+  function readBulkFile(f){
+    var rd = new FileReader();
+    rd.onload = function(){ $('csvPaste').value = String(rd.result||''); parseBulk(rd.result); };
+    rd.onerror = function(){ $('bulkErr').textContent = 'Could not read that file.'; };
+    rd.readAsText(f);
+  }
+  var pasteTimer = null;
+  $('csvPaste').addEventListener('input', function(){
+    clearTimeout(pasteTimer);
+    var v = this.value;
+    pasteTimer = setTimeout(function(){ parseBulk(v); }, 250);
+  });
+  $('tmplLink').onclick = function(e){
+    e.stopPropagation();
+    var tmpl = 'name,partysize,events,email,phone,side\n'+
+               'Priya & Arjun,2,all,priya@example.com,919876543210,\n'+
+               'The Sharmas,4,patna,,919812345678,\n'+
+               'Divya & Karthik,2,reception,divya@example.com,,Bride\'s side\n';
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([tmpl], {type:'text/csv'}));
+    a.download = 'guest-import-template.csv';
+    a.click();
+    setTimeout(function(){ URL.revokeObjectURL(a.href); }, 1000);
+  };
+
+  // sequential import — one row at a time keeps the Sheet writes safe
+  $('bulkImport').onclick = function(){
+    var rows = bulkRows.filter(function(r){ return r.valid; });
+    if (!rows.length) return;
+    if (DEMO){ $('bulkErr').textContent = 'Demo mode — importing is disabled.'; return; }
+    var btn = $('bulkImport');
+    if (btn.dataset.busy) return;
+    btn.dataset.busy = '1'; btn.disabled = true; btn.style.opacity = '.6';
+    $('bulkErr').textContent = '';
+    bulkResults = [];
+    var i = 0;
+    function next(){
+      if (i >= rows.length){ finishBulk(); return; }
+      var r = rows[i];
+      btn.textContent = 'Importing '+(i+1)+' / '+rows.length+'…';
+      var side = r.side || $('bSide').value;
+      var note = (r.message || $('bMsg').value || '').replace(/\{name\}/g, r.name).trim();
+      var payload = {
+        action:'addGuest', key: adminKey(),
+        name: r.name, email: r.email, whatsapp: r.phone,
+        partySize: r.party, side: side, invited: r.events, message: note
+      };
+      fetch(API_URL, { method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body: JSON.stringify(payload) })
+        .then(function(x){ return x.json(); })
+        .then(function(res){
+          bulkResults.push({ name:r.name, ok: !!(res && res.ok), message: (res && res.message) || '', link: (res && res.link) || '', error: (res && res.error) || (!res || res.ok ? '' : 'unknown error') });
+          i++; next();
+        })
+        .catch(function(){ bulkResults.push({ name:r.name, ok:false, message:'', link:'', error:'network error' }); i++; next(); });
+    }
+    next();
+    function finishBulk(){
+      btn.dataset.busy = ''; btn.disabled = false; btn.style.opacity = '1';
+      var ok = bulkResults.filter(function(r){ return r.ok; }).length;
+      var bad = bulkResults.length - ok;
+      $('modeTabs').classList.add('hidden');
+      $('bulkForm').classList.add('hidden');
+      $('bulkResult').classList.remove('hidden');
+      $('bulkSummary').innerHTML = '<b>'+ok+'</b> guest'+(ok===1?'':'s')+' created with personal links.'+(bad?' <span style="color:var(--no)">'+bad+' failed.</span>':'');
+      $('bulkFails').innerHTML = bad ? bulkResults.filter(function(r){ return !r.ok; }).map(function(r){ return '• '+esc(r.name)+' — '+esc(r.error); }).join('<br>') : '';
+      $('bulkDownload').style.display = ok ? '' : 'none';
+      if (adminKey()) fetchData(adminKey());
+    }
+  };
+  $('bulkDownload').onclick = function(){
+    var blocks = bulkResults.filter(function(r){ return r.ok; }).map(function(r){
+      return '===== ' + r.name + ' =====\n' + r.message + '\n';
+    });
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([blocks.join('\n')], {type:'text/plain'}));
+    a.download = 'invite-messages.txt';
+    a.click();
+    setTimeout(function(){ URL.revokeObjectURL(a.href); }, 1000);
+  };
 
   $('addCreate').onclick = function(){
     var name = $('gName').value.trim();
