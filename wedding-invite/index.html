@@ -75,7 +75,7 @@
   @keyframes flicker{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(.94) translateY(.6px);opacity:.85}}
 
   /* ==================== shared type ==================== */
-  .eyebrow{font-family:'Marcellus',serif;font-size:13px;letter-spacing:.34em;text-transform:uppercase;color:var(--gold-deep)}
+  .eyebrow{font-family:'Marcellus',serif;font-size:14.5px;font-weight:700;letter-spacing:.34em;text-transform:uppercase;color:#7A5D1E;text-shadow:0 0 5px var(--bg),0 0 10px var(--bg),0 0 16px var(--bg)}
   .display{font-family:'Cormorant Garamond',serif;font-weight:600;color:var(--maroon)}
   .script-note{font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--body-ink)}
   .section{position:relative;padding:clamp(64px,9vw,104px) 22px;max-width:1080px;margin:0 auto}
@@ -137,8 +137,8 @@
   .hero-inner::before{content:'';position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
     width:min(92vw,820px);height:114%;z-index:-1;pointer-events:none;
     background:radial-gradient(ellipse 50% 50% at center,rgba(250,244,231,.94) 36%,rgba(250,244,231,.6) 60%,rgba(250,244,231,0) 78%)}
-  .shubh{font-family:'Mukta',sans-serif;font-weight:500;font-size:19px;letter-spacing:.1em;color:var(--gold-deep);text-shadow:var(--halo-sh)}
-  .hero-eyebrow{margin-top:14px;font-family:'Marcellus',serif;font-size:clamp(12px,1.6vw,14px);letter-spacing:.4em;text-transform:uppercase;color:var(--rosewood);text-shadow:var(--halo-sh)}
+  .shubh{font-family:'Mukta',sans-serif;font-weight:600;font-size:20px;letter-spacing:.1em;color:#7A5D1E;text-shadow:var(--halo-sh)}
+  .hero-eyebrow{margin-top:14px;font-family:'Marcellus',serif;font-size:clamp(13.5px,1.8vw,16px);font-weight:700;letter-spacing:.4em;text-transform:uppercase;color:#9E3F45;text-shadow:var(--halo-sh)}
   .hero h1{margin:0;font-family:'Cormorant Garamond',serif;font-weight:600;line-height:.98;font-size:clamp(58px,11.5vw,132px);color:var(--maroon)}
   .hero .amp-row{display:flex;align-items:center;justify-content:center;gap:clamp(12px,2.6vw,26px);margin:6px 0}
   .hero .amp-row .flourish{width:clamp(48px,8vw,96px);color:var(--gold);opacity:.9}
@@ -214,8 +214,8 @@
   .foot-medal svg{width:100%;height:100%}
   .foot-mono{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:600;font-size:34px;color:var(--maroon);letter-spacing:.02em}
   #footName{margin-top:22px;font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:600;font-size:38px;color:var(--maroon)}
-  .foot-tag{margin-top:26px;font-family:'Marcellus',serif;letter-spacing:.3em;text-transform:uppercase;font-size:13px;color:var(--gold-deep)}
-  .foot-close{margin-top:24px;color:var(--ink-soft);font-size:15px;font-weight:300}
+  .foot-tag{margin-top:26px;font-family:'Marcellus',serif;letter-spacing:.3em;text-transform:uppercase;font-size:15px;font-weight:700;color:#7A5D1E}
+  .foot-close{margin-top:24px;color:var(--body-ink);font-size:16.5px;font-weight:400}
 
   /* ==================== overlays ==================== */
   .veil{position:fixed;inset:0;z-index:80;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 38%,var(--surface),var(--bg))}
@@ -290,7 +290,8 @@
     .cd-med .lab{font-size:10px;letter-spacing:.24em}
     .rsvp-card{padding:30px 22px}
     .done-card{padding:38px 22px}
-    #envelope{width:316px;height:212px}
+    /* envelope inner geometry is fixed-px — scale the whole composition instead of squeezing it */
+    #envelope{transform:scale(.82);transform-origin:center;margin:-22px 0}
     /* India map: place each pill right by its own dot (Patna above its dot,
        Palasamudram below its dot), centered on the dot and sized to fit */
     .mapwrap{width:min(340px,90vw) !important}
