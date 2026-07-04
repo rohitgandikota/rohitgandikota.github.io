@@ -259,11 +259,12 @@
   @keyframes toranSway{from{transform:rotate(-.25deg)}to{transform:rotate(.25deg)}}
 
   /* blooming side vines — stems draw and flowers spiral open as you scroll */
-  .vine{position:fixed;top:18px;width:120px;z-index:0;pointer-events:none}
+  .vine{position:fixed;top:0;width:clamp(160px,calc((100vw - 1040px)/2 + 30px),480px);z-index:0;pointer-events:none}
   .vine.left{left:0}
   .vine.right{right:0;transform:scaleX(-1)}
   .vine svg{display:block;width:100%}
-  @media (max-width:900px){.vine{display:none}}
+  .vine .vsway{animation:swayL 13s ease-in-out infinite alternate;transform-origin:50% 0}
+  @media (max-width:1023px){.vine{display:none}}
 
   /* ghost paisley watermarks (slate blue, ties the chintz corners to the sections) */
   .ghost{position:absolute;color:#5B7A94;opacity:.075;pointer-events:none;z-index:0;will-change:transform}
@@ -424,6 +425,14 @@
       <stop offset="0" stop-color="#E8809A"/><stop offset="0.42" stop-color="#C74265"/>
       <stop offset="0.76" stop-color="#9C2B4C"/><stop offset="1" stop-color="#6E1B36"/>
     </radialGradient>
+    <radialGradient id="gradVio" cx="0.42" cy="0.38" r="0.75">
+      <stop offset="0" stop-color="#DDBFEC"/><stop offset="0.42" stop-color="#B57EDC"/>
+      <stop offset="0.76" stop-color="#8E5AAE"/><stop offset="1" stop-color="#63397E"/>
+    </radialGradient>
+    <radialGradient id="gradSun" cx="0.42" cy="0.38" r="0.75">
+      <stop offset="0" stop-color="#FFE59A"/><stop offset="0.42" stop-color="#F7C348"/>
+      <stop offset="0.76" stop-color="#E09E1C"/><stop offset="1" stop-color="#B87710"/>
+    </radialGradient>
     <linearGradient id="gradMango" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0" stop-color="#4E6032"/><stop offset="1" stop-color="#87995C"/>
     </linearGradient>
@@ -583,9 +592,9 @@
             <svg class="orn" width="118" height="126" viewBox="0 0 118 126" aria-hidden="true"><use href="#sym-arch"/></svg>
             <svg class="icon orn" viewBox="0 0 64 64" aria-hidden="true"><use href="#sym-dhol"/></svg>
           </div>
-          <div class="ev-native" lang="hi">संगीत</div>
-          <h3>The Sangeet</h3>
-          <div class="ev-tag">An evening of music &amp; dance</div>
+          <div class="ev-native" lang="hi">संगीत · बारात</div>
+          <h3 style="font-size:29px">The Sangeet &amp; Baraat</h3>
+          <div class="ev-tag">Music, dance &amp; the baraat</div>
         </div>
         <div class="ev-rule"></div>
         <div class="ev-body">
@@ -594,10 +603,10 @@
             <div><span class="k">Where</span><span>Patna, Bihar, India</span></div>
             <div><span class="k">Dress</span><span>Festive Indian · ready to dance</span></div>
           </div>
-          <div class="ev-desc">A musical night where both families gather to sing, dance and welcome the union with joy.</div>
+          <div class="ev-desc">A musical night where both families sing and dance, the groom's baraat arrives in procession, and the bride and groom exchange garlands.</div>
           <div class="ev-btns">
             <a class="btn" href="https://www.google.com/maps/search/?api=1&query=Patna%2C%20Bihar%2C%20India" target="_blank" rel="noopener">◍ Directions</a>
-            <a class="btn-ghost" href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Rohit%20%26%20Aditi%20%E2%80%94%20Sangeet&dates=20261211T133000Z/20261211T173000Z&location=Patna%2C%20Bihar%2C%20India&details=An%20evening%20of%20music%20%26%20dance" target="_blank" rel="noopener">✛ Calendar</a>
+            <a class="btn-ghost" href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Rohit%20%26%20Aditi%20%E2%80%94%20Sangeet%20%26%20Baraat&dates=20261211T133000Z/20261211T173000Z&location=Patna%2C%20Bihar%2C%20India&details=Music%2C%20dance%2C%20the%20baraat%20procession%20%26%20the%20exchange%20of%20garlands" target="_blank" rel="noopener">✛ Calendar</a>
           </div>
         </div>
       </div>
@@ -909,7 +918,9 @@
       {key:'A', grad:'url(#gradMgA)',   line:'#A44E08', r1:'#F7AF43', r2:'#FCC565'},
       {key:'B', grad:'url(#gradMgB)',   line:'#8A3E05', r1:'#E08F2B', r2:'#EFA94A'},
       {key:'C', grad:'url(#gradRoseA)', line:'#8F2547', r1:'#E87FA0', r2:'#F3AEC3'},
-      {key:'D', grad:'url(#gradRoseB)', line:'#6E1B36', r1:'#D15B7E', r2:'#E489A4'}
+      {key:'D', grad:'url(#gradRoseB)', line:'#6E1B36', r1:'#D15B7E', r2:'#E489A4'},
+      {key:'E', grad:'url(#gradVio)',   line:'#4E2B63', r1:'#C495DD', r2:'#DCC0EC'},
+      {key:'F', grad:'url(#gradSun)',   line:'#8A5C0A', r1:'#F9CD5E', r2:'#FCE39B'}
     ];
     function pompom(rnd, R, st){
       var g = el('g',{});
@@ -961,27 +972,31 @@
     // ==== chintz block-print florals (indigo blues, sage greens, gold dots) ====
     var CH = { blueMid:'#4A7BA6', blueDeep:'#2E5E8C', blueLight:'#9FBEDC', blueLine:'#24455F',
                green:'#71813F', greenDeep:'#4E5F33', greenLight:'#98A968', stem:'#6B5B39', gold:'#B08D4A' };
+    // sister palettes for the blooming vines (rose & orchid-violet chintz)
+    var CH_ROSE = { blueMid:'#C9557A', blueDeep:'#A03058', blueLight:'#F0AFC6', blueLine:'#571830' };
+    var CH_VIO  = { blueMid:'#9265B5', blueDeep:'#6C4390', blueLight:'#CBA9E0', blueLine:'#3F2350' };
     function chPetal(w,l){
       return 'M0 0 C '+(w*0.85).toFixed(1)+' '+(-l*0.22).toFixed(1)+' '+(w*0.95).toFixed(1)+' '+(-l*0.7).toFixed(1)+' 0 '+(-l).toFixed(1)+
              ' C '+(-w*0.95).toFixed(1)+' '+(-l*0.7).toFixed(1)+' '+(-w*0.85).toFixed(1)+' '+(-l*0.22).toFixed(1)+' 0 0 Z';
     }
-    function chFaceBloom(rnd, R){
+    function chFaceBloom(rnd, R, pal){
+      pal = pal || CH;
       var g = el('g',{});
       for (var i=0;i<8;i++){
         var pg = el('g',{transform:'rotate('+((i/8)*360 + rnd()*6-3).toFixed(1)+')'});
-        pg.appendChild(el('path',{d:chPetal(R*0.34, R), fill: i%2 ? CH.blueMid : CH.blueDeep, stroke:CH.blueLine,'stroke-width':'1'}));
-        pg.appendChild(el('path',{d:chPetal(R*0.18, R*0.6), fill:CH.blueLight, transform:'translate(0 '+(-R*0.08).toFixed(1)+')', opacity:'0.92'}));
-        pg.appendChild(el('path',{d:'M0 '+(-R*0.3).toFixed(1)+' L0 '+(-R*0.8).toFixed(1), stroke:CH.blueLine,'stroke-width':'0.6', opacity:'0.7'}));
+        pg.appendChild(el('path',{d:chPetal(R*0.34, R), fill: i%2 ? pal.blueMid : pal.blueDeep, stroke:pal.blueLine,'stroke-width':'1'}));
+        pg.appendChild(el('path',{d:chPetal(R*0.18, R*0.6), fill:pal.blueLight, transform:'translate(0 '+(-R*0.08).toFixed(1)+')', opacity:'0.92'}));
+        pg.appendChild(el('path',{d:'M0 '+(-R*0.3).toFixed(1)+' L0 '+(-R*0.8).toFixed(1), stroke:pal.blueLine,'stroke-width':'0.6', opacity:'0.7'}));
         g.appendChild(pg);
       }
       for (var j=0;j<6;j++){
-        g.appendChild(el('path',{d:chPetal(R*0.15, R*0.44), fill:CH.blueDeep, stroke:CH.blueLine,'stroke-width':'0.6',
+        g.appendChild(el('path',{d:chPetal(R*0.15, R*0.44), fill:pal.blueDeep, stroke:pal.blueLine,'stroke-width':'0.6',
           transform:'rotate('+((j/6)*360+30).toFixed(1)+')'}));
       }
-      g.appendChild(el('circle',{r:(R*0.2).toFixed(1), fill:'#F2E8D0', stroke:CH.blueLine,'stroke-width':'0.8'}));
+      g.appendChild(el('circle',{r:(R*0.2).toFixed(1), fill:'#F2E8D0', stroke:pal.blueLine,'stroke-width':'0.8'}));
       for (var k=0;k<8;k++){
         var a = (k/8)*6.2832;
-        g.appendChild(el('circle',{cx:(Math.cos(a)*R*0.13).toFixed(1), cy:(Math.sin(a)*R*0.13).toFixed(1), r:Math.max(0.7,R*0.028).toFixed(1), fill:CH.blueLine}));
+        g.appendChild(el('circle',{cx:(Math.cos(a)*R*0.13).toFixed(1), cy:(Math.sin(a)*R*0.13).toFixed(1), r:Math.max(0.7,R*0.028).toFixed(1), fill:pal.blueLine}));
       }
       g.appendChild(el('circle',{r:(R*0.06).toFixed(1), fill:CH.gold}));
       return g;
@@ -1124,58 +1139,96 @@
         b.g.setAttribute('transform','translate('+b.x+' '+b.y+') rotate('+(b.rot*(1-e)).toFixed(1)+') scale('+Math.max(0.001,e).toFixed(3)+')');
       }
     }
+    function spiralD(cx, cy, R, turns, dir){
+      var d = '', steps = Math.round(turns*14);
+      for (var i=0;i<=steps;i++){
+        var th = (i/steps)*turns*6.2832;
+        var r = R*(1 - (i/steps)*0.88);
+        d += (i ? ' L' : 'M')+(cx+Math.cos(th*dir)*r).toFixed(1)+' '+(cy+Math.sin(th*dir)*r).toFixed(1);
+      }
+      return d;
+    }
     function makeVines(){
       var hosts = [document.getElementById('vineL'), document.getElementById('vineR')];
       if (!hosts[0] || !hosts[1]) return;
       vineDraw = []; vineBlooms = [];
       hosts.forEach(function(h){ while (h.firstChild) h.removeChild(h.firstChild); });
-      if ((document.documentElement.clientWidth||0) < 900) return;
-      var Hv = Math.max(480, innerHeight - 36);
+      if ((document.documentElement.clientWidth||0) < 1024) return;
+      var Wv = Math.max(150, Math.round(hosts[0].getBoundingClientRect().width || 160));
+      var Hv = Math.max(520, innerHeight);
+      var CHP = [CH, CH_ROSE, CH_VIO];
       hosts.forEach(function(host, side){
-        var rnd = lcg(4801 + side);
-        var svg = el('svg',{viewBox:'0 0 120 '+Hv,'aria-hidden':'true'});
+        var rnd = lcg(9101 + side*77);
+        var svg = el('svg',{viewBox:'0 0 '+Wv+' '+Hv,'aria-hidden':'true'});
         svg.style.height = Hv+'px';
         host.appendChild(svg);
+        var wrap = el('g',{'class':'vsway'});
+        svg.appendChild(wrap);
         var stemG = el('g',{fill:'none', stroke:CH.stem,'stroke-linecap':'round'});
         var bloomG = el('g',{});
-        svg.appendChild(stemG); svg.appendChild(bloomG);
-        // winding stem down the screen edge
-        var x = 36+rnd()*14, y = 14, d = 'M'+x.toFixed(1)+' '+y.toFixed(1), dir = 1, nodes = [];
-        while (y < Hv-40){
-          var ny = y + 120 + rnd()*70;
-          var nx = 26 + rnd()*58;
-          d += ' C '+(x+dir*44).toFixed(1)+' '+(y+(ny-y)*0.34).toFixed(1)+' '+(nx-dir*44).toFixed(1)+' '+(ny-(ny-y)*0.34).toFixed(1)+' '+nx.toFixed(1)+' '+ny.toFixed(1);
+        wrap.appendChild(stemG); wrap.appendChild(bloomG);
+        // bold winding stem filling the margin
+        var x = Wv*0.4 + rnd()*Wv*0.14, y = -10, d = 'M'+x.toFixed(1)+' '+y.toFixed(1), dir = 1, nodes = [];
+        while (y < Hv-56){
+          var ny = y + 112 + rnd()*76;
+          var nx = Wv*0.16 + rnd()*Wv*0.62;
+          d += ' C '+(x+dir*Wv*0.34).toFixed(1)+' '+(y+(ny-y)*0.34).toFixed(1)+' '+(nx-dir*Wv*0.34).toFixed(1)+' '+(ny-(ny-y)*0.34).toFixed(1)+' '+nx.toFixed(1)+' '+ny.toFixed(1);
           nodes.push([nx, ny, dir]);
           x = nx; y = ny; dir = -dir;
         }
-        var stem = el('path',{d:d,'stroke-width':'2.2', pathLength:'1','stroke-dasharray':'1','stroke-dashoffset':'1'});
+        var stem = el('path',{d:d,'stroke-width':'3.4', pathLength:'1','stroke-dasharray':'1','stroke-dashoffset':'1'});
         stemG.appendChild(stem);
-        vineDraw.push({el:stem, t:0, span:0.92});
-        // at each bend: a spiral tendril, an opening leaf, and a bloom that spirals open
-        var KINDS2 = ['chz','rose','mg','bud','chz','mg','rose','bud'];
+        vineDraw.push({el:stem, t:0, span:0.9});
+        // at each bend: big drawn swirls, opening leaves, and a large bloom that spirals open
+        var FLO = ['chz0','pomA','chz1','pomF','chz2','pomC','bud','pomE','chz1','pomB','chz0','pomD'];
         nodes.forEach(function(nd, i){
-          var tt = Math.max(0.02, Math.min(0.93, 0.05 + 0.85*(nd[1]/Hv)));
-          var tg2 = el('path',{d:'M'+nd[0].toFixed(1)+' '+nd[1].toFixed(1)+' q '+(nd[2]*14).toFixed(0)+' 4 '+(nd[2]*16).toFixed(0)+' 16 q 2 12 '+(-nd[2]*9).toFixed(0)+' 14 q '+(-nd[2]*9).toFixed(0)+' 2 '+(-nd[2]*10).toFixed(0)+' -7',
-            'stroke-width':'1.1', pathLength:'1','stroke-dasharray':'1','stroke-dashoffset':'1'});
-          stemG.appendChild(tg2);
-          vineDraw.push({el:tg2, t:Math.max(0, tt-0.02), span:0.07});
-          var lg = el('g',{transform:'translate('+nd[0]+' '+nd[1]+') scale(0.001)'});
-          var lf = chLeaf(rnd, 22+rnd()*10);
-          lf.setAttribute('transform','rotate('+(nd[2]*(60+rnd()*30)).toFixed(0)+')');
-          lg.appendChild(lf);
-          bloomG.appendChild(lg);
-          vineBlooms.push({g:lg, x:nd[0], y:nd[1], rot:nd[2]*-70, t:Math.max(0.02, tt-0.015), last:-1});
-          var kind = KINDS2[i % KINDS2.length];
+          var tt = Math.max(0.02, Math.min(0.9, 0.04 + 0.86*(nd[1]/Hv)));
+          var swR = 16 + rnd()*20;
+          var sp = el('path',{d:spiralD(nd[0]+nd[2]*swR*0.95, nd[1]+8, swR, 1.9+rnd()*0.9, nd[2]),
+            'stroke-width':(1.7+rnd()*0.9).toFixed(1), pathLength:'1','stroke-dasharray':'1','stroke-dashoffset':'1'});
+          stemG.appendChild(sp);
+          vineDraw.push({el:sp, t:Math.max(0, tt-0.03), span:0.1});
+          if (rnd() > 0.4){
+            var sp2 = el('path',{d:spiralD(nd[0]-nd[2]*15, nd[1]+34+rnd()*22, 9+rnd()*9, 1.6, -nd[2]),
+              'stroke-width':'1.2', pathLength:'1','stroke-dasharray':'1','stroke-dashoffset':'1'});
+            stemG.appendChild(sp2);
+            vineDraw.push({el:sp2, t:tt, span:0.09});
+          }
+          for (var lv=0; lv<2; lv++){
+            var lg = el('g',{transform:'translate('+nd[0]+' '+nd[1]+') scale(0.001)'});
+            var lf = chLeaf(rnd, 30+rnd()*18);
+            lf.setAttribute('transform','rotate('+((lv ? -1 : 1)*nd[2]*(50+rnd()*40)).toFixed(0)+')');
+            lg.appendChild(lf);
+            bloomG.appendChild(lg);
+            vineBlooms.push({g:lg, x:nd[0], y:nd[1], rot:nd[2]*-60, t:Math.max(0.02, tt-0.01), last:-1});
+          }
+          var key = FLO[i % FLO.length];
           var fg = el('g',{});
-          if (kind==='chz') fg.appendChild(chFaceBloom(rnd, 15+rnd()*5));
-          else if (kind==='bud'){ var bd = chBud(rnd, 15+rnd()*5); bd.setAttribute('transform','rotate('+(rnd()*40-20).toFixed(0)+')'); fg.appendChild(bd); }
-          else fg.appendChild(el('use',{href:'#mg'+(kind==='rose' ? (rnd()>0.5?'C':'D') : (rnd()>0.5?'A':'B'))+Math.floor(rnd()*3),
-            transform:'scale('+(1.35+rnd()*0.5).toFixed(2)+')'}));
-          var wrap = el('g',{transform:'translate('+nd[0]+' '+nd[1]+') scale(0.001)'});
-          wrap.appendChild(fg);
-          bloomG.appendChild(wrap);
-          vineBlooms.push({g:wrap, x:nd[0], y:nd[1], rot:nd[2]*-130, t:tt, last:-1});
-          if (rnd()>0.4) bloomG.appendChild(el('circle',{cx:(nd[0]+nd[2]*(16+rnd()*10)).toFixed(0), cy:(nd[1]-14-rnd()*10).toFixed(0), r:(1.2+rnd()).toFixed(1), fill:CH.gold, opacity:'0.75'}));
+          if (key.slice(0,3) === 'chz'){
+            fg.appendChild(chFaceBloom(rnd, 24+rnd()*12, CHP[+key[3]]));
+          } else if (key === 'bud'){
+            var bd = chBud(rnd, 20+rnd()*8);
+            bd.setAttribute('transform','rotate('+(rnd()*40-20).toFixed(0)+')');
+            fg.appendChild(bd);
+          } else {
+            fg.appendChild(el('use',{href:'#mg'+key[3]+Math.floor(rnd()*3), transform:'scale('+(2.1+rnd()*1.1).toFixed(2)+')'}));
+          }
+          var bx = nd[0] + nd[2]*(10+rnd()*16);
+          var wrapB = el('g',{transform:'translate('+bx.toFixed(1)+' '+nd[1].toFixed(1)+') scale(0.001)'});
+          wrapB.appendChild(fg);
+          bloomG.appendChild(wrapB);
+          vineBlooms.push({g:wrapB, x:bx, y:nd[1], rot:nd[2]*-160, t:tt, last:-1});
+          if (rnd() > 0.35){
+            var k2 = ['A','B','C','D','E','F'][Math.floor(rnd()*6)];
+            var sx2 = nd[0]-nd[2]*(16+rnd()*16), sy2 = nd[1]+28+rnd()*20;
+            var w2 = el('g',{transform:'translate('+sx2.toFixed(1)+' '+sy2.toFixed(1)+') scale(0.001)'});
+            w2.appendChild(el('use',{href:'#mg'+k2+Math.floor(rnd()*3), transform:'scale('+(1.1+rnd()*0.6).toFixed(2)+')'}));
+            bloomG.appendChild(w2);
+            vineBlooms.push({g:w2, x:sx2, y:sy2, rot:nd[2]*120, t:Math.min(0.92, tt+0.02), last:-1});
+          }
+          for (var gd2=0; gd2<3; gd2++){
+            bloomG.appendChild(el('circle',{cx:(nd[0]+(rnd()*70-35)).toFixed(0), cy:(nd[1]+(rnd()*54-22)).toFixed(0), r:(1.3+rnd()*1.4).toFixed(1), fill:CH.gold, opacity:'0.75'}));
+          }
         });
       });
     }
@@ -1301,23 +1354,25 @@
       }
       function mgPick(keys){ return function(){ return '#mg'+keys[Math.floor(rnd()*keys.length)]+Math.floor(rnd()*3); }; }
       // balanced colour rotation with jitter — every stretch of the drape gets
-      // orange, rose, mixed, jasmine, blue pendant and gold chain strands
-      var CYCLE = ['o','r','m','j','p','o','c','r','o','m','p','j'];
+      // orange, rose, yellow, mixed, jasmine, blue pendant and gold chain strands
+      var CYCLE = ['o','r','m','j','p','y','o','c','r','m','p','j'];
       while (sx < W-10){
         var g = el('g',{transform:'translate('+sx.toFixed(1)+' '+swagY(sx).toFixed(1)+') rotate('+(rnd()*5-2.5).toFixed(1)+')'});
         var kindKey = CYCLE[strandIdx % CYCLE.length];
         if (rnd() < 0.15) kindKey = CYCLE[Math.floor(rnd()*CYCLE.length)];
-        var kind = {o:0.2, r:0.45, m:0.6, j:0.7, p:0.8, c:0.95}[kindKey];
-        if (kind < 0.34){
+        if (kindKey === 'o'){
           // orange genda strand
           flowerRun(g, mgPick(['A','B']));
-        } else if (kind < 0.52){
+        } else if (kindKey === 'y'){
+          // golden genda strand
+          flowerRun(g, mgPick(['F','F','A']));
+        } else if (kindKey === 'r'){
           // pink & crimson rose strand
           flowerRun(g, mgPick(['C','D']));
-        } else if (kind < 0.64){
+        } else if (kindKey === 'm'){
           // mixed garland — genda and rose alternating
           flowerRun(g, (function(){ var o = mgPick(['A','B']), r = mgPick(['C','D']); return function(fi){ return fi%2 ? r() : o(); }; })());
-        } else if (kind < 0.76){
+        } else if (kindKey === 'j'){
           // jasmine string (malligai poo): braided buds with sepals, open bloom at the tip
           var lenJ = 34 + rnd()*(mobile?52:74);
           g.appendChild(el('path',{d:'M0 0 L0 '+lenJ.toFixed(1), stroke:'#A69A78','stroke-width':'0.9', fill:'none'}));
@@ -1338,7 +1393,7 @@
           }
           of.appendChild(el('circle',{r:'1.2', fill:'#D9A93F'}));
           g.appendChild(of);
-        } else if (kind < 0.9){
+        } else if (kindKey === 'p'){
           // blue chintz pendant — ties the corner florals through the drape
           var lenP = 26 + rnd()*(mobile?32:48);
           g.appendChild(el('path',{d:'M0 0 L0 '+lenP.toFixed(1), stroke:'#8C6F35','stroke-width':'1', fill:'none'}));
@@ -1459,7 +1514,7 @@
       g.__k = parseFloat(g.getAttribute('data-depth'))||0.1;
     });
 
-    var lastY = -1, lastT = performance.now(), rafId = null;
+    var lastY = -1, lastT = performance.now(), rafId = null, vineMax = 1;
     function loop(t){
       rafId = requestAnimationFrame(loop);
       var dt = Math.min(0.05,(t-lastT)/1000); lastT = t;
@@ -1480,10 +1535,10 @@
         for (var i=0;i<ghosts.length;i++){
           ghosts[i].style.transform = 'translateY('+(-y*ghosts[i].__k).toFixed(1)+'px) '+ghosts[i].__base;
         }
-        var max = (document.documentElement.scrollHeight - innerHeight) || 1;
-        lastProg = Math.max(0, Math.min(1, y/max));
-        updateVines(lastProg);
+        vineMax = (document.documentElement.scrollHeight - innerHeight) || 1;
       }
+      lastProg = Math.max(0, Math.min(1, y / vineMax));
+      updateVines(lastProg); // every frame — per-bloom early-exit keeps it cheap
     }
     rafId = requestAnimationFrame(loop);
     addEventListener('resize', function(){ if (back) back.size(); if (front) front.size(); lastY = -1; }, {passive:true});
@@ -1543,7 +1598,7 @@
   $('envBtn').onclick = openEnvelope;
 
   // ===================== RSVP =====================
-  var ALL_EVENTS = [['sangeet','Sangeet · Dec 11'],['wedding','Wedding · Dec 12'],['reception','Reception · Dec 19']];
+  var ALL_EVENTS = [['sangeet','Sangeet & Baraat · Dec 11'],['wedding','Wedding · Dec 12'],['reception','Reception · Dec 19']];
   var EVENTS = ALL_EVENTS.slice();
   var MEALS  = [['veg','Vegetarian'],['nonveg','Non-vegetarian']];
   var state = { attending:'yes', ev:{sangeet:true,wedding:true,reception:true}, guests:1, meal:'veg', partyMax:1 };
@@ -1659,7 +1714,7 @@
 
   // ---- summary helpers ----
   function eventsLabel(){
-    var out=[]; if(state.ev.sangeet)out.push('Sangeet'); if(state.ev.wedding)out.push('Wedding'); if(state.ev.reception)out.push('Reception');
+    var out=[]; if(state.ev.sangeet)out.push('Sangeet & Baraat'); if(state.ev.wedding)out.push('Wedding'); if(state.ev.reception)out.push('Reception');
     return out.join(' & ') || '—';
   }
   function showSummary(d){
