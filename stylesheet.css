@@ -96,25 +96,6 @@ html[data-theme="dark"] {
   --toggle-border: #3a3f44;
   --thumb-filter: brightness(.9);
 }
-@media (prefers-color-scheme: dark) {
-  html:not([data-theme="light"]) {
-    color-scheme: dark;
-    --bg: #101214;
-    --text: #e7e4de;
-    --text-soft: #a8a29a;
-    --link: #7db3ff;
-    --link-hover: #ffab5e;
-    --highlight: #4a4522;
-    --box-media: #c98f57;
-    --box-oss: #86987c;
-    --box-awards: #c2ad6b;
-    --box-text: #101214;
-    --toggle-bg: #1c1f22;
-    --toggle-border: #3a3f44;
-    --thumb-filter: brightness(.9);
-  }
-}
-
 html { background: var(--bg); }
 body {
   background: var(--bg);
