@@ -249,8 +249,6 @@
     -webkit-mask-image:linear-gradient(180deg,#000 0%,#000 70%,rgba(0,0,0,.5) 88%,transparent 100%);
     mask-image:linear-gradient(180deg,#000 0%,#000 70%,rgba(0,0,0,.5) 88%,transparent 100%)}
   .petal-canvas{position:fixed;inset:0;width:100%;height:100%;pointer-events:none}
-  .chintz-crown{display:flex;justify-content:center;margin:-4px 0 14px}
-  .chintz-crown svg{width:min(250px,72%);height:auto}
   .env-sprig svg{width:132px;height:auto;display:block}
   .foot-sprig{display:flex;justify-content:center;margin-bottom:12px}
   .foot-sprig svg{width:230px;height:auto}
@@ -685,7 +683,6 @@
 
     <!-- FORM -->
     <div id="rsvpForm" class="card rsvp-card reveal">
-      <div id="rsvpCrown" class="chintz-crown" aria-hidden="true"></div>
       <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap">
         <span class="lbl">RSVP for</span>
         <span id="lockedName" style="font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:700;font-size:28px;color:var(--maroon)">friend</span>
@@ -1126,7 +1123,6 @@
       });
       var fb = chFaceBloom(rnd, 21); fb.setAttribute('transform','translate(0 -20)'); g.appendChild(fb);
     }
-    chintzSprig(document.getElementById('rsvpCrown'), 55501);
     chintzSprig(document.getElementById('footSprig'), 55502);
     chintzSprig(document.getElementById('envSprig'), 55503);
 

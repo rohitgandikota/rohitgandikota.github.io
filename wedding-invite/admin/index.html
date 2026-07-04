@@ -16,97 +16,131 @@
 <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,600&family=Mukta:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
-  :root{ --bg:#F5F0E7; --surface:#FFFCF6; --ink:#5C3540; --ink-soft:#9E7680; --primary:#CE8678; --accent:#B5646A; --gold:#C0A07E; --petal:#E6A89F; --halo:rgba(206,134,120,.14);
-         --yes:#5a8f63; --no:#c0726c; --pending:#bba36a; }
+  :root{ --bg:#FAF4E7; --surface:#FFFDF6; --ink:#4A1B22; --ink-soft:#96676B; --maroon:#7A2E36; --rosewood:#B4575C;
+         --gold:#B08D4A; --gold-deep:#7A5D1E; --gold-soft:#D9C69A; --gold-pale:#EFE3C6; --halo:rgba(176,141,74,.14);
+         --yes:#58895F; --no:#B4575C; --pending:#A98A3F; }
   *{box-sizing:border-box}
   body{margin:0;background:var(--bg);color:var(--ink);font-family:'Mukta',sans-serif;-webkit-font-smoothing:antialiased}
   .hidden{display:none !important}
   a{color:inherit}
-  .wrap{max-width:1140px;margin:0 auto;padding:28px 20px 80px}
+  .wrap{max-width:1180px;margin:0 auto;padding:28px 20px 80px}
   .serif{font-family:'Cormorant Garamond',serif}
-  .kicker{font-family:'Marcellus',serif;letter-spacing:.3em;text-transform:uppercase;font-size:11px;color:var(--gold)}
+  .kicker{font-family:'Marcellus',serif;letter-spacing:.3em;text-transform:uppercase;font-size:11.5px;color:var(--gold-deep);font-weight:700}
 
   /* gate */
   #gate{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 38%,var(--surface),var(--bg));z-index:50;padding:24px}
-  .gate-card{background:var(--surface);border:1px solid rgba(0,0,0,.08);border-radius:20px;padding:34px;max-width:380px;width:100%;text-align:center;box-shadow:0 34px 80px -50px rgba(90,22,32,.6)}
-  input.key{width:100%;padding:13px 15px;border-radius:12px;border:1px solid rgba(0,0,0,.16);background:var(--bg);font-size:16px;margin-top:18px}
-  input.key:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px var(--halo)}
-  .btn{cursor:pointer;background:var(--ink);color:var(--bg);padding:13px 20px;border-radius:12px;text-align:center;font-family:'Marcellus',serif;letter-spacing:.14em;text-transform:uppercase;font-size:12px;border:none;font-weight:600}
+  .gate-card{background:var(--surface);border:1px solid var(--gold-soft);border-radius:20px;padding:34px;max-width:380px;width:100%;text-align:center;box-shadow:0 34px 80px -50px rgba(74,27,34,.6)}
+  input.key{width:100%;padding:13px 15px;border-radius:12px;border:1px solid var(--gold-soft);background:var(--bg);font-size:16px;margin-top:18px;color:var(--ink)}
+  input.key:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px var(--halo)}
+  .btn{cursor:pointer;background:var(--maroon);color:var(--gold-pale);padding:13px 20px;border-radius:12px;text-align:center;font-family:'Marcellus',serif;letter-spacing:.14em;text-transform:uppercase;font-size:12px;border:none;font-weight:600}
   .btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--gold)}
   .btn:hover{filter:brightness(1.08)}
 
   /* header */
-  .head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:26px}
-  h1.title{margin:6px 0 0;font-family:'Cormorant Garamond',serif;font-weight:600;font-size:clamp(34px,6vw,52px)}
+  .head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:10px}
+  h1.title{margin:6px 0 0;font-family:'Cormorant Garamond',serif;font-weight:600;font-size:clamp(34px,6vw,52px);color:var(--maroon)}
+  .updated{font-size:12.5px;color:var(--ink-soft);margin:0 0 22px}
 
   /* stat cards */
   .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-bottom:22px}
-  .stat{background:var(--surface);border:1px solid rgba(0,0,0,.06);border-radius:16px;padding:18px 20px;box-shadow:0 22px 50px -42px rgba(90,22,32,.6)}
-  .stat .n{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:42px;line-height:1}
-  .stat .l{margin-top:6px;font-family:'Marcellus',serif;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-soft)}
+  .stat{background:var(--surface);border:1px solid var(--gold-soft);border-radius:16px;padding:16px 18px;box-shadow:0 22px 50px -42px rgba(74,27,34,.6)}
+  .stat .n{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:40px;line-height:1}
+  .stat .l{margin-top:5px;font-family:'Marcellus',serif;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-soft);font-weight:600}
+  .stat .s{margin-top:4px;font-size:12px;color:var(--ink-soft)}
 
-  .panels{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:22px}
-  @media(max-width:760px){.panels{grid-template-columns:1fr}}
-  /* ---------- mobile-only tweaks (desktop untouched) ---------- */
-  @media(max-width:640px){
-    html,body{overflow-x:clip}
-    .wrap{padding:20px 14px 70px}
-    /* table keeps its columns and scrolls sideways within its own card,
-       so the page itself never scrolls horizontally */
-    table{min-width:720px}
-    .tablewrap{border-radius:14px}
-    th,td{padding:10px 12px}
-    /* hint that the table is swipeable */
-    #tableFoot::before{content:'← swipe the table sideways to see all columns · ';color:var(--ink-soft)}
-  }
-  .panel{background:var(--surface);border:1px solid rgba(0,0,0,.06);border-radius:18px;padding:22px;box-shadow:0 22px 50px -42px rgba(90,22,32,.6)}
-  .panel h3{margin:0 0 16px;font-family:'Marcellus',serif;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-soft);font-weight:600}
+  .panels{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px}
+  @media(max-width:860px){.panels{grid-template-columns:1fr}}
+  .panel{background:var(--surface);border:1px solid var(--gold-soft);border-radius:18px;padding:22px;box-shadow:0 22px 50px -42px rgba(74,27,34,.6)}
+  .panel h3{margin:0 0 16px;font-family:'Marcellus',serif;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-deep);font-weight:700}
+  .panel .hint{font-size:12px;color:var(--ink-soft);margin:-10px 0 14px}
 
   .barrow{display:flex;align-items:center;gap:12px;margin-bottom:12px}
-  .barrow .name{width:110px;font-size:14px}
-  .bartrack{flex:1;display:block;height:14px;background:rgba(0,0,0,.06);border-radius:999px;overflow:hidden}
-  .barfill{display:block;height:100%;border-radius:999px}
-  .barrow .v{width:64px;text-align:right;font-size:13px;color:var(--ink-soft)}
+  .barrow .name{width:118px;font-size:14px}
+  .bartrack{flex:1;display:block;position:relative;height:16px;background:rgba(0,0,0,.05);border-radius:999px;overflow:hidden}
+  .barpot{position:absolute;inset:0;width:0;background:var(--gold-pale);border-radius:999px}
+  .barfill{position:absolute;inset:0;width:0;border-radius:999px}
+  .barrow .v{width:110px;text-align:right;font-size:12.5px;color:var(--ink-soft);line-height:1.3}
 
-  /* table */
-  .toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:14px}
-  .search{flex:1;min-width:180px;padding:11px 14px;border-radius:10px;border:1px solid rgba(0,0,0,.14);background:var(--surface);font-size:15px;font-family:inherit;color:var(--ink);height:44px}
-  .search:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px var(--halo)}
-  .filter{cursor:pointer;padding:9px 14px;border-radius:999px;border:1px solid rgba(0,0,0,.14);font-size:13px;background:var(--surface);user-select:none}
-  .filter.active{background:var(--ink);color:var(--bg);border-color:transparent}
-  .tablewrap{background:var(--surface);border:1px solid rgba(0,0,0,.06);border-radius:18px;overflow:hidden;overflow-x:auto;-webkit-overflow-scrolling:touch;box-shadow:0 22px 50px -42px rgba(90,22,32,.6)}
+  /* timeline */
+  #timelinePanel svg{display:block;width:100%;height:120px}
+
+  /* table & filters */
+  .toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
+  .search{flex:1;min-width:180px;padding:11px 14px;border-radius:10px;border:1px solid var(--gold-soft);background:var(--surface);font-size:15px;font-family:inherit;color:var(--ink);height:44px}
+  .search:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px var(--halo)}
+  .filter{cursor:pointer;padding:9px 14px;border-radius:999px;border:1px solid var(--gold-soft);font-size:13px;background:var(--surface);user-select:none;white-space:nowrap}
+  .filter b{font-weight:700}
+  .filter .cnt{display:inline-block;margin-left:6px;padding:1px 7px;border-radius:999px;background:var(--halo);font-size:11.5px;color:var(--gold-deep);font-weight:700}
+  .filter.active{background:var(--maroon);color:var(--gold-pale);border-color:transparent}
+  .filter.active .cnt{background:rgba(255,253,246,.22);color:var(--gold-pale)}
+  #moreBtn{display:none}
+
+  .tablewrap{background:var(--surface);border:1px solid var(--gold-soft);border-radius:18px;overflow:hidden;overflow-x:auto;-webkit-overflow-scrolling:touch;box-shadow:0 22px 50px -42px rgba(74,27,34,.6)}
   table{width:100%;border-collapse:collapse;font-size:14px}
   th,td{text-align:left;padding:12px 14px;border-bottom:1px solid rgba(0,0,0,.05);vertical-align:top}
-  th{font-family:'Marcellus',serif;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft);font-weight:600;background:var(--bg);position:sticky;top:0}
+  th{font-family:'Marcellus',serif;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-deep);font-weight:700;background:var(--bg);position:sticky;top:0;z-index:1}
+  th.sortable{cursor:pointer;user-select:none}
+  th.sortable:hover{color:var(--maroon)}
+  th .arrow{font-size:10px;margin-left:4px;opacity:.9}
+  tbody tr:nth-child(even) td{background:rgba(176,141,74,.045)}
+  tbody tr:hover td{background:var(--halo)}
   tr:last-child td{border-bottom:none}
   .badge{display:inline-block;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:700;letter-spacing:.04em}
-  .badge.yes{background:rgba(90,143,99,.16);color:var(--yes)}
-  .badge.no{background:rgba(192,114,108,.16);color:var(--no)}
-  .badge.pending{background:rgba(187,163,106,.18);color:#917b3f}
+  .badge.yes{background:rgba(88,137,95,.16);color:var(--yes)}
+  .badge.no{background:rgba(180,87,92,.16);color:var(--no)}
+  .badge.pending{background:rgba(169,138,63,.18);color:#8A6F2E}
   .act{display:inline-flex;gap:6px;flex-wrap:wrap}
   .act a,.act button{text-decoration:none;font-size:12px;border:1px solid var(--gold);border-radius:999px;padding:4px 9px;white-space:nowrap;background:transparent;color:var(--ink);cursor:pointer;font-family:inherit}
   .act a:hover,.act button:hover{background:var(--halo)}
   .muted{color:var(--ink-soft)}
   .noteclip{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;max-width:190px;line-height:1.35;cursor:help}
-  #noteTip{position:fixed;z-index:100;display:none;max-width:300px;background:var(--surface);border:1px solid rgba(0,0,0,.14);border-radius:10px;padding:11px 13px;font-size:13px;line-height:1.5;color:var(--ink);box-shadow:0 18px 42px -16px rgba(90,22,32,.55);white-space:pre-wrap}
+  #noteTip{position:fixed;z-index:100;display:none;max-width:300px;background:var(--surface);border:1px solid var(--gold-soft);border-radius:10px;padding:11px 13px;font-size:13px;line-height:1.5;color:var(--ink);box-shadow:0 18px 42px -16px rgba(74,27,34,.55);white-space:pre-wrap}
   .err{color:var(--no);font-size:13px;margin-top:10px;min-height:18px}
-  .spinner{width:30px;height:30px;border:3px solid rgba(0,0,0,.12);border-top-color:var(--primary);border-radius:50%;animation:spin .8s linear infinite;margin:60px auto}
+  .spinner{width:30px;height:30px;border:3px solid var(--gold-pale);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite;margin:60px auto}
   @keyframes spin{to{transform:rotate(360deg)}}
 
+  /* mobile guest cards (replace the wide table on phones) */
+  #cards{display:none}
+  .gcard{background:var(--surface);border:1px solid var(--gold-soft);border-radius:16px;padding:16px;margin-bottom:12px;box-shadow:0 18px 40px -36px rgba(74,27,34,.6)}
+  .gcard .top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+  .gcard .nm{font-weight:600;font-size:16px}
+  .gcard .contact{font-size:12px;color:var(--ink-soft);margin-top:2px;word-break:break-all}
+  .gcard .meta{margin-top:10px;font-size:13.5px;line-height:1.55}
+  .gcard .meta b{font-family:'Marcellus',serif;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-deep);font-weight:700;margin-right:6px}
+  .gcard .note{margin-top:8px;font-size:13px;color:var(--ink-soft);font-style:italic}
+  .gcard .act{margin-top:12px}
+
+  /* ---------- mobile ---------- */
+  @media(max-width:640px){
+    html,body{overflow-x:clip}
+    .wrap{padding:20px 14px 70px}
+    .head .btn{padding:11px 14px;font-size:11px}
+    .stats{grid-template-columns:repeat(2,1fr);gap:10px}
+    .stat .n{font-size:32px}
+    .tablewrap{display:none}
+    #tableFoot{display:none}
+    #cards{display:block}
+    #moreBtn{display:inline-block}
+    .toolbar.advanced{display:none}
+    .toolbar.advanced.open{display:flex}
+    .toolbar.advanced .search{flex:1 1 100% !important;min-width:0 !important;width:100% !important}
+    .modal{padding:22px;max-width:100%}
+  }
+
   /* add-guest modal */
-  #addModal{position:fixed;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(60,30,40,.45);backdrop-filter:blur(2px)}
-  .modal{background:var(--surface);border:1px solid rgba(0,0,0,.08);border-radius:20px;padding:28px;width:100%;max-width:440px;box-shadow:0 40px 90px -40px rgba(90,22,32,.7);max-height:90vh;overflow-y:auto}
-  .modal h3{margin:0 0 4px;font-family:'Cormorant Garamond',serif;font-weight:700;font-size:30px;color:var(--ink)}
+  #addModal{position:fixed;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(60,25,32,.45);backdrop-filter:blur(2px)}
+  .modal{background:var(--surface);border:1px solid var(--gold-soft);border-radius:20px;padding:28px;width:100%;max-width:440px;box-shadow:0 40px 90px -40px rgba(74,27,34,.7);max-height:92vh;overflow-y:auto}
+  .modal h3{margin:0 0 4px;font-family:'Cormorant Garamond',serif;font-weight:700;font-size:30px;color:var(--maroon)}
   .modal .sub{color:var(--ink-soft);font-size:14px;margin-bottom:18px}
-  .modal label{display:block;font-family:'Marcellus',serif;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);margin:14px 0 6px;font-weight:600}
-  .modal input,.modal textarea,.modal select{width:100%;padding:11px 13px;border-radius:10px;border:1px solid rgba(0,0,0,.16);background:var(--bg);font-size:15px;font-family:'Mukta',sans-serif;color:var(--ink)}
-  .modal input:focus,.modal textarea:focus,.modal select:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px var(--halo)}
+  .modal label{display:block;font-family:'Marcellus',serif;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-deep);margin:14px 0 6px;font-weight:700}
+  .modal input,.modal textarea,.modal select{width:100%;padding:11px 13px;border-radius:10px;border:1px solid var(--gold-soft);background:var(--bg);font-size:15px;font-family:'Mukta',sans-serif;color:var(--ink)}
+  .modal input:focus,.modal textarea:focus,.modal select:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px var(--halo)}
   .modal textarea{resize:vertical}
   .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
   .row .btn{flex:1;min-width:120px}
   .copied{color:var(--yes);font-size:13px;margin-top:8px;min-height:16px}
-  .evpick{cursor:pointer;padding:8px 14px;border-radius:999px;border:1px solid rgba(0,0,0,.16);font-size:13px;user-select:none;background:var(--bg);color:var(--ink-soft)}
-  .evpick.on{background:var(--ink);color:var(--surface);border-color:transparent}
+  .evpick{cursor:pointer;padding:8px 14px;border-radius:999px;border:1px solid var(--gold-soft);font-size:13px;user-select:none;background:var(--bg);color:var(--ink-soft)}
+  .evpick.on{background:var(--maroon);color:var(--gold-pale);border-color:transparent}
 </style>
 </head>
 <body>
@@ -115,7 +149,7 @@
 <div id="gate">
   <div class="gate-card">
     <div class="kicker">Rohit &amp; Aditi</div>
-    <div class="serif" style="font-weight:700;font-size:30px;margin-top:6px">RSVP Dashboard</div>
+    <div class="serif" style="font-weight:700;font-size:30px;margin-top:6px;color:var(--maroon)">RSVP Dashboard</div>
     <div class="muted" style="font-size:14px;margin-top:8px">Enter the admin key to view responses.</div>
     <input id="keyInput" class="key" type="password" placeholder="Admin key" autocomplete="off">
     <div class="err" id="gateErr"></div>
@@ -139,6 +173,7 @@
         <button class="btn ghost" id="lockBtn">Lock</button>
       </div>
     </div>
+    <p class="updated" id="updatedAt"></p>
 
     <div id="loading"><div class="spinner"></div></div>
 
@@ -156,16 +191,26 @@
         <div class="panel">
           <div id="bars"></div>
         </div>
+        <div class="panel">
+          <h3>Catering by city <span style="letter-spacing:0;text-transform:none;font-family:'Mukta',sans-serif;font-weight:400;color:var(--ink-soft)">(attending headcount)</span></h3>
+          <div id="catering"></div>
+        </div>
+        <div class="panel" id="timelinePanel">
+          <h3>RSVP momentum</h3>
+          <div class="hint">Cumulative replies over time.</div>
+          <div id="timeline"></div>
+        </div>
       </div>
 
       <div class="toolbar">
-        <input class="search" id="search" placeholder="Search by name…">
-        <div class="filter active" data-f="all">All</div>
-        <div class="filter" data-f="yes">Attending</div>
-        <div class="filter" data-f="no">Declined</div>
-        <div class="filter" data-f="pending">Pending</div>
+        <input class="search" id="search" placeholder="Search name, email or phone…">
+        <div class="filter active" data-f="all">All<span class="cnt" id="cAll">0</span></div>
+        <div class="filter" data-f="yes">Attending<span class="cnt" id="cYes">0</span></div>
+        <div class="filter" data-f="no">Declined<span class="cnt" id="cNo">0</span></div>
+        <div class="filter" data-f="pending">Pending<span class="cnt" id="cPending">0</span></div>
+        <div class="filter" id="moreBtn">☰ Filters</div>
       </div>
-      <div class="toolbar">
+      <div class="toolbar advanced" id="advToolbar">
         <select class="search" id="fAttending" style="flex:0 1 auto;min-width:175px">
           <option value="">Attending: any</option>
           <optgroup label="By city">
@@ -173,7 +218,7 @@
             <option value="palasamudram">Attending Palasamudram (Reception)</option>
           </optgroup>
           <optgroup label="By event">
-            <option value="sangeet">Attending Sangeet</option>
+            <option value="sangeet">Attending Sangeet &amp; Baraat</option>
             <option value="wedding">Attending Wedding</option>
             <option value="reception">Attending Reception</option>
           </optgroup>
@@ -185,7 +230,7 @@
             <option value="palasamudram">Invited to Palasamudram (Reception)</option>
           </optgroup>
           <optgroup label="By event">
-            <option value="sangeet">Invited to Sangeet</option>
+            <option value="sangeet">Invited to Sangeet &amp; Baraat</option>
             <option value="wedding">Invited to Wedding</option>
             <option value="reception">Invited to Reception</option>
           </optgroup>
@@ -209,11 +254,17 @@
       <div class="tablewrap">
         <table>
           <thead><tr>
-            <th>Name</th><th>Status</th><th>Guests</th><th>Events</th><th>Meal</th><th>Song</th><th>Note</th><th>Responded</th><th>Reach out</th>
+            <th class="sortable" data-sort="name">Name<span class="arrow"></span></th>
+            <th class="sortable" data-sort="status">Status<span class="arrow"></span></th>
+            <th class="sortable" data-sort="guests">Guests<span class="arrow"></span></th>
+            <th>Events</th><th>Meal</th><th>Song</th><th>Note</th>
+            <th class="sortable" data-sort="respondedAt">Responded<span class="arrow"></span></th>
+            <th>Reach out</th>
           </tr></thead>
           <tbody id="rows"></tbody>
         </table>
       </div>
+      <div id="cards"></div>
       <div class="muted" id="tableFoot" style="margin-top:12px;font-size:13px"></div>
     </div>
   </div>
@@ -286,6 +337,8 @@
   var data = [];          // all guests
   var filter = 'all';
   var search = '';
+  var sortCol = '', sortDir = 1;   // click a column header to sort; '' = sheet order
+  var DEMO = /(?:\?|&)demo=1(?:&|$)/.test(location.search);   // ?demo=1 → styled preview with fake data, no key, no API
 
   // ---------- auth ----------
   function unlock(key){
@@ -308,6 +361,12 @@
       .catch(function(){ $('enterBtn').textContent='Unlock'; $('gateErr').textContent = 'Network error — try again.'; });
   }
   function load(){
+    if (DEMO){
+      $('gate').classList.add('hidden'); $('dash').classList.remove('hidden');
+      render(demoGuests());
+      $('updatedAt').textContent = 'Demo data — styling preview only.';
+      return;
+    }
     var key = (function(){ try{ return localStorage.getItem(KEY_LS); }catch(_){ return null; } })();
     if (key){ $('gate').classList.add('hidden'); $('dash').classList.remove('hidden'); fetchData(key); }
   }
@@ -327,30 +386,51 @@
   $('enterBtn').onclick = function(){ unlock($('keyInput').value.trim()); };
   $('keyInput').addEventListener('keydown', function(e){ if(e.key==='Enter') unlock($('keyInput').value.trim()); });
   $('lockBtn').onclick = lock;
-  $('refreshBtn').onclick = function(){ var key; try{ key=localStorage.getItem(KEY_LS);}catch(_){ } if(key) fetchData(key); };
+  $('refreshBtn').onclick = function(){ if (DEMO){ render(demoGuests()); return; } var key; try{ key=localStorage.getItem(KEY_LS);}catch(_){ } if(key) fetchData(key); };
+
+  // ---------- helpers ----------
+  function statusOf(g){ var s=String(g.status||'').toLowerCase(); return s==='yes'?'yes':(s==='no'?'no':'pending'); }
+  function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
+  function headOf(g){ return Number(g.guests)||1; }
+  function partyOf(g){ return Number(g.partySize)||Number(g.guests)||1; }
+  function invitedTo(g, ev){ var inv=String(g.invited||'').toLowerCase(); return !inv || inv.indexOf(ev)>=0; } // blank = invited to everything
+  var EV_LABEL = { sangeet:'Sangeet & Baraat', wedding:'Wedding', reception:'Reception' };
+  function prettyEvents(str){
+    var s = String(str||'').toLowerCase();
+    var out = [];
+    ['sangeet','wedding','reception'].forEach(function(k){ if (s.indexOf(k)>=0) out.push(EV_LABEL[k]); });
+    return out.length ? out.join(', ') : String(str||'');
+  }
 
   // ---------- render ----------
-  function statusOf(g){ var s=String(g.status||'').toLowerCase(); return s==='yes'?'yes':(s==='no'?'no':'pending'); }
-
   function render(guests){
     data = guests;
     $('loading').classList.add('hidden'); $('content').classList.remove('hidden');
-    renderStats(); renderDonut(); renderBars(); renderTable();
+    if (!DEMO) $('updatedAt').textContent = 'Updated ' + new Date().toLocaleTimeString(undefined,{hour:'numeric',minute:'2-digit'});
+    renderStats(); renderDonut(); renderBars(); renderCatering(); renderTimeline(); renderTable();
   }
 
   function renderStats(){
-    var total=data.length, yes=0, no=0, pending=0, head=0;
-    data.forEach(function(g){ var s=statusOf(g); if(s==='yes'){yes++; head+=Number(g.guests)||1;} else if(s==='no'){no++;} else {pending++;} });
+    var total=data.length, yes=0, no=0, pending=0, head=0, potential=0;
+    data.forEach(function(g){
+      potential += partyOf(g);
+      var s=statusOf(g);
+      if(s==='yes'){yes++; head+=headOf(g);} else if(s==='no'){no++;} else {pending++;}
+    });
+    var replied = yes+no;
+    var pct = total ? Math.round(replied/total*100) : 0;
     var cards=[
-      ['Invited', total, 'var(--ink)'],
-      ['Attending', yes, 'var(--yes)'],
-      ['Declined', no, 'var(--no)'],
-      ['Pending', pending, '#917b3f'],
-      ['Total headcount', head, 'var(--primary)']
+      ['Invited', total, 'var(--ink)', 'up to '+potential+' people'],
+      ['Attending', yes, 'var(--yes)', head+' people confirmed'],
+      ['Declined', no, 'var(--no)', ''],
+      ['Pending', pending, '#8A6F2E', pct+'% replied so far'],
+      ['Total headcount', head, 'var(--maroon)', 'across all events']
     ];
     $('statCards').innerHTML = cards.map(function(c){
-      return '<div class="stat"><div class="n" style="color:'+c[2]+'">'+c[1]+'</div><div class="l">'+c[0]+'</div></div>';
+      return '<div class="stat"><div class="n" style="color:'+c[2]+'">'+c[1]+'</div><div class="l">'+c[0]+'</div>'+(c[3]?'<div class="s">'+c[3]+'</div>':'')+'</div>';
     }).join('');
+    // status chip counts
+    $('cAll').textContent = total; $('cYes').textContent = yes; $('cNo').textContent = no; $('cPending').textContent = pending;
   }
 
   function renderDonut(){
@@ -368,53 +448,113 @@
       }
       off = (off - pct + 100) % 100;
     });
-    svg+='<text x="21" y="20.5" text-anchor="middle" font-size="7" font-family="Cormorant Garamond,serif" font-weight="700" fill="var(--ink)">'+(yes+no)+'</text>';
+    svg+='<text x="21" y="20.5" text-anchor="middle" font-size="7" font-family="Cormorant Garamond,serif" font-weight="700" fill="var(--maroon)">'+(yes+no)+'</text>';
     svg+='<text x="21" y="26" text-anchor="middle" font-size="2.6" font-family="Marcellus,serif" letter-spacing=".1" fill="var(--ink-soft)">REPLIED</text>';
     $('donut').innerHTML = svg;
     $('donutLegend').innerHTML = segs.map(function(s){
+      var pct = Math.round(s[1]/total*100);
       return '<div style="display:flex;align-items:center;gap:8px;font-size:14px">'+
         '<span style="width:11px;height:11px;border-radius:50%;background:'+s[2]+';display:inline-block"></span>'+
-        s[0]+' <b style="margin-left:4px">'+s[1]+'</b></div>';
+        s[0]+' <b style="margin-left:4px">'+s[1]+'</b><span class="muted" style="font-size:12px">('+pct+'%)</span></div>';
     }).join('');
   }
 
+  // attendance bars now show confirmed vs potential (everyone invited to that event)
   function renderBars(){
-    var ev={sangeet:0,wedding:0,reception:0};
+    var ev={sangeet:{go:0,pot:0},wedding:{go:0,pot:0},reception:{go:0,pot:0}};
     var meal={veg:0,nonveg:0};
     data.forEach(function(g){
+      Object.keys(ev).forEach(function(k){ if (invitedTo(g,k)) ev[k].pot += partyOf(g); });
       if (statusOf(g)!=='yes') return;
-      var n=Number(g.guests)||1;
+      var n=headOf(g);
       var e=String(g.events||'').toLowerCase();
-      if(e.indexOf('sangeet')>=0)ev.sangeet+=n;
-      if(e.indexOf('wedding')>=0)ev.wedding+=n;
-      if(e.indexOf('reception')>=0)ev.reception+=n;
+      Object.keys(ev).forEach(function(k){ if(e.indexOf(k)>=0) ev[k].go+=n; });
       var m=String(g.meal||'').toLowerCase();
       if(m.indexOf('non')>=0)meal.nonveg+=n; else if(m.indexOf('veg')>=0)meal.veg+=n;
     });
     var evRows=[
-      ['Sangeet',ev.sangeet,'var(--primary)'],
-      ['Wedding',ev.wedding,'var(--accent)'],
+      ['Sangeet & Baraat',ev.sangeet,'var(--rosewood)'],
+      ['Wedding',ev.wedding,'var(--maroon)'],
       ['Reception',ev.reception,'var(--gold)']
     ];
-    var mealRows=[
-      ['Vegetarian',meal.veg,'var(--yes)'],
-      ['Non-vegetarian',meal.nonveg,'var(--no)']
-    ];
-    function barsHtml(rows){
-      var max=Math.max(1,Math.max.apply(null,rows.map(function(r){return r[1];})));
-      return rows.map(function(r){
-        var w=(r[1]/max*100).toFixed(1);
+    var max=Math.max(1,ev.sangeet.pot,ev.wedding.pot,ev.reception.pot);
+    var html = '<h3 style="margin-top:0">Attendance by event</h3>'+
+      '<div class="hint">Solid = confirmed · pale = everyone invited</div>'+
+      evRows.map(function(r){
+        var wGo=(r[1].go/max*100).toFixed(1), wPot=(r[1].pot/max*100).toFixed(1);
+        return '<div class="barrow"><span class="name">'+r[0]+'</span>'+
+          '<span class="bartrack"><span class="barpot" style="width:'+wPot+'%"></span><span class="barfill" style="width:'+wGo+'%;background:'+r[2]+'"></span></span>'+
+          '<span class="v"><b>'+r[1].go+'</b> of '+r[1].pot+' invited</span></div>';
+      }).join('');
+    var mealRows=[['Vegetarian',meal.veg,'var(--yes)'],['Non-vegetarian',meal.nonveg,'var(--no)']];
+    var mMax=Math.max(1,meal.veg,meal.nonveg);
+    html += '<h3 style="margin-top:24px">Meals (all attending)</h3>'+
+      mealRows.map(function(r){
+        var w=(r[1]/mMax*100).toFixed(1);
         return '<div class="barrow"><span class="name">'+r[0]+'</span>'+
           '<span class="bartrack"><span class="barfill" style="width:'+w+'%;background:'+r[2]+'"></span></span>'+
-          '<span class="v">'+r[1]+' guests</span></div>';
+          '<span class="v"><b>'+r[1]+'</b> guests</span></div>';
       }).join('');
-    }
-    $('bars').innerHTML =
-      '<h3 style="margin-top:0">Attendance by event</h3>' + barsHtml(evRows) +
-      '<h3 style="margin-top:26px">Attendance by meal</h3>' + barsHtml(mealRows);
+    $('bars').innerHTML = html;
   }
 
-  function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
+  // veg / non-veg split per city — what each caterer actually needs
+  function renderCatering(){
+    var city = { patna:{veg:0,nonveg:0}, palasamudram:{veg:0,nonveg:0} };
+    data.forEach(function(g){
+      if (statusOf(g)!=='yes') return;
+      var n=headOf(g);
+      var e=String(g.events||'').toLowerCase();
+      var m=String(g.meal||'').toLowerCase();
+      var mk = m.indexOf('non')>=0 ? 'nonveg' : (m.indexOf('veg')>=0 ? 'veg' : '');
+      if (!mk) return;
+      if (e.indexOf('sangeet')>=0 || e.indexOf('wedding')>=0) city.patna[mk]+=n;
+      if (e.indexOf('reception')>=0) city.palasamudram[mk]+=n;
+    });
+    function block(label, c){
+      var max=Math.max(1,c.veg,c.nonveg);
+      return '<div style="margin-bottom:18px"><div style="font-size:14px;font-weight:600;margin-bottom:8px">'+label+'</div>'+
+        [['Veg',c.veg,'var(--yes)'],['Non-veg',c.nonveg,'var(--no)']].map(function(r){
+          var w=(r[1]/max*100).toFixed(1);
+          return '<div class="barrow" style="margin-bottom:8px"><span class="name" style="width:74px">'+r[0]+'</span>'+
+            '<span class="bartrack" style="height:13px"><span class="barfill" style="width:'+w+'%;background:'+r[2]+'"></span></span>'+
+            '<span class="v" style="width:70px"><b>'+r[1]+'</b></span></div>';
+        }).join('')+'</div>';
+    }
+    $('catering').innerHTML =
+      block('Patna · Sangeet, Baraat &amp; Wedding', city.patna) +
+      block('Palasamudram · Reception', city.palasamudram);
+  }
+
+  // cumulative replies over time (tiny area chart)
+  function renderTimeline(){
+    var dates = data.map(function(g){ return g.respondedAt ? new Date(g.respondedAt).getTime() : 0; })
+                    .filter(Boolean).sort(function(a,b){ return a-b; });
+    var total = data.length;
+    if (dates.length < 2){
+      $('timeline').innerHTML = '<p class="muted" style="font-size:13px;margin:6px 0 0">Not enough responses yet — the chart appears after a couple of replies.</p>';
+      return;
+    }
+    var t0 = dates[0], t1 = Math.max(dates[dates.length-1], Date.now());
+    var W=560, H=110, PAD=6;
+    function x(t){ return PAD + (t-t0)/(t1-t0||1)*(W-2*PAD); }
+    function y(c){ return H-PAD - (c/total)*(H-2*PAD); }
+    var pts = 'M'+x(t0).toFixed(1)+' '+y(0).toFixed(1);
+    dates.forEach(function(t,i){ pts += ' L'+x(t).toFixed(1)+' '+y(i).toFixed(1)+' L'+x(t).toFixed(1)+' '+y(i+1).toFixed(1); });
+    pts += ' L'+x(t1).toFixed(1)+' '+y(dates.length).toFixed(1);
+    var area = pts + ' L'+x(t1).toFixed(1)+' '+y(0).toFixed(1)+' Z';
+    var lastX=x(dates[dates.length-1]), lastY=y(dates.length);
+    var fmt=function(t){ return new Date(t).toLocaleDateString(undefined,{month:'short',day:'numeric'}); };
+    $('timeline').innerHTML =
+      '<svg viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="none">'+
+        '<path d="'+area+'" fill="rgba(176,141,74,.16)"></path>'+
+        '<path d="'+pts+'" fill="none" stroke="var(--maroon)" stroke-width="2"></path>'+
+        '<circle cx="'+lastX+'" cy="'+lastY+'" r="3.4" fill="var(--maroon)"></circle>'+
+      '</svg>'+
+      '<div style="display:flex;justify-content:space-between;font-size:12px;color:var(--ink-soft);margin-top:6px">'+
+        '<span>'+fmt(t0)+'</span><span><b style="color:var(--ink)">'+dates.length+'</b> of '+total+' replied</span><span>'+fmt(t1)+'</span>'+
+      '</div>';
+  }
 
   var lastRows = [];   // currently displayed (filtered) rows
   // a filter value can be a single event or a city (which maps to its events)
@@ -423,12 +563,15 @@
   function filteredData(){
     var at=$('fAttending').value, iv=$('fInvited').value, sd=$('fSide').value,
         ml=$('fMeal').value, mn=$('fMin').value, mx=$('fMax').value;
-    return data.filter(function(g){
+    var rows = data.filter(function(g){
       var s=statusOf(g);
       if (filter==='yes'&&s!=='yes') return false;
       if (filter==='no'&&s!=='no') return false;
       if (filter==='pending'&&s!=='pending') return false;
-      if (search && String(g.name||'').toLowerCase().indexOf(search)<0) return false;
+      if (search){
+        var hay = (String(g.name||'')+' '+String(g.email||'')+' '+String(g.whatsapp||'')).toLowerCase();
+        if (hay.indexOf(search)<0) return false;
+      }
       // Attending: RSVP'd yes and ticked any of the target events (event or city)
       if (at){
         var aKeys=eventsForVal(at), evs=String(g.events||'').toLowerCase();
@@ -447,44 +590,105 @@
       if (mx!=='' && gc>Number(mx)) return false;
       return true;
     });
+    if (sortCol){
+      var STATUS_ORDER = {yes:0, pending:1, no:2};
+      rows = rows.slice().sort(function(a,b){
+        var va, vb;
+        if (sortCol==='name'){ va=String(a.name||'').toLowerCase(); vb=String(b.name||'').toLowerCase(); return va<vb?-sortDir:(va>vb?sortDir:0); }
+        if (sortCol==='status'){ return (STATUS_ORDER[statusOf(a)]-STATUS_ORDER[statusOf(b)])*sortDir; }
+        if (sortCol==='guests'){ return ((Number(a.guests)||0)-(Number(b.guests)||0))*sortDir; }
+        if (sortCol==='respondedAt'){
+          va = a.respondedAt ? new Date(a.respondedAt).getTime() : 0;
+          vb = b.respondedAt ? new Date(b.respondedAt).getTime() : 0;
+          return (va-vb)*sortDir;
+        }
+        return 0;
+      });
+    }
+    return rows;
   }
 
   function msgFor(g){ return g.inviteMessage || ("Hi "+(g.name||'friend')+"! 💍 Rohit & Aditi are getting married and would love for you to join the celebrations. Here's your personal invitation & RSVP: "+(g.inviteLink||'')); }
 
+  function actsHtml(g, i){
+    var acts='<button class="rowcopy" data-i="'+i+'">⧉ Msg</button>';
+    if (g.whatsappSend) acts+='<a href="'+esc(g.whatsappSend)+'" target="_blank" rel="noopener">WhatsApp</a>';
+    if (g.emailSend) acts+='<a href="'+esc(g.emailSend)+'" target="_blank" rel="noopener">Email</a>';
+    if (g.inviteLink) acts+='<a href="'+esc(g.inviteLink)+'" target="_blank" rel="noopener">Link</a>';
+    return acts;
+  }
+
   function renderTable(){
     var rows = filteredData(); lastRows = rows;
+    // desktop table
     $('rows').innerHTML = rows.map(function(g, i){
       var s=statusOf(g);
       var badge='<span class="badge '+s+'">'+(s==='yes'?'Attending':s==='no'?'Declined':'Pending')+'</span>';
       var when = g.respondedAt ? new Date(g.respondedAt).toLocaleDateString(undefined,{month:'short',day:'numeric'}) : '<span class="muted">—</span>';
-      var acts='<button class="rowcopy" data-i="'+i+'">⧉ Msg</button>';
-      if (g.whatsappSend) acts+='<a href="'+esc(g.whatsappSend)+'" target="_blank" rel="noopener">WhatsApp</a>';
-      if (g.emailSend) acts+='<a href="'+esc(g.emailSend)+'" target="_blank" rel="noopener">Email</a>';
-      if (g.inviteLink) acts+='<a href="'+esc(g.inviteLink)+'" target="_blank" rel="noopener">Link</a>';
       return '<tr>'+
         '<td><b>'+esc(g.name)+'</b>'+(g.email?'<br><span class="muted" style="font-size:12px">'+esc(g.email)+'</span>':'')+(g.whatsapp?'<br><span class="muted" style="font-size:12px">'+esc(g.whatsapp)+'</span>':'')+'</td>'+
         '<td>'+badge+'</td>'+
         '<td>'+(s==='yes'?(esc(g.guests)||'1'):'<span class="muted">—</span>')+'</td>'+
-        '<td>'+(esc(g.events)||'<span class="muted">—</span>')+'</td>'+
+        '<td>'+(g.events?esc(prettyEvents(g.events)):'<span class="muted">—</span>')+'</td>'+
         '<td>'+(esc(g.meal)||'<span class="muted">—</span>')+'</td>'+
         '<td>'+(g.song?'<div class="noteclip" data-full="'+esc(String(g.song))+'">'+esc(String(g.song).replace(/\n/g,', '))+'</div>':'<span class="muted">—</span>')+'</td>'+
         '<td>'+(g.message?'<div class="noteclip" data-full="'+esc(g.message)+'">'+esc(g.message)+'</div>':'<span class="muted">—</span>')+'</td>'+
         '<td>'+when+'</td>'+
-        '<td><span class="act">'+acts+'</span></td>'+
+        '<td><span class="act">'+actsHtml(g,i)+'</span></td>'+
       '</tr>';
     }).join('') || '<tr><td colspan="9" class="muted" style="text-align:center;padding:30px">No guests match.</td></tr>';
+
+    // mobile cards
+    $('cards').innerHTML = rows.map(function(g, i){
+      var s=statusOf(g);
+      var badge='<span class="badge '+s+'">'+(s==='yes'?'Attending':s==='no'?'Declined':'Pending')+'</span>';
+      var when = g.respondedAt ? new Date(g.respondedAt).toLocaleDateString(undefined,{month:'short',day:'numeric'}) : '';
+      var meta = [];
+      if (s==='yes'){
+        meta.push('<b>Guests</b>'+(esc(g.guests)||'1'));
+        if (g.events) meta.push('<b>Events</b>'+esc(prettyEvents(g.events)));
+        if (g.meal) meta.push('<b>Meal</b>'+esc(g.meal));
+      }
+      if (when) meta.push('<b>Replied</b>'+when);
+      return '<div class="gcard">'+
+        '<div class="top"><div><div class="nm">'+esc(g.name)+'</div>'+
+        ((g.email||g.whatsapp)?'<div class="contact">'+esc(g.email||'')+(g.email&&g.whatsapp?' · ':'')+esc(g.whatsapp||'')+'</div>':'')+
+        '</div>'+badge+'</div>'+
+        (meta.length?'<div class="meta">'+meta.join('<br>')+'</div>':'')+
+        (g.song?'<div class="note">♫ '+esc(String(g.song).replace(/\n/g,', '))+'</div>':'')+
+        (g.message?'<div class="note">“'+esc(g.message)+'”</div>':'')+
+        '<div class="act">'+actsHtml(g,i)+'</div>'+
+      '</div>';
+    }).join('') || '<p class="muted" style="text-align:center;padding:20px">No guests match.</p>';
+
     $('tableFoot').textContent = 'Showing '+rows.length+' of '+data.length+' guests.';
+    // sort arrows
+    Array.prototype.forEach.call(document.querySelectorAll('th.sortable'), function(th){
+      th.querySelector('.arrow').textContent = th.getAttribute('data-sort')===sortCol ? (sortDir>0?'▲':'▼') : '';
+    });
   }
 
-  // copy a row's invite message (event delegation)
-  $('rows').addEventListener('click', function(e){
+  // sorting
+  Array.prototype.forEach.call(document.querySelectorAll('th.sortable'), function(th){
+    th.addEventListener('click', function(){
+      var col = th.getAttribute('data-sort');
+      if (sortCol===col){ if (sortDir===1) sortDir=-1; else { sortCol=''; sortDir=1; } }
+      else { sortCol=col; sortDir=1; }
+      renderTable();
+    });
+  });
+
+  // copy a row's invite message (event delegation — works for table AND cards)
+  function copyHandler(e){
     var btn = e.target.closest('.rowcopy'); if (!btn) return;
     var g = lastRows[Number(btn.getAttribute('data-i'))]; if (!g) return;
     var text = msgFor(g);
     var done=function(){ var o=btn.textContent; btn.textContent='✓ Copied'; setTimeout(function(){ btn.textContent=o; }, 1500); };
     if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(done, done);
     else { var ta=document.createElement('textarea'); ta.value=text; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy');}catch(_){} document.body.removeChild(ta); done(); }
-  });
+  }
+  $('rows').addEventListener('click', copyHandler);
+  $('cards').addEventListener('click', copyHandler);
 
   // hover a truncated note to see the full message in a popup
   var noteTip = $('noteTip');
@@ -517,6 +721,11 @@
     Array.prototype.forEach.call(document.querySelectorAll('.filter[data-f]'), function(x){ x.classList.toggle('active', x.getAttribute('data-f')==='all'); });
     $('fAttending').value=''; $('fInvited').value=''; $('fSide').value=''; $('fMeal').value=''; $('fMin').value=''; $('fMax').value='';
     renderTable();
+  };
+  $('moreBtn').onclick = function(){
+    var t = $('advToolbar');
+    t.classList.toggle('open');
+    $('moreBtn').classList.toggle('active', t.classList.contains('open'));
   };
 
   // ---------- CSV (exports the currently filtered rows) ----------
@@ -559,7 +768,7 @@
   // ---------- add guest ----------
   function adminKey(){ if (sessionKey) return sessionKey; try{ return localStorage.getItem(KEY_LS) || ''; }catch(_){ return ''; } }
   var lastLink = '', lastPhone = '', lastEmail = '';
-  var INV_EVENTS = [['sangeet','Sangeet'],['wedding','Wedding'],['reception','Reception']];
+  var INV_EVENTS = [['sangeet','Sangeet & Baraat'],['wedding','Wedding'],['reception','Reception']];
   var invitedState = {sangeet:true, wedding:true, reception:true};
 
   function renderInvited(){
@@ -595,6 +804,7 @@
     if (!name){ $('addErr').textContent = 'Please enter a name.'; $('gName').focus(); return; }
     var invited = Object.keys(invitedState).filter(function(k){ return invitedState[k]; });
     if (!invited.length){ $('addErr').textContent = 'Pick at least one event they are invited to.'; return; }
+    if (DEMO){ $('addErr').textContent = 'Demo mode — adding guests is disabled.'; return; }
     var btn = $('addCreate'); if (btn.dataset.busy) return;
     btn.dataset.busy='1'; var orig=btn.textContent; btn.textContent='Creating…'; btn.style.opacity='.6';
     $('addErr').textContent='';
@@ -642,6 +852,28 @@
   }
   $('copyMsg').onclick = function(){ copyText($('resMsg').value, '✓ Message copied — paste into WhatsApp or email.'); };
   $('copyLink').onclick = function(){ copyText(lastLink, '✓ Link copied.'); };
+
+  // ---------- demo data (styling preview via ?demo=1 — fake names, no API) ----------
+  function demoGuests(){
+    var day = 86400000, now = Date.now();
+    function d(n){ return new Date(now - n*day).toISOString(); }
+    return [
+      {name:'Priya & Arjun', email:'priya@example.com', whatsapp:'919812345001', side:"Bride's side", status:'yes', guests:2, partySize:2, invited:'', events:'sangeet, wedding, reception', meal:'veg', song:'Kala Chashma\nKajra Re', message:'So excited for you both! Counting the days.', respondedAt:d(18), inviteLink:'#', whatsappSend:'', emailSend:''},
+      {name:'The Sharma Family', email:'', whatsapp:'919812345002', side:"Groom's side", status:'yes', guests:4, partySize:5, invited:'sangeet, wedding', events:'sangeet, wedding', meal:'nonveg', song:'Gallan Goodiyaan', message:'', respondedAt:d(15), inviteLink:'#', whatsappSend:'', emailSend:''},
+      {name:'Meera Aunty', email:'meera@example.com', whatsapp:'', side:"Bride's side", status:'yes', guests:1, partySize:2, invited:'', events:'wedding, reception', meal:'veg', song:'', message:'Blessings to the couple!', respondedAt:d(12), inviteLink:'#', whatsappSend:'', emailSend:''},
+      {name:'Rahul & Sneha', email:'rahul@example.com', whatsapp:'919812345004', side:"Groom's side", status:'pending', guests:'', partySize:2, invited:'', events:'', meal:'', song:'', message:'', respondedAt:'', inviteLink:'#', whatsappSend:'', emailSend:''},
+      {name:'Prof. Iyer', email:'iyer@example.edu', whatsapp:'', side:"Bride & Groom", status:'yes', guests:2, partySize:2, invited:'reception', events:'reception', meal:'veg', song:'', message:'Wouldn\'t miss it.', respondedAt:d(9), inviteLink:'#', whatsappSend:'', emailSend:''},
+      {name:'Kabir', email:'', whatsapp:'919812345006', side:"Groom's side", status:'no', guests:'', partySize:1, invited:'', events:'', meal:'', song:'', message:'Sadly traveling — sending love!', respondedAt:d(8), inviteLink:'#', whatsappSend:'', emailSend:''},
+      {name:'The Krishnamurthys', email:'', whatsapp:'919812345007', side:"Bride's side", status:'yes', guests:3, partySize:4, invited:'', events:'sangeet, wedding, reception', meal:'nonveg', song:'Mehendi Laga Ke Rakhna', message:'', respondedAt:d(6), inviteLink:'#', whatsappSend:'', emailSend:''},
+      {name:'Ananya', email:'ananya@example.com', whatsapp:'', side:"Bride's side", status:'yes', guests:1, partySize:1, invited:'sangeet, wedding', events:'sangeet', meal:'veg', song:'London Thumakda', message:'', respondedAt:d(5), inviteLink:'#', whatsappSend:'', emailSend:''},
+      {name:'Uncle Verma', email:'', whatsapp:'919812345009', side:"Groom's side", status:'pending', guests:'', partySize:3, invited:'', events:'', meal:'', song:'', message:'', respondedAt:'', inviteLink:'#', whatsappSend:'', emailSend:''},
+      {name:'Divya & Karthik', email:'divya@example.com', whatsapp:'919812345010', side:"Bride's side", status:'yes', guests:2, partySize:2, invited:'reception', events:'reception', meal:'nonveg', song:'Why This Kolaveri Di', message:'See you in Palasamudram!', respondedAt:d(3), inviteLink:'#', whatsappSend:'', emailSend:''},
+      {name:'The Guptas', email:'', whatsapp:'919812345011', side:"Groom's side", status:'yes', guests:5, partySize:6, invited:'', events:'sangeet, wedding', meal:'veg', song:'', message:'Whole family is coming!', respondedAt:d(2), inviteLink:'#', whatsappSend:'', emailSend:''},
+      {name:'Zara', email:'zara@example.com', whatsapp:'', side:"Bride's side", status:'pending', guests:'', partySize:1, invited:'sangeet', events:'', meal:'', song:'', message:'', respondedAt:'', inviteLink:'#', whatsappSend:'', emailSend:''},
+      {name:'Old Roommates', email:'gang@example.com', whatsapp:'919812345013', side:"Groom's side", status:'yes', guests:4, partySize:4, invited:'', events:'sangeet, reception', meal:'nonveg', song:'Sadi Gali\nTunak Tunak Tun', message:'Bringing the dhol energy 🥁', respondedAt:d(1), inviteLink:'#', whatsappSend:'', emailSend:''},
+      {name:'Nani', email:'', whatsapp:'', side:"Bride's side", status:'yes', guests:1, partySize:1, invited:'', events:'wedding', meal:'veg', song:'', message:'Blessings, my dear.', respondedAt:d(1), inviteLink:'#', whatsappSend:'', emailSend:''}
+    ];
+  }
 
   load();
 })();
