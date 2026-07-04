@@ -131,16 +131,22 @@
   .hero-mandala{position:absolute;left:50%;top:50%;transform:translate(-50%,-52%);width:min(92vw,760px);aspect-ratio:1;color:var(--gold);opacity:.20;pointer-events:none}
   .hero-mandala svg{width:100%;height:100%;animation:spinSlow 300s linear infinite}
   .hero-inner{position:relative}
-  .shubh{font-family:'Mukta',sans-serif;font-weight:500;font-size:19px;letter-spacing:.1em;color:var(--gold-deep)}
-  .hero-eyebrow{margin-top:14px;font-family:'Marcellus',serif;font-size:clamp(12px,1.6vw,14px);letter-spacing:.4em;text-transform:uppercase;color:var(--rosewood)}
+  /* cream halos lift the fine text off the monument's gold linework */
+  .hero-inner{--halo-sh:0 0 4px var(--bg),0 0 8px var(--bg),0 0 14px var(--bg),0 0 22px var(--bg)}
+  /* soft vellum mist behind the hero text so the monument recedes politely */
+  .hero-inner::before{content:'';position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+    width:min(92vw,820px);height:114%;z-index:-1;pointer-events:none;
+    background:radial-gradient(ellipse 50% 50% at center,rgba(250,244,231,.94) 36%,rgba(250,244,231,.6) 60%,rgba(250,244,231,0) 78%)}
+  .shubh{font-family:'Mukta',sans-serif;font-weight:500;font-size:19px;letter-spacing:.1em;color:var(--gold-deep);text-shadow:var(--halo-sh)}
+  .hero-eyebrow{margin-top:14px;font-family:'Marcellus',serif;font-size:clamp(12px,1.6vw,14px);letter-spacing:.4em;text-transform:uppercase;color:var(--rosewood);text-shadow:var(--halo-sh)}
   .hero h1{margin:0;font-family:'Cormorant Garamond',serif;font-weight:600;line-height:.98;font-size:clamp(58px,11.5vw,132px);color:var(--maroon)}
   .hero .amp-row{display:flex;align-items:center;justify-content:center;gap:clamp(12px,2.6vw,26px);margin:6px 0}
   .hero .amp-row .flourish{width:clamp(48px,8vw,96px);color:var(--gold);opacity:.9}
   .hero .amp{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:500;font-size:clamp(36px,6vw,64px);color:var(--gold-deep);line-height:1}
   .amp{color:var(--gold-deep)}
   .hero-date{margin-top:30px;display:flex;flex-direction:column;align-items:center;gap:10px}
-  .hero-date .date-line{font-family:'Marcellus',serif;letter-spacing:.3em;font-size:clamp(16px,2.6vw,21px);color:var(--gold-deep)}
-  #heroGreeting{margin-top:34px;font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:500;font-size:clamp(21px,3.2vw,28px);color:var(--ink);min-height:1em}
+  .hero-date .date-line{font-family:'Marcellus',serif;letter-spacing:.3em;font-size:clamp(16px,2.6vw,21px);color:var(--gold-deep);text-shadow:var(--halo-sh)}
+  #heroGreeting{margin-top:34px;font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:500;font-size:clamp(21px,3.2vw,28px);color:var(--ink);min-height:1em;text-shadow:var(--halo-sh)}
   .scroll-cue{margin-top:52px;font-family:'Marcellus',serif;font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--ink-soft);display:flex;flex-direction:column;align-items:center;gap:6px;animation:bob 2.6s ease-in-out infinite}
 
   /* ==================== families ==================== */
