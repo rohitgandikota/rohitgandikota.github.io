@@ -7,29 +7,23 @@
 
     <meta name="author" content="Rohit Gandikota">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Rohit Gandikota is a PhD student at Northeastern University researching how to understand, control, and edit generative models — diffusion models, LLMs, and vision-language models.">
+    <meta property="og:title" content="Rohit Gandikota">
+    <meta property="og:description" content="PhD student at Northeastern University researching how to understand, control, and edit generative models.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://rohitgandikota.github.io/">
+    <meta property="og:image" content="https://rohitgandikota.github.io/images/rohit.jpeg">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Rohit Gandikota">
+    <meta name="twitter:description" content="PhD student at Northeastern University researching how to understand, control, and edit generative models.">
+    <meta name="twitter:image" content="https://rohitgandikota.github.io/images/rohit.jpeg">
     <link rel="shortcut icon" href="images/favicon/favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" type="text/css" href="stylesheet.css?v=3">
+    <link rel="stylesheet" type="text/css" href="stylesheet.css?v=5">
     <script>(function(){try{var t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
     
   </head>
 
   <body>
-    <button id="themeToggle" aria-label="Toggle dark mode" title="Toggle dark mode">🌙</button>
-    <script>
-      (function(){
-        // light is the default — dark only when the visitor toggles it
-        var btn = document.getElementById('themeToggle');
-        function effective(){ return document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light'; }
-        function paint(){ btn.textContent = effective() === 'dark' ? '☀️' : '🌙'; }
-        btn.addEventListener('click', function(){
-          var next = effective() === 'dark' ? 'light' : 'dark';
-          document.documentElement.setAttribute('data-theme', next);
-          try{ localStorage.setItem('theme', next); }catch(e){}
-          paint();
-        });
-        paint();
-      })();
-    </script>
     <table style="width:100%;max-width:800px;border:0px;border-spacing:0px;border-collapse:separate;margin-right:auto;margin-left:auto;"><tbody>
       <tr style="padding:0px">
         <td style="padding:0px">
@@ -50,19 +44,41 @@
                   <a href="mailto:gandikota.ro@northeastern.edu">Email</a> &nbsp;/&nbsp;
                   <a href="https://scholar.google.com/citations?user=BKW8p24AAAAJ&hl=en">Scholar</a> &nbsp;/&nbsp;
                   <a href="https://twitter.com/rohitgandikota">Twitter</a> &nbsp;/&nbsp;
-                  <a href="https://www.linkedin.com/in/rohitgandikota/">Linkedin</a> &nbsp;/&nbsp;
-                  <a href="https://github.com/rohitgandikota/">Github</a>
+                  <a href="https://www.linkedin.com/in/rohitgandikota/">LinkedIn</a> &nbsp;/&nbsp;
+                  <a href="https://github.com/rohitgandikota/">GitHub</a>
                  
                 </p>
               </td>
-              <td style="padding:2.5%;width:37%;max-width:37%">
+              <td style="padding:2.5% 2.5% 0;width:37%;max-width:37%">
                 <a href="images/rohit.jpeg"><img style="width:100%;max-width:100%;object-fit: cover; border-radius: 50%;" alt="profile photo" src="images/rohit.jpeg" class="hoverZoomLink"></a>
+                <div class="theme-switch-wrap">
+                  <button id="themeToggle" role="switch" aria-checked="false" aria-label="Dark mode" title="Toggle dark mode">
+                    <span class="knob"></span>
+                    <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4" fill="currentColor" stroke="none"/><path d="M12 2.8v2.2M12 19v2.2M2.8 12H5M19 12h2.2M5.5 5.5l1.6 1.6M16.9 16.9l1.6 1.6M18.5 5.5l-1.6 1.6M7.1 16.9l-1.6 1.6"/></svg>
+                    <svg class="moon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                  </button>
+                </div>
+                <script>
+                  (function(){
+                    // light is the default — dark only when the visitor toggles it
+                    var btn = document.getElementById('themeToggle');
+                    function isDark(){ return document.documentElement.getAttribute('data-theme') === 'dark'; }
+                    function paint(){ btn.setAttribute('aria-checked', isDark() ? 'true' : 'false'); }
+                    btn.addEventListener('click', function(){
+                      var next = isDark() ? 'light' : 'dark';
+                      document.documentElement.setAttribute('data-theme', next);
+                      try{ localStorage.setItem('theme', next); }catch(e){}
+                      paint();
+                    });
+                    paint();
+                  })();
+                </script>
               </td>
             </tr>
           </tbody></table>
           <table style="width:100%;border:0px;border-spacing:0px;border-collapse:separate;margin-right:auto;margin-left:auto;"><tbody>
               <tr>
-              <td style="padding:16px;width:100%;vertical-align:middle">
+              <td style="padding:4px 16px 16px;width:100%;vertical-align:middle">
                 <h2>Research</h2>
                 <p>
                     AI should extend human intent. Language models are getting there because text is interpretable, and editing the output is a natural extension of reading it. Vision models are far behind. Their outputs aren't interpretable, so controlling them requires understanding the model itself. My research works toward a future where vision models behave less like black boxes and more like renderers, programmable through a precise, compositional language for visual editing and control.
@@ -125,28 +141,11 @@
         </tr>
 
         <!-- Distillation Entry -->
-        <tr onmouseout="distillation_stop()" onmouseover="distillation_start()">
+        <tr>
           <td style="padding:16px;width:20%;vertical-align:middle">
             <div class="one">
-              <div class="two" id='distillation_image'><video width=100% muted autoplay loop playsinline>
-              <source src="images/dt.png" type="video/mp4">
-              Your browser does not support the video tag.
-              </video></div>
               <img src='images/dt.png' width=100%>
             </div>
-            <script type="text/javascript">
-              function distillation_start() {
-                document.getElementById('distillation_image').style.opacity = "1";
-                // For Safari compatibility
-               document.querySelector('#distillation_image video').setAttribute('playsinline', '');
-               document.querySelector('#distillation_image video').play();
-              }
-        
-              function distillation_stop() {
-                document.getElementById('distillation_image').style.opacity = "0";
-              }
-              distillation_stop()
-            </script>
           </td>
           <td style="padding:8px;width:80%;vertical-align:middle">
             <a href="https://distillation.baulab.info/">
@@ -228,25 +227,11 @@
 
                 
         <!-- ELM Entry -->
-        <tr onmouseout="elm_stop()" onmouseover="elm_start()">
+        <tr>
           <td style="padding:16px;width:20%;vertical-align:middle">
             <div class="one">
-              <div class="two" id='elm_image'><video width=100% muted autoplay loop>
-              <source src="images/elm.png" type="video/mp4">
-              Your browser does not support the video tag.
-              </video></div>
               <img src='images/elm.png' width=100%>
             </div>
-            <script type="text/javascript">
-              function elm_start() {
-                document.getElementById('elm_image').style.opacity = "1";
-              }
-        
-              function elm_stop() {
-                document.getElementById('elm_image').style.opacity = "0";
-              }
-              elm_stop()
-            </script>
           </td>
           <td style="padding:8px;width:80%;vertical-align:middle">
             <a href="https://elm.baulab.info">
@@ -275,25 +260,11 @@
         </tr>
         
         <!-- Concept Sliders Entry -->
-        <tr onmouseout="concept_sliders_stop()" onmouseover="concept_sliders_start()">
+        <tr>
           <td style="padding:16px;width:20%;vertical-align:middle">
             <div class="one">
-              <div class="two" id='concept_sliders_image'><video width=100% muted autoplay loop>
-              <source src="images/conceptsliders.png" type="video/mp4">
-              Your browser does not support the video tag.
-              </video></div>
               <img src='images/conceptsliders.png' width=100%>
             </div>
-            <script type="text/javascript">
-              function concept_sliders_start() {
-                document.getElementById('concept_sliders_image').style.opacity = "1";
-              }
-        
-              function concept_sliders_stop() {
-                document.getElementById('concept_sliders_image').style.opacity = "0";
-              }
-              concept_sliders_stop()
-            </script>
           </td>
           <td style="padding:8px;width:80%;vertical-align:middle">
             <a href="https://sliders.baulab.info">
@@ -323,25 +294,11 @@
         </tr>
         
         <!-- UCE Entry -->
-        <tr onmouseout="uce_stop()" onmouseover="uce_start()">
+        <tr>
           <td style="padding:16px;width:20%;vertical-align:middle">
             <div class="one">
-              <div class="two" id='uce_image'><video width=100% muted autoplay loop>
-              <source src="images/unified.png" type="video/mp4">
-              Your browser does not support the video tag.
-              </video></div>
               <img src='images/unified.png' width=100%>
             </div>
-            <script type="text/javascript">
-              function uce_start() {
-                document.getElementById('uce_image').style.opacity = "1";
-              }
-        
-              function uce_stop() {
-                document.getElementById('uce_image').style.opacity = "0";
-              }
-              uce_stop()
-            </script>
           </td>
           <td style="padding:8px;width:80%;vertical-align:middle">
             <a href="https://unified.baulab.info">
@@ -369,25 +326,11 @@
         </tr>
         
         <!-- Erasing Concepts from Diffusion Models Entry -->
-        <tr onmouseout="erasing_diffusion_stop()" onmouseover="erasing_diffusion_start()">
+        <tr>
           <td style="padding:16px;width:20%;vertical-align:middle">
             <div class="one">
-              <div class="two" id='erasing_diffusion_image'><video width=100% muted autoplay loop>
-              <source src="images/erasing.png" type="video/mp4">
-              Your browser does not support the video tag.
-              </video></div>
               <img src='images/erasing.png' width=100%>
             </div>
-            <script type="text/javascript">
-              function erasing_diffusion_start() {
-                document.getElementById('erasing_diffusion_image').style.opacity = "1";
-              }
-        
-              function erasing_diffusion_stop() {
-                document.getElementById('erasing_diffusion_image').style.opacity = "0";
-              }
-              erasing_diffusion_stop()
-            </script>
           </td>
           <td style="padding:8px;width:80%;vertical-align:middle">
             <a href="https://erasing.baulab.info">
@@ -482,28 +425,11 @@
         </tr>
 
         <!-- When are concepts erased Entry -->
-        <tr onmouseout="where_stop()" onmouseover="where_start()">
+        <tr>
           <td style="padding:16px;width:20%;vertical-align:middle">
             <div class="one">
-              <div class="two" id='where_image'><video width=100% muted autoplay loop playsinline>
-              <source src="images/where_concepts_go.png" type="video/mp4">
-              Your browser does not support the video tag.
-              </video></div>
               <img src='images/where_concepts_go.png' width=100%>
             </div>
-            <script type="text/javascript">
-              function where_start() {
-                document.getElementById('where_image').style.opacity = "1";
-                // For Safari compatibility
-               document.querySelector('#where_image video').setAttribute('playsinline', '');
-               document.querySelector('#where_image video').play();
-              }
-        
-              function where_stop() {
-                document.getElementById('where_image').style.opacity = "0";
-              }
-              where_stop()
-            </script>
           </td>
           <td style="padding:8px;width:80%;vertical-align:middle">
             <a href="https://nyu-dice-lab.github.io/when-are-concepts-erased/">
@@ -533,25 +459,11 @@
         </tr>
         
         <!-- Art-Free Entry -->
-        <tr onmouseout="artfree_stop()" onmouseover="artfree_start()">
+        <tr>
           <td style="padding:16px;width:20%;vertical-align:middle">
             <div class="one">
-              <div class="two" id='artfree_image'><video width=100% muted autoplay loop>
-              <source src="images/artfree.png" type="video/mp4">
-              Your browser does not support the video tag.
-              </video></div>
               <img src='images/artfree.png' width=100%>
             </div>
-            <script type="text/javascript">
-              function artfree_start() {
-                document.getElementById('artfree_image').style.opacity = "1";
-              }
-        
-              function artfree_stop() {
-                document.getElementById('artfree_image').style.opacity = "0";
-              }
-              artfree_stop()
-            </script>
           </td>
           <td style="padding:8px;width:80%;vertical-align:middle">
             <a href="https://joaanna.github.io/art-free-diffusion/">
@@ -581,28 +493,11 @@
         </tr>
 
         <!-- RippleBench Entry -->
-        <tr onmouseout="ripplebench_stop()" onmouseover="ripplebench_start()">
+        <tr>
           <td style="padding:16px;width:20%;vertical-align:middle">
             <div class="one">
-              <div class="two" id='ripplebench_image'><video width=100% muted autoplay loop playsinline>
-              <source src="images/ripplebench.png" type="video/mp4">
-              Your browser does not support the video tag.
-              </video></div>
               <img src='images/ripplebench.png' width=100%>
             </div>
-            <script type="text/javascript">
-              function ripplebench_start() {
-                document.getElementById('ripplebench_image').style.opacity = "1";
-                // For Safari compatibility
-               document.querySelector('#ripplebench_image video').setAttribute('playsinline', '');
-               document.querySelector('#ripplebench_image video').play();
-              }
-        
-              function ripplebench_stop() {
-                document.getElementById('ripplebench_image').style.opacity = "0";
-              }
-              ripplebench_stop()
-            </script>
           </td>
           <td style="padding:8px;width:80%;vertical-align:middle">
             <a href="https://openreview.net/forum?id=JTnYGSxN5k">
@@ -697,25 +592,11 @@
 
 
         <!-- Agents of Chaos Entry -->
-        <tr onmouseout="agents_stop()" onmouseover="agents_start()">
+        <tr>
           <td style="padding:16px;width:20%;vertical-align:middle">
             <div class="one">
-              <div class="two" id='agents_image'><video width=100% muted autoplay loop playsinline>
-              <source src="images/agents.png" type="video/mp4">
-              Your browser does not support the video tag.
-              </video></div>
               <img src='images/agents.png' width=100%>
             </div>
-            <script type="text/javascript">
-              function agents_start() {
-                document.getElementById('agents_image').style.opacity = "1";
-              }
-
-              function agents_stop() {
-                document.getElementById('agents_image').style.opacity = "0";
-              }
-              agents_stop()
-            </script>
           </td>
           <td style="padding:8px;width:80%;vertical-align:middle">
             <a href="https://agentsofchaos.baulab.info">
@@ -738,25 +619,11 @@
 
 
         <!-- Forbidden Topics Entry -->
-        <tr onmouseout="forbidden_stop()" onmouseover="forbidden_start()">
+        <tr>
           <td style="padding:16px;width:20%;vertical-align:middle">
             <div class="one">
-              <div class="two" id='forbidden_image'><video width=100% muted autoplay loop playsinline>
-              <source src="images/forbidden.png" type="video/mp4">
-              Your browser does not support the video tag.
-              </video></div>
               <img src='images/forbidden.png' width=100%>
             </div>
-            <script type="text/javascript">
-              function forbidden_start() {
-                document.getElementById('forbidden_image').style.opacity = "1";
-              }
-
-              function forbidden_stop() {
-                document.getElementById('forbidden_image').style.opacity = "0";
-              }
-              forbidden_stop()
-            </script>
           </td>
           <td style="padding:8px;width:80%;vertical-align:middle">
             <a href="https://forbidden.baulab.info">
@@ -784,25 +651,11 @@
 
 
         <!-- Model Tampering Entry -->
-        <tr onmouseout="tampering_stop()" onmouseover="tampering_start()">
+        <tr>
           <td style="padding:16px;width:20%;vertical-align:middle">
             <div class="one">
-              <div class="two" id='tampering_image'><video width=100% muted autoplay loop playsinline>
-              <source src="images/tampering.png" type="video/mp4">
-              Your browser does not support the video tag.
-              </video></div>
               <img src='images/tampering.png' width=100%>
             </div>
-            <script type="text/javascript">
-              function tampering_start() {
-                document.getElementById('tampering_image').style.opacity = "1";
-              }
-
-              function tampering_stop() {
-                document.getElementById('tampering_image').style.opacity = "0";
-              }
-              tampering_stop()
-            </script>
           </td>
           <td style="padding:8px;width:80%;vertical-align:middle">
             <a href="https://arxiv.org/abs/2502.05209">

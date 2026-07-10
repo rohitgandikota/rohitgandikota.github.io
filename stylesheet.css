@@ -75,9 +75,11 @@
   --box-media: #fcb97d;
   --box-oss: #aaba9e;
   --box-awards: #edd892;
-  --box-text: #000000;
-  --toggle-bg: #ffffff;
+  --box-label: #2e2618;
+  --rule: #e6e1d6;
+  --toggle-track: #f2eee6;
   --toggle-border: #d8d2c6;
+  --knob-bg: #ffffff;
   --thumb-filter: none;
 }
 html[data-theme="dark"] {
@@ -91,9 +93,11 @@ html[data-theme="dark"] {
   --box-media: #c98f57;
   --box-oss: #86987c;
   --box-awards: #c2ad6b;
-  --box-text: #101214;
-  --toggle-bg: #1c1f22;
+  --box-label: #101214;
+  --rule: #2b3036;
+  --toggle-track: #1e2124;
   --toggle-border: #3a3f44;
+  --knob-bg: #3d444b;
   --thumb-filter: brightness(.9);
 }
 html { background: var(--bg); }
@@ -120,24 +124,50 @@ a:hover {
   border-radius: 4px;
 }
 
-/* theme toggle button */
-#themeToggle {
-  position: fixed;
-  top: 14px;
-  right: 14px;
-  z-index: 10;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  border: 1px solid var(--toggle-border);
-  background: var(--toggle-bg);
-  font-size: 18px;
-  line-height: 1;
-  cursor: pointer;
-  box-shadow: 0 2px 10px rgba(0,0,0,.12);
-  transition: background-color .25s ease, transform .15s ease;
+/* theme switch (light/dark), sits under the profile photo */
+.theme-switch-wrap {
+  text-align: center;
+  margin-top: 14px;
 }
-#themeToggle:hover { transform: scale(1.08); }
+#themeToggle {
+  position: relative;
+  width: 64px;
+  height: 32px;
+  padding: 0;
+  border-radius: 999px;
+  border: 1px solid var(--toggle-border);
+  background: var(--toggle-track);
+  cursor: pointer;
+  vertical-align: middle;
+  transition: background-color .25s ease, border-color .25s ease;
+}
+#themeToggle .knob {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--knob-bg);
+  box-shadow: 0 1px 3px rgba(0,0,0,.25);
+  transition: transform .25s cubic-bezier(.4,0,.2,1), background-color .25s ease;
+}
+html[data-theme="dark"] #themeToggle .knob { transform: translateX(32px); }
+#themeToggle svg {
+  position: absolute;
+  top: 50%;
+  width: 15px;
+  height: 15px;
+  margin-top: -7.5px;
+}
+#themeToggle .sun { left: 8px; color: #e8940a; }
+#themeToggle .moon { right: 8px; color: var(--text-soft); opacity: .55; }
+html[data-theme="dark"] #themeToggle .sun { color: var(--text-soft); opacity: .55; }
+html[data-theme="dark"] #themeToggle .moon { color: #a8c2f0; opacity: 1; }
+#themeToggle:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) {
+  #themeToggle .knob { transition: none; }
+}
 
 body,
 td,
@@ -161,8 +191,17 @@ h2 {
   font-size: 22px;
 }
 
+/* section headings (Research, Advising, ...) get a hairline rule */
+td > h2 {
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--rule);
+}
+
 .colored-box h2 {
-  font-weight: normal;
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
 }
 
 .papertitle {
@@ -204,12 +243,48 @@ span.highlight {
 }
 
 .colored-box {
-    color: var(--box-text);
-    padding: 20px;
+    padding: 9px 18px;
     display: inline-block;
-    border-radius: 10px;
+    border: 1px solid;
+    border-radius: 999px;
+    white-space: nowrap;
 }
 
-.box-media { background-color: var(--box-media); }
-.box-oss { background-color: var(--box-oss); }
-.box-awards { background-color: var(--box-awards); }
+.box-media {
+    background-color: var(--box-media);
+    border-color: color-mix(in srgb, var(--box-media) 72%, var(--box-label));
+    color: var(--box-label);
+}
+.box-oss {
+    background-color: var(--box-oss);
+    border-color: color-mix(in srgb, var(--box-oss) 72%, var(--box-label));
+    color: var(--box-label);
+}
+.box-awards {
+    background-color: var(--box-awards);
+    border-color: color-mix(in srgb, var(--box-awards) 72%, var(--box-label));
+    color: var(--box-label);
+}
+
+/* responsive: stack thumbnail/label columns above their text on narrow screens */
+@media (max-width: 640px) {
+  tr:has(> td > .one),
+  tr:has(> td > .colored-box) { display: block; }
+  tr:has(> td > .one) > td,
+  tr:has(> td > .colored-box) > td {
+    display: block;
+    width: auto !important;
+    padding: 10px 8px !important;
+  }
+  .one { margin: 0 auto; }
+  tr:has(> td > .theme-switch-wrap) { display: flex; flex-direction: column-reverse; }
+  tr:has(> td > .theme-switch-wrap) > td {
+    width: auto !important;
+    max-width: none !important;
+  }
+  tr:has(> td > .theme-switch-wrap) img {
+    display: block;
+    width: min(55vw, 220px) !important;
+    margin: 0 auto;
+  }
+}
