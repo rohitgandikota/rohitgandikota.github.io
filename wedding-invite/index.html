@@ -168,7 +168,7 @@
   .cd-med.dark .lab{color:var(--gold-soft)}
 
   /* ==================== festivities ==================== */
-  .ev-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:26px}
+  .ev-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));gap:26px}
   .ev-card{display:flex;flex-direction:column;overflow:hidden;transition:transform .35s ease,box-shadow .35s ease}
   @media(hover:hover){.ev-card:hover{transform:translateY(-6px);box-shadow:0 46px 80px -52px rgba(71,22,31,.9)}}
   .ev-top{padding:34px 26px 0;text-align:center}
@@ -383,6 +383,18 @@
         <path d="M19 30 L15.5 26.5 M45 30 L48.5 26.5 M32 16.5 V12.5" stroke-width="1.5"/>
       </g>
     </symbol>
+    <!-- samai standing lamp (wedding reception) -->
+    <symbol id="sym-samai" viewBox="0 0 64 64">
+      <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path class="fl" d="M32 21 Q27.5 14.5 32 7 Q36.5 14.5 32 21 Z"/>
+        <path class="fl" d="M32 18.6 Q30 15.4 32 12 Q34 15.4 32 18.6" stroke-width="1.1"/>
+        <path d="M22.5 26.5 Q32 31 41.5 26.5 L39 32 Q32 35.2 25 32 Z"/>
+        <path d="M32 35.2 V45.5"/>
+        <path d="M26.5 45.5 H37.5"/>
+        <path d="M23 51.5 Q32 48.5 41 51.5 L39.2 55 H24.8 Z"/>
+        <path d="M20.5 29 L17.5 26.5 M43.5 29 L46.5 26.5" stroke-width="1.5"/>
+      </g>
+    </symbol>
     <!-- paw print (for the pets) -->
     <symbol id="sym-paw" viewBox="0 0 24 24">
       <g fill="currentColor">
@@ -561,7 +573,7 @@
   <!-- FESTIVITIES -->
   <section class="section">
     <div class="sec-head reveal">
-      <div class="eyebrow">Three celebrations, one union</div>
+      <div class="eyebrow">Days of celebration, one union</div>
       <h2>The Festivities</h2>
       <div class="lotus-div"><svg class="orn" width="120" height="32" viewBox="0 0 120 32" aria-hidden="true"><use href="#sym-lotus"/></svg></div>
     </div>
@@ -617,6 +629,31 @@
         </div>
       </div>
 
+      <div data-ev="wreception" class="card ev-card reveal">
+        <div class="ev-top">
+          <div class="ev-arch">
+            <svg class="orn" width="118" height="126" viewBox="0 0 118 126" aria-hidden="true"><use href="#sym-arch"/></svg>
+            <svg class="icon flame-anim orn" viewBox="0 0 64 64" aria-hidden="true"><use href="#sym-samai"/></svg>
+          </div>
+          <div class="ev-native" lang="hi">प्रीतिभोज</div>
+          <h3 style="font-size:29px">The Wedding Reception</h3>
+          <div class="ev-tag">An evening with the newlyweds</div>
+        </div>
+        <div class="ev-rule"></div>
+        <div class="ev-body">
+          <div class="ev-rows">
+            <div><span class="k">When</span><span>Saturday, December 12, 2026 · 7:00 PM</span></div>
+            <div><span class="k">Where</span><span>The Panache, Patna</span></div>
+            <div><span class="k">Dress</span><span>Festive Indian · dress to celebrate</span></div>
+          </div>
+          <div class="ev-desc">Dinner and celebration as the newlyweds receive your love and blessings.</div>
+          <div class="ev-btns">
+            <a class="btn" href="https://maps.app.goo.gl/PhnpW8bJjug9cEH8A" target="_blank" rel="noopener">◍ Directions</a>
+            <a class="btn-ghost" href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Rohit%20%26%20Aditi%20%E2%80%94%20Wedding%20Reception&dates=20261212T133000Z/20261212T173000Z&location=The%20Panache%2C%20Patna&details=With%20love%2C%20Rohit%20%26%20Aditi" target="_blank" rel="noopener">✛ Calendar</a>
+          </div>
+        </div>
+      </div>
+
       <div data-ev="reception" class="card ev-card reveal">
         <div class="ev-top">
           <div class="ev-arch">
@@ -663,11 +700,11 @@
       </svg>
       <div class="maplabel" style="left:54%;top:22%">
         <span class="dot" style="background:var(--maroon)"></span>
-        <span>Patna · Sangeet &amp; Wedding</span>
+        <span>Patna · Dec 11 &amp; 12</span>
       </div>
       <div class="maplabel" style="left:29%;top:82%">
         <span class="dot" style="background:var(--gold)"></span>
-        <span>Palasamudram · Reception</span>
+        <span>Palasamudram · Dec 19</span>
       </div>
     </div>
   </section>
@@ -1487,10 +1524,10 @@
   $('envBtn').onclick = openEnvelope;
 
   // ===================== RSVP =====================
-  var ALL_EVENTS = [['sangeet','Sangeet - Baraat · Dec 11'],['wedding','Wedding · Dec 12'],['reception','Reception · Dec 19']];
+  var ALL_EVENTS = [['sangeet','Sangeet - Baraat · Dec 11'],['wedding','Wedding · Dec 12'],['wreception','Wedding Reception · Dec 12'],['reception','Reception · Dec 19']];
   var EVENTS = ALL_EVENTS.slice();
   var MEALS  = [['veg','Vegetarian'],['nonveg','Non-vegetarian']];
-  var state = { attending:'yes', ev:{sangeet:true,wedding:true,reception:true}, guests:1, meal:'veg', partyMax:1 };
+  var state = { attending:'yes', ev:{sangeet:true,wedding:true,wreception:true,reception:true}, guests:1, meal:'veg', partyMax:1 };
 
   // ---- song list (tag input) ----
   var songs = [];
@@ -1514,7 +1551,7 @@
   });
 
   function hideUninvitedCards(invited){
-    ['sangeet','wedding','reception'].forEach(function(k){
+    ['sangeet','wedding','wreception','reception'].forEach(function(k){
       var el = document.querySelector('[data-ev="'+k+'"]');
       if (el) el.style.display = invited.indexOf(k) >= 0 ? '' : 'none';
     });
@@ -1577,9 +1614,9 @@
       $('partyHint').textContent = '(up to ' + state.partyMax + ')';
 
       // restrict to the events this guest is invited to
-      var invited = (Array.isArray(d.invited) && d.invited.length) ? d.invited : ['sangeet','wedding','reception'];
+      var invited = (Array.isArray(d.invited) && d.invited.length) ? d.invited : ['sangeet','wedding','wreception','reception'];
       EVENTS = ALL_EVENTS.filter(function(e){ return invited.indexOf(e[0]) >= 0; });
-      state.ev = {sangeet:false, wedding:false, reception:false};
+      state.ev = {sangeet:false, wedding:false, wreception:false, reception:false};
       invited.forEach(function(k){ state.ev[k] = true; });
       hideUninvitedCards(invited);
       renderEvents();
@@ -1587,7 +1624,7 @@
       // prefill prior response
       if (d.attending === 'yes' || d.attending === 'no'){
         state.attending = d.attending;
-        if (Array.isArray(d.events)){ state.ev = {sangeet:false,wedding:false,reception:false}; d.events.forEach(function(k){ state.ev[k]=true; }); }
+        if (Array.isArray(d.events)){ state.ev = {sangeet:false,wedding:false,wreception:false,reception:false}; d.events.forEach(function(k){ state.ev[k]=true; }); }
         if (d.meal) state.meal = d.meal;
         setGuests(Number(d.guests)||1);
         if (d.song){ songs = String(d.song).split('\n').map(function(x){return x.trim();}).filter(Boolean); }
@@ -1603,7 +1640,7 @@
 
   // ---- summary helpers ----
   function eventsLabel(){
-    var out=[]; if(state.ev.sangeet)out.push('Sangeet - Baraat'); if(state.ev.wedding)out.push('Wedding'); if(state.ev.reception)out.push('Reception');
+    var out=[]; if(state.ev.sangeet)out.push('Sangeet - Baraat'); if(state.ev.wedding)out.push('Wedding'); if(state.ev.wreception)out.push('Wedding Reception'); if(state.ev.reception)out.push('Reception');
     return out.join(' & ') || '—';
   }
   function showSummary(d){

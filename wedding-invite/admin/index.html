@@ -281,6 +281,7 @@
           <optgroup label="By event">
             <option value="sangeet">Attending Sangeet - Baraat</option>
             <option value="wedding">Attending Wedding</option>
+            <option value="wreception">Attending Wedding Reception</option>
             <option value="reception">Attending Reception</option>
           </optgroup>
         </select>
@@ -293,6 +294,7 @@
           <optgroup label="By event">
             <option value="sangeet">Invited to Sangeet - Baraat</option>
             <option value="wedding">Invited to Wedding</option>
+            <option value="wreception">Invited to Wedding Reception</option>
             <option value="reception">Invited to Reception</option>
           </optgroup>
         </select>
@@ -382,13 +384,14 @@
       <div class="evlegend">
         <div class="h">What to put in the “events” column</div>
         <table>
-          <tr><td><code>all</code> or blank</td><td>everything — Sangeet - Baraat, Wedding &amp; Reception</td></tr>
-          <tr><td><code>patna</code></td><td>both Patna events — Sangeet - Baraat + Wedding</td></tr>
+          <tr><td><code>all</code> or blank</td><td>everything — all four events</td></tr>
+          <tr><td><code>patna</code></td><td>all three Patna events — Sangeet - Baraat, Wedding &amp; Wedding Reception</td></tr>
           <tr><td><code>sangeet</code></td><td>Sangeet - Baraat only</td></tr>
-          <tr><td><code>wedding</code></td><td>Wedding only</td></tr>
-          <tr><td><code>reception</code> · <code>palasamudram</code></td><td>Reception only</td></tr>
+          <tr><td><code>wedding</code></td><td>morning Wedding ceremony only</td></tr>
+          <tr><td><code>wedding reception</code> · <code>evening</code></td><td>Wedding Reception (Dec 12 night) only</td></tr>
+          <tr><td><code>reception</code> · <code>palasamudram</code></td><td>Palasamudram Reception (Dec 19) only</td></tr>
         </table>
-        <span class="tip">Case-insensitive. To mix specific events, separate with a <b>space</b> (not a comma) — e.g. <code>sangeet reception</code>. Leave the column blank to invite everyone to everything.</span>
+        <span class="tip">Case-insensitive. Mix with <b>spaces</b> (not commas) — e.g. <code>sangeet evening</code> for Sangeet + the Dec 12 night reception without the morning ceremony. <code>reception</code> alone always means Dec 19 Palasamudram.</span>
       </div>
       <label>Side <span style="font-weight:400;text-transform:none;letter-spacing:0">(applies to all — a side column in the file overrides per row)</span></label>
       <select id="bSide">
@@ -511,12 +514,21 @@
   function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
   function headOf(g){ return Number(g.guests)||1; }
   function partyOf(g){ return Number(g.partySize)||Number(g.guests)||1; }
-  function invitedTo(g, ev){ var inv=String(g.invited||'').toLowerCase(); return !inv || inv.indexOf(ev)>=0; } // blank = invited to everything
-  var EV_LABEL = { sangeet:'Sangeet - Baraat', wedding:'Wedding', reception:'Reception' };
+  function invitedTo(g, ev){ return !String(g.invited||'').trim() || hasEv(g.invited, ev); } // blank = invited to everything
+  var EV_LABEL = { sangeet:'Sangeet - Baraat', wedding:'Wedding', wreception:'Wedding Reception', reception:'Reception' };
+  var EV_KEYS = ['sangeet','wedding','wreception','reception'];
+  // exact comma-token matching — 'Wedding Reception' must never count as 'Wedding' or 'Reception'
+  var EV_TOKENS = { sangeet:{'sangeet':1}, wedding:{'wedding':1},
+                    wreception:{'wedding reception':1,'wreception':1}, reception:{'reception':1} };
+  function hasEv(str, key){
+    var set = EV_TOKENS[key] || {};
+    var toks = String(str||'').split(',');
+    for (var i=0;i<toks.length;i++){ if (set[toks[i].trim().toLowerCase()]) return true; }
+    return false;
+  }
   function prettyEvents(str){
-    var s = String(str||'').toLowerCase();
     var out = [];
-    ['sangeet','wedding','reception'].forEach(function(k){ if (s.indexOf(k)>=0) out.push(EV_LABEL[k]); });
+    EV_KEYS.forEach(function(k){ if (hasEv(str,k)) out.push(EV_LABEL[k]); });
     return out.length ? out.join(', ') : String(str||'');
   }
 
@@ -579,23 +591,23 @@
 
   // attendance bars now show confirmed vs potential (everyone invited to that event)
   function renderBars(){
-    var ev={sangeet:{go:0,pot:0},wedding:{go:0,pot:0},reception:{go:0,pot:0}};
+    var ev={sangeet:{go:0,pot:0},wedding:{go:0,pot:0},wreception:{go:0,pot:0},reception:{go:0,pot:0}};
     var meal={veg:0,nonveg:0};
     data.forEach(function(g){
       Object.keys(ev).forEach(function(k){ if (invitedTo(g,k)) ev[k].pot += partyOf(g); });
       if (statusOf(g)!=='yes') return;
       var n=headOf(g);
-      var e=String(g.events||'').toLowerCase();
-      Object.keys(ev).forEach(function(k){ if(e.indexOf(k)>=0) ev[k].go+=n; });
+      Object.keys(ev).forEach(function(k){ if (hasEv(g.events,k)) ev[k].go+=n; });
       var m=String(g.meal||'').toLowerCase();
       if(m.indexOf('non')>=0)meal.nonveg+=n; else if(m.indexOf('veg')>=0)meal.veg+=n;
     });
     var evRows=[
       ['Sangeet - Baraat',ev.sangeet,'var(--rosewood)'],
       ['Wedding',ev.wedding,'var(--maroon)'],
+      ['Wedding Reception',ev.wreception,'#C15E52'],
       ['Reception',ev.reception,'var(--gold)']
     ];
-    var max=Math.max(1,ev.sangeet.pot,ev.wedding.pot,ev.reception.pot);
+    var max=Math.max(1,ev.sangeet.pot,ev.wedding.pot,ev.wreception.pot,ev.reception.pot);
     var html = '<h3 style="margin-top:0">Attendance by event</h3>'+
       '<div class="hint">Solid = confirmed · pale = everyone invited</div>'+
       evRows.map(function(r){
@@ -622,12 +634,11 @@
     data.forEach(function(g){
       if (statusOf(g)!=='yes') return;
       var n=headOf(g);
-      var e=String(g.events||'').toLowerCase();
       var m=String(g.meal||'').toLowerCase();
       var mk = m.indexOf('non')>=0 ? 'nonveg' : (m.indexOf('veg')>=0 ? 'veg' : '');
       if (!mk) return;
-      if (e.indexOf('sangeet')>=0 || e.indexOf('wedding')>=0) city.patna[mk]+=n;
-      if (e.indexOf('reception')>=0) city.palasamudram[mk]+=n;
+      if (hasEv(g.events,'sangeet') || hasEv(g.events,'wedding') || hasEv(g.events,'wreception')) city.patna[mk]+=n;
+      if (hasEv(g.events,'reception')) city.palasamudram[mk]+=n;
     });
     function block(label, c){
       var max=Math.max(1,c.veg,c.nonveg);
@@ -640,8 +651,8 @@
         }).join('')+'</div>';
     }
     $('catering').innerHTML =
-      block('Patna · Sangeet, Baraat &amp; Wedding', city.patna) +
-      block('Palasamudram · Reception', city.palasamudram);
+      block('Patna · Dec 11 &amp; 12 events', city.patna) +
+      block('Palasamudram · Dec 19', city.palasamudram);
   }
 
   // cumulative replies over time (tiny area chart)
@@ -676,7 +687,7 @@
 
   var lastRows = [];   // currently displayed (filtered) rows
   // a filter value can be a single event or a city (which maps to its events)
-  var CITY_EVENTS = { patna:['sangeet','wedding'], palasamudram:['reception'] };
+  var CITY_EVENTS = { patna:['sangeet','wedding','wreception'], palasamudram:['reception'] };
   function eventsForVal(v){ return CITY_EVENTS[v] || (v ? [v] : []); }
   function filteredData(){
     var at=$('fAttending').value, iv=$('fInvited').value, sd=$('fSide').value,
@@ -692,13 +703,13 @@
       }
       // Attending: RSVP'd yes and ticked any of the target events (event or city)
       if (at){
-        var aKeys=eventsForVal(at), evs=String(g.events||'').toLowerCase();
-        if (s!=='yes' || !aKeys.some(function(k){ return evs.indexOf(k)>=0; })) return false;
+        var aKeys=eventsForVal(at);
+        if (s!=='yes' || !aKeys.some(function(k){ return hasEv(g.events,k); })) return false;
       }
       // Invited: invited to any of the target events (blank Invited = invited to everything)
       if (iv){
-        var iKeys=eventsForVal(iv), invs=String(g.invited||'').toLowerCase();
-        if (invs && !iKeys.some(function(k){ return invs.indexOf(k)>=0; })) return false;
+        var iKeys=eventsForVal(iv);
+        if (String(g.invited||'').trim() && !iKeys.some(function(k){ return hasEv(g.invited,k); })) return false;
       }
       // Side
       if (sd){ if (String(g.side||'') !== sd) return false; }
@@ -886,8 +897,8 @@
   // ---------- add guest ----------
   function adminKey(){ if (sessionKey) return sessionKey; try{ return localStorage.getItem(KEY_LS) || ''; }catch(_){ return ''; } }
   var lastLink = '', lastPhone = '', lastEmail = '';
-  var INV_EVENTS = [['sangeet','Sangeet - Baraat'],['wedding','Wedding'],['reception','Reception']];
-  var invitedState = {sangeet:true, wedding:true, reception:true};
+  var INV_EVENTS = [['sangeet','Sangeet - Baraat'],['wedding','Wedding'],['wreception','Wedding Reception'],['reception','Reception']];
+  var invitedState = {sangeet:true, wedding:true, wreception:true, reception:true};
 
   function renderInvited(){
     var box = $('gInvited'); box.innerHTML='';
@@ -951,12 +962,18 @@
     return null;
   }
   function normEvents(v){
-    var t = String(v||'').toLowerCase();
-    if (!t.trim() || /\ball\b/.test(t)) return ['sangeet','wedding','reception'];
+    var t = ' ' + String(v||'').toLowerCase().replace(/[_-]+/g,' ') + ' ';
+    if (!t.trim() || /\ball\b/.test(t)) return ['sangeet','wedding','wreception','reception'];
     var out = [];
-    if (t.indexOf('sangeet')>=0 || t.indexOf('baraat')>=0 || t.indexOf('patna')>=0) out.push('sangeet');
-    if (t.indexOf('wedding')>=0 || t.indexOf('patna')>=0) out.push('wedding');
-    if (t.indexOf('reception')>=0 || t.indexOf('palasamudram')>=0) out.push('reception');
+    // phrases first — consume them so the single words below can't double-match
+    if (/wedding\s*reception|wreception|evening/.test(t)){
+      out.push('wreception');
+      t = t.replace(/wedding\s*reception|wreception|evening/g,' ');
+    }
+    if (t.indexOf('patna')>=0) out.push('sangeet','wedding','wreception');
+    if (/sangeet|baraat/.test(t)) out.push('sangeet');
+    if (t.indexOf('wedding')>=0) out.push('wedding');
+    if (/reception|palasamudram/.test(t)) out.push('reception');
     return out.filter(function(x,i,a){ return a.indexOf(x)===i; });
   }
   function normSide(v){
@@ -980,7 +997,7 @@
         err = 'First row must be a header that includes a "name" column (see the template).';
       } else {
         for (var r=1; r<grid.length; r++){
-          var o = {name:'', party:1, events:['sangeet','wedding','reception'], email:'', phone:'', side:'', message:''};
+          var o = {name:'', party:1, events:['sangeet','wedding','wreception','reception'], email:'', phone:'', side:'', message:''};
           for (var c=0; c<head.length; c++){
             var k = head[c]; if (!k) continue;
             var v = String(grid[r][c]==null?'':grid[r][c]).trim();
@@ -1006,7 +1023,7 @@
     if (!bulkRows.length){ box.innerHTML=''; setImportEnabled(0); return; }
     var good = bulkRows.filter(function(r){ return r.valid; }).length;
     var show = bulkRows.slice(0, 30);
-    var EVL = {sangeet:'S-B', wedding:'W', reception:'R'};
+    var EVL = {sangeet:'S-B', wedding:'W', wreception:'WR', reception:'R'};
     box.innerHTML = '<div class="bpv"><table><thead><tr><th>Name</th><th>Party</th><th>Events</th><th>Email</th><th>Phone</th><th>Side</th></tr></thead><tbody>'+
       show.map(function(r){
         return '<tr'+(r.valid?'':' class="bad"')+'><td><b>'+esc(r.name||'?')+'</b>'+(r.valid?'':'<div class="why">'+esc(r.reason)+'</div>')+'</td>'+
@@ -1032,7 +1049,7 @@
     $('addResult').classList.add('hidden');
     $('addForm').classList.remove('hidden');
     $('gName').value=''; $('gEmail').value=''; $('gPhone').value=''; $('gParty').value='1'; $('gMessage').value=''; $('gSide').value="Bride & Groom";
-    invitedState = {sangeet:true, wedding:true, reception:true}; renderInvited();
+    invitedState = {sangeet:true, wedding:true, wreception:true, reception:true}; renderInvited();
     $('addErr').textContent=''; $('copiedMsg').textContent='';
     setTimeout(function(){ $('gName').focus(); }, 30);
   }
@@ -1094,6 +1111,7 @@
                'Priya & Arjun,2,all,priya@example.com,919876543210,\n'+
                'The Sharmas,4,patna,,919812345678,\n'+
                'Uncle Verma,1,wedding,,,\n'+
+               'Office Colleagues,3,sangeet evening,,,\n'+
                'College Friends,4,sangeet reception,,,\n'+
                'Divya & Karthik,2,reception,divya@example.com,,Bride\'s side\n';
     var a = document.createElement('a');
@@ -1217,17 +1235,17 @@
     var day = 86400000, now = Date.now();
     function d(n){ return new Date(now - n*day).toISOString(); }
     return [
-      {name:'Priya & Arjun', email:'priya@example.com', whatsapp:'919812345001', side:"Bride's side", status:'yes', guests:2, partySize:2, invited:'', events:'sangeet, wedding, reception', meal:'veg', song:'Kala Chashma\nKajra Re', message:'So excited for you both! Counting the days.', respondedAt:d(18), inviteLink:'#', whatsappSend:'', emailSend:''},
-      {name:'The Sharma Family', email:'', whatsapp:'919812345002', side:"Groom's side", status:'yes', guests:4, partySize:5, invited:'sangeet, wedding', events:'sangeet, wedding', meal:'nonveg', song:'Gallan Goodiyaan', message:'', respondedAt:d(15), inviteLink:'#', whatsappSend:'', emailSend:''},
+      {name:'Priya & Arjun', email:'priya@example.com', whatsapp:'919812345001', side:"Bride's side", status:'yes', guests:2, partySize:2, invited:'', events:'sangeet, wedding, wedding reception, reception', meal:'veg', song:'Kala Chashma\nKajra Re', message:'So excited for you both! Counting the days.', respondedAt:d(18), inviteLink:'#', whatsappSend:'', emailSend:''},
+      {name:'The Sharma Family', email:'', whatsapp:'919812345002', side:"Groom's side", status:'yes', guests:4, partySize:5, invited:'sangeet, wedding reception', events:'sangeet, wedding reception', meal:'nonveg', song:'Gallan Goodiyaan', message:'', respondedAt:d(15), inviteLink:'#', whatsappSend:'', emailSend:''},
       {name:'Meera Aunty', email:'meera@example.com', whatsapp:'', side:"Bride's side", status:'yes', guests:1, partySize:2, invited:'', events:'wedding, reception', meal:'veg', song:'', message:'Blessings to the couple!', respondedAt:d(12), inviteLink:'#', whatsappSend:'', emailSend:''},
       {name:'Rahul & Sneha', email:'rahul@example.com', whatsapp:'919812345004', side:"Groom's side", status:'pending', guests:'', partySize:2, invited:'', events:'', meal:'', song:'', message:'', respondedAt:'', inviteLink:'#', whatsappSend:'', emailSend:''},
       {name:'Prof. Iyer', email:'iyer@example.edu', whatsapp:'', side:"Bride & Groom", status:'yes', guests:2, partySize:2, invited:'reception', events:'reception', meal:'veg', song:'', message:'Wouldn\'t miss it.', respondedAt:d(9), inviteLink:'#', whatsappSend:'', emailSend:''},
       {name:'Kabir', email:'', whatsapp:'919812345006', side:"Groom's side", status:'no', guests:'', partySize:1, invited:'', events:'', meal:'', song:'', message:'Sadly traveling — sending love!', respondedAt:d(8), inviteLink:'#', whatsappSend:'', emailSend:''},
-      {name:'The Krishnamurthys', email:'', whatsapp:'919812345007', side:"Bride's side", status:'yes', guests:3, partySize:4, invited:'', events:'sangeet, wedding, reception', meal:'nonveg', song:'Mehendi Laga Ke Rakhna', message:'', respondedAt:d(6), inviteLink:'#', whatsappSend:'', emailSend:''},
+      {name:'The Krishnamurthys', email:'', whatsapp:'919812345007', side:"Bride's side", status:'yes', guests:3, partySize:4, invited:'', events:'sangeet, wedding, wedding reception', meal:'nonveg', song:'Mehendi Laga Ke Rakhna', message:'', respondedAt:d(6), inviteLink:'#', whatsappSend:'', emailSend:''},
       {name:'Ananya', email:'ananya@example.com', whatsapp:'', side:"Bride's side", status:'yes', guests:1, partySize:1, invited:'sangeet, wedding', events:'sangeet', meal:'veg', song:'London Thumakda', message:'', respondedAt:d(5), inviteLink:'#', whatsappSend:'', emailSend:''},
       {name:'Uncle Verma', email:'', whatsapp:'919812345009', side:"Groom's side", status:'pending', guests:'', partySize:3, invited:'', events:'', meal:'', song:'', message:'', respondedAt:'', inviteLink:'#', whatsappSend:'', emailSend:''},
       {name:'Divya & Karthik', email:'divya@example.com', whatsapp:'919812345010', side:"Bride's side", status:'yes', guests:2, partySize:2, invited:'reception', events:'reception', meal:'nonveg', song:'Why This Kolaveri Di', message:'See you in Palasamudram!', respondedAt:d(3), inviteLink:'#', whatsappSend:'', emailSend:''},
-      {name:'The Guptas', email:'', whatsapp:'919812345011', side:"Groom's side", status:'yes', guests:5, partySize:6, invited:'', events:'sangeet, wedding', meal:'veg', song:'', message:'Whole family is coming!', respondedAt:d(2), inviteLink:'#', whatsappSend:'', emailSend:''},
+      {name:'The Guptas', email:'', whatsapp:'919812345011', side:"Groom's side", status:'yes', guests:5, partySize:6, invited:'sangeet, wedding reception', events:'sangeet, wedding reception', meal:'veg', song:'', message:'Whole family is coming!', respondedAt:d(2), inviteLink:'#', whatsappSend:'', emailSend:''},
       {name:'Zara', email:'zara@example.com', whatsapp:'', side:"Bride's side", status:'pending', guests:'', partySize:1, invited:'sangeet', events:'', meal:'', song:'', message:'', respondedAt:'', inviteLink:'#', whatsappSend:'', emailSend:''},
       {name:'Old Roommates', email:'gang@example.com', whatsapp:'919812345013', side:"Groom's side", status:'yes', guests:4, partySize:4, invited:'', events:'sangeet, reception', meal:'nonveg', song:'Sadi Gali\nTunak Tunak Tun', message:'Bringing the dhol energy 🥁', respondedAt:d(1), inviteLink:'#', whatsappSend:'', emailSend:''},
       {name:'Nani', email:'', whatsapp:'', side:"Bride's side", status:'yes', guests:1, partySize:1, invited:'', events:'wedding', meal:'veg', song:'', message:'Blessings, my dear.', respondedAt:d(1), inviteLink:'#', whatsappSend:'', emailSend:''}
