@@ -389,9 +389,9 @@
           <tr><td><code>sangeet</code></td><td>Sangeet only</td></tr>
           <tr><td><code>wedding</code></td><td>morning Wedding ceremony only</td></tr>
           <tr><td><code>wedding reception</code> · <code>evening</code></td><td>Wedding Reception (Dec 12 night) only</td></tr>
-          <tr><td><code>reception</code> · <code>palasamudram</code></td><td>Palasamudram Reception (Dec 19) only</td></tr>
+          <tr><td><code>reception</code> · <code>palasamudram</code></td><td>Palasamudram Reception (Dec 17) only</td></tr>
         </table>
-        <span class="tip">Case-insensitive. Mix with <b>spaces</b> (not commas) — e.g. <code>sangeet evening</code> for Sangeet + the Dec 12 night reception without the morning ceremony. <code>reception</code> alone always means Dec 19 Palasamudram.</span>
+        <span class="tip">Case-insensitive. Mix with <b>spaces</b> (not commas) — e.g. <code>sangeet evening</code> for Sangeet + the Dec 12 night reception without the morning ceremony. <code>reception</code> alone always means Dec 17 Palasamudram.</span>
       </div>
       <label>Side <span style="font-weight:400;text-transform:none;letter-spacing:0">(applies to all — a side column in the file overrides per row)</span></label>
       <select id="bSide">
@@ -652,7 +652,7 @@
     }
     $('catering').innerHTML =
       block('Patna · Dec 11 &amp; 12 events', city.patna) +
-      block('Palasamudram · Dec 19', city.palasamudram);
+      block('Palasamudram · Dec 17', city.palasamudram);
   }
 
   // cumulative replies over time (tiny area chart)
