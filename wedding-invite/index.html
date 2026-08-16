@@ -69,7 +69,7 @@
   @keyframes floatUp{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
   @keyframes spinSlow{to{transform:rotate(360deg)}}
   @keyframes flapOpen{from{transform:rotateX(0)}to{transform:rotateX(178deg)}}
-  @keyframes cardLift{0%{transform:translateY(0) scale(1);opacity:1}60%{opacity:1}100%{transform:translateY(-150%) scale(.92);opacity:0}}
+  @keyframes cardLift{0%{transform:translateY(0) scale(1);opacity:0}16%{opacity:1}62%{opacity:1}100%{transform:translateY(-150%) scale(.92);opacity:0}}
   @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(8px)}}
   @keyframes mapPulse{from{transform:scale(.5);opacity:.55}to{transform:scale(2.6);opacity:0}}
   @keyframes flicker{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(.94) translateY(.6px);opacity:.85}}
@@ -234,13 +234,14 @@
   #envelopeOverlay{position:fixed;inset:0;z-index:60;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:30px;padding:24px;background:radial-gradient(circle at 50% 36%,var(--surface),var(--bg));transition:opacity .55s ease .72s}
   #envelope{position:relative;width:360px;height:246px;cursor:pointer;perspective:1100px}
   .env-body{position:absolute;inset:0;border-radius:14px;background:linear-gradient(160deg,var(--surface),#F6ECD6);border:1px solid var(--gold);box-shadow:0 36px 70px -30px rgba(71,22,31,.65)}
-  #envCard{position:absolute;left:26px;right:26px;top:30px;height:148px;border-radius:9px;background:var(--surface);border:1px solid var(--gold-pale);box-shadow:0 10px 24px -10px rgba(71,22,31,.4);display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding-bottom:8px;z-index:2}
+  #envCard{position:absolute;left:26px;right:26px;top:30px;height:148px;border-radius:9px;background:var(--surface);border:1px solid var(--gold-pale);box-shadow:0 10px 24px -10px rgba(71,22,31,.4);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:2;opacity:0}
   .env-addr{position:absolute;left:0;right:0;bottom:16px;z-index:7;display:flex;flex-direction:column;align-items:center;gap:6px;pointer-events:none}
   #envNames{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:600;font-size:29px;color:var(--maroon);line-height:1;text-shadow:0 1px 0 rgba(255,253,246,.8)}
   .env-date{font-family:'Marcellus',serif;letter-spacing:.3em;font-size:10.5px;text-transform:uppercase;color:var(--gold-deep)}
-  .env-vee{position:absolute;left:0;right:0;bottom:0;height:120px;border-radius:0 0 14px 14px;background:linear-gradient(170deg,#F8EFDC,#EFDFBE);clip-path:polygon(0 38%,50% 100%,100% 38%,100% 100%,0 100%);filter:drop-shadow(0 -1px 0 var(--gold-soft));z-index:4}
-  #envFlap{position:absolute;top:0;left:0;right:0;height:98px;transform-origin:top center;transform-style:preserve-3d;background:linear-gradient(168deg,#83303F,var(--maroon) 62%,#571623);clip-path:polygon(0 0,100% 0,50% 100%);border-radius:14px 14px 0 0;z-index:5;box-shadow:0 5px 12px -5px rgba(0,0,0,.35)}
-  #envFlap::after{content:'';position:absolute;inset:0;clip-path:polygon(0 0,100% 0,50% 100%);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'%3E%3Cpath d='M15 3c1.9 4.1 4.9 7.1 9 9-4.1 1.9-7.1 4.9-9 9-1.9-4.1-4.9-7.1-9-9 4.1-1.9 7.1-4.9 9-9z' fill='none' stroke='%23D9C69A' stroke-opacity='.28' stroke-width='.8'/%3E%3C/svg%3E");background-size:30px 30px}
+  .env-vee{position:absolute;left:1px;right:1px;bottom:1px;height:120px;border-radius:0 0 13px 13px;background:linear-gradient(170deg,#F8EFDC,#EFDFBE);clip-path:polygon(0 38%,50% 100%,100% 38%,100% 100%,0 100%);filter:drop-shadow(0 -1.2px 0 var(--gold));z-index:4}
+  #envFlap{position:absolute;top:0;left:0;right:0;height:98px;transform-origin:top center;transform-style:preserve-3d;background:var(--gold);clip-path:polygon(0 0,100% 0,50% 100%);border-radius:14px 14px 0 0;z-index:5;filter:drop-shadow(0 3px 4px rgba(0,0,0,.22))}
+  #envFlap::before{content:'';position:absolute;inset:0;border-radius:14px 14px 0 0;background:linear-gradient(168deg,#83303F,var(--maroon) 62%,#571623);clip-path:polygon(5px 1.3px,calc(100% - 5px) 1.3px,50% calc(100% - 1.6px))}
+  #envFlap::after{content:'';position:absolute;inset:0;clip-path:polygon(5px 1.3px,calc(100% - 5px) 1.3px,50% calc(100% - 1.6px));background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'%3E%3Cpath d='M15 3c1.9 4.1 4.9 7.1 9 9-4.1 1.9-7.1 4.9-9 9-1.9-4.1-4.9-7.1-9-9 4.1-1.9 7.1-4.9 9-9z' fill='none' stroke='%23D9C69A' stroke-opacity='.28' stroke-width='.8'/%3E%3C/svg%3E");background-size:30px 30px}
   .env-seal{position:absolute;left:50%;top:98px;transform:translate(-50%,-50%);width:48px;height:48px;border-radius:50%;background:radial-gradient(circle at 36% 30%,#DEC489,var(--gold) 58%,#93733A);display:flex;align-items:center;justify-content:center;box-shadow:0 8px 18px -5px rgba(0,0,0,.5),inset 0 0 0 1px rgba(255,253,246,.4);z-index:6}
   .env-seal::before{content:'';position:absolute;inset:5px;border-radius:50%;border:1px dashed rgba(71,22,31,.5)}
   .env-seal span{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:700;font-size:17px;color:var(--maroon)}
@@ -255,6 +256,7 @@
     -webkit-mask-image:linear-gradient(180deg,#000 0%,#000 70%,rgba(0,0,0,.5) 88%,transparent 100%);
     mask-image:linear-gradient(180deg,#000 0%,#000 70%,rgba(0,0,0,.5) 88%,transparent 100%)}
   .petal-canvas{position:fixed;inset:0;width:100%;height:100%;pointer-events:none}
+  #envSprig{position:absolute;left:0;right:0;top:129px;display:flex;justify-content:center;z-index:5;pointer-events:none}
   .env-sprig svg{width:132px;height:auto;display:block}
   .foot-sprig{display:flex;justify-content:center;margin-bottom:12px}
   .foot-sprig svg{width:230px;height:auto}
@@ -480,10 +482,11 @@
   <div id="envelope">
     <div class="env-body"></div>
     <div id="envCard">
-      <div id="envSprig" class="env-sprig" aria-hidden="true"></div>
+      <svg class="orn" width="88" height="23" viewBox="0 0 120 32" style="color:var(--gold-deep)" aria-hidden="true"><use href="#sym-lotus"/></svg>
     </div>
     <div class="env-vee"></div>
     <div id="envFlap"></div>
+    <div id="envSprig" class="env-sprig" aria-hidden="true"></div>
     <div class="env-seal"><span>R·A</span></div>
     <div class="env-addr">
       <div id="envNames">Rohit <span class="amp">&amp;</span> Aditi</div>
