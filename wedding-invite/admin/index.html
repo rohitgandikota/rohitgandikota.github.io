@@ -279,7 +279,7 @@
             <option value="palasamudram">Attending Palasamudram (Reception)</option>
           </optgroup>
           <optgroup label="By event">
-            <option value="sangeet">Attending Sangeet - Baraat</option>
+            <option value="sangeet">Attending Sangeet</option>
             <option value="wedding">Attending Wedding</option>
             <option value="wreception">Attending Wedding Reception</option>
             <option value="reception">Attending Reception</option>
@@ -292,7 +292,7 @@
             <option value="palasamudram">Invited to Palasamudram (Reception)</option>
           </optgroup>
           <optgroup label="By event">
-            <option value="sangeet">Invited to Sangeet - Baraat</option>
+            <option value="sangeet">Invited to Sangeet</option>
             <option value="wedding">Invited to Wedding</option>
             <option value="wreception">Invited to Wedding Reception</option>
             <option value="reception">Invited to Reception</option>
@@ -385,8 +385,8 @@
         <div class="h">What to put in the “events” column</div>
         <table>
           <tr><td><code>all</code> or blank</td><td>everything — all four events</td></tr>
-          <tr><td><code>patna</code></td><td>all three Patna events — Sangeet - Baraat, Wedding &amp; Wedding Reception</td></tr>
-          <tr><td><code>sangeet</code></td><td>Sangeet - Baraat only</td></tr>
+          <tr><td><code>patna</code></td><td>all three Patna events — Sangeet, Wedding &amp; Wedding Reception</td></tr>
+          <tr><td><code>sangeet</code></td><td>Sangeet only</td></tr>
           <tr><td><code>wedding</code></td><td>morning Wedding ceremony only</td></tr>
           <tr><td><code>wedding reception</code> · <code>evening</code></td><td>Wedding Reception (Dec 12 night) only</td></tr>
           <tr><td><code>reception</code> · <code>palasamudram</code></td><td>Palasamudram Reception (Dec 19) only</td></tr>
@@ -515,7 +515,7 @@
   function headOf(g){ return Number(g.guests)||1; }
   function partyOf(g){ return Number(g.partySize)||Number(g.guests)||1; }
   function invitedTo(g, ev){ return !String(g.invited||'').trim() || hasEv(g.invited, ev); } // blank = invited to everything
-  var EV_LABEL = { sangeet:'Sangeet - Baraat', wedding:'Wedding', wreception:'Wedding Reception', reception:'Reception' };
+  var EV_LABEL = { sangeet:'Sangeet', wedding:'Wedding', wreception:'Wedding Reception', reception:'Reception' };
   var EV_KEYS = ['sangeet','wedding','wreception','reception'];
   // exact comma-token matching — 'Wedding Reception' must never count as 'Wedding' or 'Reception'
   var EV_TOKENS = { sangeet:{'sangeet':1}, wedding:{'wedding':1},
@@ -602,7 +602,7 @@
       if(m.indexOf('non')>=0)meal.nonveg+=n; else if(m.indexOf('veg')>=0)meal.veg+=n;
     });
     var evRows=[
-      ['Sangeet - Baraat',ev.sangeet,'var(--rosewood)'],
+      ['Sangeet',ev.sangeet,'var(--rosewood)'],
       ['Wedding',ev.wedding,'var(--maroon)'],
       ['Wedding Reception',ev.wreception,'#C15E52'],
       ['Reception',ev.reception,'var(--gold)']
@@ -897,7 +897,7 @@
   // ---------- add guest ----------
   function adminKey(){ if (sessionKey) return sessionKey; try{ return localStorage.getItem(KEY_LS) || ''; }catch(_){ return ''; } }
   var lastLink = '', lastPhone = '', lastEmail = '';
-  var INV_EVENTS = [['sangeet','Sangeet - Baraat'],['wedding','Wedding'],['wreception','Wedding Reception'],['reception','Reception']];
+  var INV_EVENTS = [['sangeet','Sangeet'],['wedding','Wedding'],['wreception','Wedding Reception'],['reception','Reception']];
   var invitedState = {sangeet:true, wedding:true, wreception:true, reception:true};
 
   function renderInvited(){
@@ -1023,7 +1023,7 @@
     if (!bulkRows.length){ box.innerHTML=''; setImportEnabled(0); return; }
     var good = bulkRows.filter(function(r){ return r.valid; }).length;
     var show = bulkRows.slice(0, 30);
-    var EVL = {sangeet:'S-B', wedding:'W', wreception:'WR', reception:'R'};
+    var EVL = {sangeet:'S', wedding:'W', wreception:'WR', reception:'R'};
     box.innerHTML = '<div class="bpv"><table><thead><tr><th>Name</th><th>Party</th><th>Events</th><th>Email</th><th>Phone</th><th>Side</th></tr></thead><tbody>'+
       show.map(function(r){
         return '<tr'+(r.valid?'':' class="bad"')+'><td><b>'+esc(r.name||'?')+'</b>'+(r.valid?'':'<div class="why">'+esc(r.reason)+'</div>')+'</td>'+

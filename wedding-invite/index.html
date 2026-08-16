@@ -91,11 +91,15 @@
   .anim .reveal:nth-child(3){transition-delay:.24s}
 
   /* ==================== chips & controls (classes used by JS — keep) ==================== */
-  .chip{padding:11px 20px;border-radius:999px;cursor:pointer;user-select:none;font-size:15px;transition:all .2s;border:1px solid var(--gold-soft);background:var(--surface);color:var(--ink-soft)}
+  .chip{padding:10px 18px 10px 12px;border-radius:999px;cursor:pointer;user-select:none;font-size:15px;transition:all .2s;border:1px solid var(--gold-soft);background:var(--surface);color:var(--ink-soft);display:inline-flex;align-items:center;gap:9px}
   .chip b{font-weight:600;font-size:16.5px}
+  .chip::before{content:'';flex:0 0 auto;width:17px;height:17px;border-radius:50%;border:1.5px solid var(--gold-soft);background:transparent;display:flex;align-items:center;justify-content:center;font-size:11px;line-height:1;font-weight:800;transition:all .2s}
   .chip:hover{border-color:var(--gold)}
-  .chip.active{border-color:var(--maroon);background:var(--maroon);color:var(--gold-pale);box-shadow:0 12px 26px -14px rgba(107,31,45,.7)}
+  .chip:hover::before{border-color:var(--gold)}
+  .chip.active{border-color:var(--maroon);background:var(--maroon);color:var(--gold-pale);box-shadow:inset 0 2px 6px rgba(0,0,0,.22),0 12px 26px -14px rgba(107,31,45,.7)}
+  .chip.active::before{content:'✓';background:var(--gold-pale);border-color:var(--gold-pale);color:var(--maroon)}
   .chip.decline.active{background:var(--rosewood);border-color:var(--rosewood)}
+  .chip.decline.active::before{color:var(--rosewood)}
   .counter-btn{width:44px;height:44px;border-radius:50%;border:1px solid var(--gold);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:22px;color:var(--gold-deep);user-select:none;background:var(--surface);transition:all .2s}
   .counter-btn:hover{background:var(--halo)}
   .rsvp-input{width:100%;padding:13px 16px;border-radius:12px;border:1px solid var(--gold-soft);background:var(--bg);color:var(--ink);font-size:18px;transition:border-color .2s,box-shadow .2s}
@@ -585,8 +589,8 @@
             <svg class="orn" width="118" height="126" viewBox="0 0 118 126" aria-hidden="true"><use href="#sym-arch"/></svg>
             <svg class="icon orn" viewBox="0 0 64 64" aria-hidden="true"><use href="#sym-dhol"/></svg>
           </div>
-          <div class="ev-native" lang="hi">संगीत · बारात</div>
-          <h3 style="font-size:29px">The Sangeet - Baraat</h3>
+          <div class="ev-native" lang="hi">संगीत</div>
+          <h3>The Sangeet</h3>
           <div class="ev-tag">Music, dance &amp; the baraat</div>
         </div>
         <div class="ev-rule"></div>
@@ -599,7 +603,7 @@
           <div class="ev-desc">A musical night where both families sing and dance, the groom's baraat arrives in procession, and the bride and groom exchange garlands.</div>
           <div class="ev-btns">
             <a class="btn" href="https://maps.app.goo.gl/PhnpW8bJjug9cEH8A" target="_blank" rel="noopener">◍ Directions</a>
-            <a class="btn-ghost" href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Rohit%20%26%20Aditi%20%E2%80%94%20Sangeet%20-%20Baraat&dates=20261211T133000Z/20261211T173000Z&location=The%20Panache%2C%20Patna&details=Music%2C%20dance%2C%20the%20baraat%20procession%20%26%20the%20exchange%20of%20garlands" target="_blank" rel="noopener">✛ Calendar</a>
+            <a class="btn-ghost" href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Rohit%20%26%20Aditi%20%E2%80%94%20Sangeet&dates=20261211T133000Z/20261211T173000Z&location=The%20Panache%2C%20Patna&details=Music%2C%20dance%2C%20the%20baraat%20procession%20%26%20the%20exchange%20of%20garlands" target="_blank" rel="noopener">✛ Calendar</a>
           </div>
         </div>
       </div>
@@ -715,7 +719,7 @@
       <div class="eyebrow">Will you join us?</div>
       <h2>RSVP</h2>
       <div class="lotus-div"><svg class="orn" width="120" height="32" viewBox="0 0 120 32" aria-hidden="true"><use href="#sym-lotus"/></svg></div>
-      <div class="sub script-note" style="font-size:21px">Kindly respond by August 31, 2026</div>
+      <div class="sub script-note" style="font-size:21px">Kindly respond by September 15, 2026</div>
     </div>
 
     <!-- FORM -->
@@ -1524,7 +1528,7 @@
   $('envBtn').onclick = openEnvelope;
 
   // ===================== RSVP =====================
-  var ALL_EVENTS = [['sangeet','Sangeet - Baraat · Dec 11'],['wedding','Wedding · Dec 12'],['wreception','Wedding Reception · Dec 12'],['reception','Reception · Dec 19']];
+  var ALL_EVENTS = [['sangeet','Sangeet · Dec 11'],['wedding','Wedding · Dec 12'],['wreception','Wedding Reception · Dec 12'],['reception','Reception · Dec 19']];
   var EVENTS = ALL_EVENTS.slice();
   var MEALS  = [['veg','Vegetarian'],['nonveg','Non-vegetarian']];
   var state = { attending:'yes', ev:{sangeet:true,wedding:true,wreception:true,reception:true}, guests:1, meal:'veg', partyMax:1 };
@@ -1640,7 +1644,7 @@
 
   // ---- summary helpers ----
   function eventsLabel(){
-    var out=[]; if(state.ev.sangeet)out.push('Sangeet - Baraat'); if(state.ev.wedding)out.push('Wedding'); if(state.ev.wreception)out.push('Wedding Reception'); if(state.ev.reception)out.push('Reception');
+    var out=[]; if(state.ev.sangeet)out.push('Sangeet'); if(state.ev.wedding)out.push('Wedding'); if(state.ev.wreception)out.push('Wedding Reception'); if(state.ev.reception)out.push('Reception');
     return out.join(' & ') || '—';
   }
   function showSummary(d){
