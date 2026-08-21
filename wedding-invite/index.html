@@ -262,6 +262,14 @@
   .stream-line2{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:600;font-size:clamp(25px,4.4vw,36px);color:#F6E7C8;line-height:1.1}
   .stream-note{font-size:13.5px;font-weight:300;color:rgba(246,231,200,.78);max-width:430px}
   .stream-screen iframe{position:absolute;inset:0;width:100%;height:100%;border:0;display:block}
+  .live-badge{display:inline-flex;align-items:center;gap:9px;font-family:'Marcellus',serif;letter-spacing:.3em;text-transform:uppercase;font-size:12px;color:#FFD9D2;background:rgba(0,0,0,.28);border:1px solid rgba(255,120,110,.5);padding:8px 16px 8px 13px;border-radius:999px}
+  .live-dot{width:9px;height:9px;border-radius:50%;background:#FF6B5E;animation:livePulse 1.6s ease-out infinite}
+  @keyframes livePulse{0%{box-shadow:0 0 0 0 rgba(255,107,94,.55)}70%{box-shadow:0 0 0 11px rgba(255,107,94,0)}100%{box-shadow:0 0 0 0 rgba(255,107,94,0)}}
+  .stream-live-btn{display:inline-flex;align-items:center;gap:10px;margin-top:8px;padding:15px 32px;border-radius:999px;
+    background:linear-gradient(160deg,#EDD49A,var(--gold) 60%,#A9853F);color:#5A1620;
+    font-family:'Marcellus',serif;font-size:13px;letter-spacing:.18em;text-transform:uppercase;text-decoration:none;
+    box-shadow:0 18px 38px -14px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,253,246,.55);transition:transform .2s,box-shadow .2s}
+  .stream-live-btn:hover{transform:translateY(-2px);box-shadow:0 24px 44px -14px rgba(0,0,0,.65),inset 0 1px 0 rgba(255,253,246,.55)}
 
   /* ==================== living ambience ==================== */
   /* heritage palace backdrop, recolored into the blue-chintz family */
@@ -743,11 +751,11 @@
     <div class="streamwrap reveal">
       <div id="streamBox" class="stream-screen">
         <svg class="samai" width="52" height="52" viewBox="0 0 64 64" aria-hidden="true"><use href="#sym-samai"/></svg>
-        <div class="stream-line1" id="streamLine1">The telecast begins</div>
+        <div class="stream-line1">The telecast begins</div>
         <div class="stream-line2">Saturday, December 12, 2026</div>
-        <div class="stream-note" id="streamNote">The link to watch will appear right here on the day.</div>
+        <div class="stream-note">The link to watch will appear right here on the day.</div>
       </div>
-      <div style="text-align:center;margin-top:22px"><a id="streamOpen" class="btn-ghost hidden" target="_blank" rel="noopener">▶ Watch on YouTube</a></div>
+      <div style="text-align:center;margin-top:22px"><a id="streamOpen" class="stream-live-btn hidden" target="_blank" rel="noopener">▶ Watch on YouTube</a></div>
     </div>
   </section>
 
@@ -1606,14 +1614,17 @@
     var id = ytWatchId(url);
     if (id){
       box.innerHTML = '<iframe src="https://www.youtube-nocookie.com/embed/' + id + '?rel=0" title="Rohit & Aditi — live telecast" loading="lazy" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>';
+      open.href = url;
       open.textContent = '▶ Watch on YouTube';
+      open.classList.remove('hidden');
     } else {
-      $('streamLine1').textContent = 'We are live';
-      $('streamNote').textContent = 'Tap below to watch the telecast.';
-      open.textContent = '▶ Watch live';
+      // platforms other than YouTube block embedding — show an unmistakable live state instead
+      box.innerHTML = '<div class="live-badge"><span class="live-dot"></span>Live now</div>' +
+        '<div class="stream-line2">The telecast has begun</div>' +
+        '<div class="stream-note">Join us and watch the wedding live, wherever you are.</div>' +
+        '<a class="stream-live-btn" href="' + url.replace(/"/g, '%22') + '" target="_blank" rel="noopener">▶ Watch the telecast</a>';
+      open.classList.add('hidden');
     }
-    open.href = url;
-    open.classList.remove('hidden');
   }
 
   function hideUninvitedCards(invited){

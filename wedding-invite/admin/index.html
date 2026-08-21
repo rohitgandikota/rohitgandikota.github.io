@@ -535,7 +535,7 @@
     var st = $('streamStatus');
     if (!streamUrl) st.innerHTML = 'Guests currently see the <b>placeholder</b> — “the link will appear here on the day.”';
     else if (ytIdOf(streamUrl)) st.innerHTML = 'Live on the invite: <b>embedded YouTube player</b> + a Watch on YouTube button.';
-    else st.innerHTML = 'Live on the invite: a <b>Watch live</b> button (not a YouTube link, so no embedded player).';
+    else st.innerHTML = 'Live on the invite: the <b>“Live now” screen</b> with a Watch the telecast button (non-YouTube links can’t be embedded).';
   }
   function saveStream(url){
     if (DEMO){ setStreamState(url); $('streamStatus').innerHTML += ' <b>(Demo mode — not saved.)</b>'; return; }
