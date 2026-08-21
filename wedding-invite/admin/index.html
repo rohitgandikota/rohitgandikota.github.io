@@ -241,6 +241,17 @@
     <div id="content" class="hidden">
       <div class="stats" id="statCards"></div>
 
+      <div class="panel" id="streamPanel" style="margin-bottom:18px">
+        <h3>Live telecast</h3>
+        <div class="hint">The watch-live link on the invitation. Paste the YouTube link and update — guests see it as soon as they open or refresh their invite.</div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <input class="search" id="streamInput" placeholder="https://www.youtube.com/watch?v=…" style="flex:1;min-width:220px">
+          <button class="btn" id="streamBtn">Update live telecast link</button>
+          <button class="btn ghost" id="streamClearBtn" style="display:none">Remove</button>
+        </div>
+        <div class="hint" id="streamStatus" style="margin:12px 0 0"></div>
+      </div>
+
       <div class="panels">
         <div class="panel">
           <h3>Response breakdown</h3>
@@ -475,6 +486,7 @@
           $('gate').classList.add('hidden');
           $('dash').classList.remove('hidden');
           render(res.guests || []);
+          setStreamState(res.stream || '');
         } else {
           $('gateErr').textContent = 'That key was not accepted.';
         }
@@ -485,6 +497,7 @@
     if (DEMO){
       $('gate').classList.add('hidden'); $('dash').classList.remove('hidden');
       render(demoGuests());
+      setStreamState('');
       $('updatedAt').textContent = 'Demo data — styling preview only.';
       return;
     }
@@ -497,7 +510,7 @@
     fetch(API_URL + '?action=admin&key=' + encodeURIComponent(key))
       .then(function(r){ return r.json(); })
       .then(function(res){
-        if (res && res.ok){ render(res.guests || []); }
+        if (res && res.ok){ render(res.guests || []); setStreamState(res.stream || ''); }
         else { lock(); }
       })
       .catch(function(){ $('loading').innerHTML = '<p style="text-align:center" class="muted">Could not load data.</p>'; });
@@ -508,6 +521,46 @@
   $('keyInput').addEventListener('keydown', function(e){ if(e.key==='Enter') unlock($('keyInput').value.trim()); });
   $('lockBtn').onclick = lock;
   $('refreshBtn').onclick = function(){ if (DEMO){ render(demoGuests()); return; } var key; try{ key=localStorage.getItem(KEY_LS);}catch(_){ } if(key) fetchData(key); };
+
+  // ---------- live telecast link ----------
+  var streamUrl = '';
+  function ytIdOf(url){
+    var m = String(url||'').match(/(?:youtube(?:-nocookie)?\.com\/(?:watch\?[^#]*?v=|embed\/|live\/|shorts\/)|youtu\.be\/)([A-Za-z0-9_-]{6,20})/);
+    return m ? m[1] : '';
+  }
+  function setStreamState(url){
+    streamUrl = String(url||'').trim();
+    $('streamInput').value = streamUrl;
+    $('streamClearBtn').style.display = streamUrl ? '' : 'none';
+    var st = $('streamStatus');
+    if (!streamUrl) st.innerHTML = 'Guests currently see the <b>placeholder</b> — “the link will appear here on the day.”';
+    else if (ytIdOf(streamUrl)) st.innerHTML = 'Live on the invite: <b>embedded YouTube player</b> + a Watch on YouTube button.';
+    else st.innerHTML = 'Live on the invite: a <b>Watch live</b> button (not a YouTube link, so no embedded player).';
+  }
+  function saveStream(url){
+    if (DEMO){ setStreamState(url); $('streamStatus').innerHTML += ' <b>(Demo mode — not saved.)</b>'; return; }
+    var btn = $('streamBtn');
+    btn.disabled = true; btn.textContent = 'Updating…';
+    fetch(API_URL, { method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body: JSON.stringify({ action:'setStream', key: adminKey(), url: url }) })
+      .then(function(r){ return r.json(); })
+      .then(function(res){
+        btn.disabled = false; btn.textContent = 'Update live telecast link';
+        if (res && res.ok){ setStreamState(res.stream != null ? res.stream : url); $('streamStatus').innerHTML += ' <b>✓ Updated.</b>'; }
+        else {
+          var msg = (res && res.error) || 'unknown error';
+          if (msg === 'no token') msg = 'the backend does not know this action yet — paste the updated Code.gs into script.google.com, then Deploy → Manage deployments → ✏️ on the existing deployment → New version → Deploy.';
+          $('streamStatus').innerHTML = '<span style="color:#B3261E">Could not update: ' + esc(msg) + '</span>';
+        }
+      })
+      .catch(function(){ btn.disabled = false; btn.textContent = 'Update live telecast link'; $('streamStatus').innerHTML = '<span style="color:#B3261E">Network error — try again.</span>'; });
+  }
+  $('streamBtn').onclick = function(){
+    var u = $('streamInput').value.trim();
+    if (u && !/^https?:\/\//i.test(u)){ $('streamStatus').innerHTML = '<span style="color:#B3261E">The link must start with http:// or https://</span>'; return; }
+    saveStream(u);
+  };
+  $('streamClearBtn').onclick = function(){ $('streamInput').value = ''; saveStream(''); };
+
 
   // ---------- helpers ----------
   function statusOf(g){ var s=String(g.status||'').toLowerCase(); return s==='yes'?'yes':(s==='no'?'no':'pending'); }

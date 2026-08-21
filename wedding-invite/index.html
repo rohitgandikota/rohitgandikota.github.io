@@ -248,6 +248,21 @@
   #envBtn{cursor:pointer;display:flex;align-items:center;gap:9px;background:var(--maroon);color:var(--gold-pale);padding:14px 28px;border-radius:999px;font-family:'Marcellus',serif;letter-spacing:.2em;text-transform:uppercase;font-size:12px;animation:bob 2.4s ease-in-out infinite;box-shadow:0 18px 38px -16px rgba(107,31,45,.9)}
   .env-eyebrow{font-family:'Marcellus',serif;letter-spacing:.36em;text-transform:uppercase;font-size:12px;color:var(--gold-deep)}
 
+  /* ---- live telecast ---- */
+  .streamwrap{max-width:760px;margin:0 auto}
+  .stream-screen{position:relative;aspect-ratio:16/9;border-radius:18px;border:1px solid var(--gold);overflow:hidden;
+    background:linear-gradient(160deg,#7E2C3B,var(--maroon) 55%,#511420);
+    box-shadow:0 34px 70px -34px rgba(71,22,31,.65);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:11px;text-align:center;padding:26px;color:var(--gold-pale)}
+  .stream-screen::before{content:'';position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'%3E%3Cpath d='M15 3c1.9 4.1 4.9 7.1 9 9-4.1 1.9-7.1 4.9-9 9-1.9-4.1-4.9-7.1-9-9 4.1-1.9 7.1-4.9 9-9z' fill='none' stroke='%23D9C69A' stroke-opacity='.28' stroke-width='.8'/%3E%3C/svg%3E");background-size:30px 30px;opacity:.5;pointer-events:none}
+  .stream-screen>*{position:relative}
+  .stream-screen .samai{color:#EBD9A8;opacity:.95}
+  .stream-screen .samai path.fl{animation:flicker 2.2s ease-in-out infinite;transform-origin:center 60%}
+  .stream-line1{font-family:'Marcellus',serif;letter-spacing:.3em;text-transform:uppercase;font-size:12px;color:var(--gold-pale)}
+  .stream-line2{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:600;font-size:clamp(25px,4.4vw,36px);color:#F6E7C8;line-height:1.1}
+  .stream-note{font-size:13.5px;font-weight:300;color:rgba(246,231,200,.78);max-width:430px}
+  .stream-screen iframe{position:absolute;inset:0;width:100%;height:100%;border:0;display:block}
+
   /* ==================== living ambience ==================== */
   /* heritage palace backdrop, recolored into the blue-chintz family */
   #backdrop{position:fixed;inset:0;z-index:0;pointer-events:none;
@@ -714,6 +729,25 @@
         <span class="dot" style="background:var(--gold)"></span>
         <span>Palasamudram · Dec 17</span>
       </div>
+    </div>
+  </section>
+
+  <!-- LIVE TELECAST -->
+  <section class="section stream-sec" id="streamSec">
+    <div class="sec-head reveal">
+      <div class="eyebrow">Watch with us, from anywhere</div>
+      <h2>The Live Telecast</h2>
+      <div class="lotus-div"><svg class="orn" width="120" height="32" viewBox="0 0 120 32" aria-hidden="true"><use href="#sym-lotus"/></svg></div>
+      <div class="sub">Can't be there in person? Watch the wedding live, from wherever you are.</div>
+    </div>
+    <div class="streamwrap reveal">
+      <div id="streamBox" class="stream-screen">
+        <svg class="samai" width="52" height="52" viewBox="0 0 64 64" aria-hidden="true"><use href="#sym-samai"/></svg>
+        <div class="stream-line1" id="streamLine1">The telecast begins</div>
+        <div class="stream-line2">Saturday, December 12, 2026</div>
+        <div class="stream-note" id="streamNote">The link to watch will appear right here on the day.</div>
+      </div>
+      <div style="text-align:center;margin-top:22px"><a id="streamOpen" class="btn-ghost hidden" target="_blank" rel="noopener">▶ Watch on YouTube</a></div>
     </div>
   </section>
 
@@ -1558,6 +1592,30 @@
     else if (e.key === 'Backspace' && !this.value && songs.length){ songs.pop(); renderSongs(); }
   });
 
+  // ---- live telecast (link set from the admin dashboard, stored in the Sheet) ----
+  function ytWatchId(url){
+    var m = String(url||'').match(/(?:youtube(?:-nocookie)?\.com\/(?:watch\?[^#]*?v=|embed\/|live\/|shorts\/)|youtu\.be\/)([A-Za-z0-9_-]{6,20})/);
+    return m ? m[1] : '';
+  }
+  function renderStream(url){
+    url = String(url||'').trim();
+    if (!/^https?:\/\//i.test(url)) url = '';
+    var box = $('streamBox'), open = $('streamOpen');
+    if (!box || !open) return;
+    if (!url){ open.classList.add('hidden'); return; }  // placeholder stays as authored
+    var id = ytWatchId(url);
+    if (id){
+      box.innerHTML = '<iframe src="https://www.youtube-nocookie.com/embed/' + id + '?rel=0" title="Rohit & Aditi — live telecast" loading="lazy" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>';
+      open.textContent = '▶ Watch on YouTube';
+    } else {
+      $('streamLine1').textContent = 'We are live';
+      $('streamNote').textContent = 'Tap below to watch the telecast.';
+      open.textContent = '▶ Watch live';
+    }
+    open.href = url;
+    open.classList.remove('hidden');
+  }
+
   function hideUninvitedCards(invited){
     ['sangeet','wedding','wreception','reception'].forEach(function(k){
       var el = document.querySelector('[data-ev="'+k+'"]');
@@ -1634,6 +1692,7 @@
       invited.forEach(function(k){ state.ev[k] = true; });
       hideUninvitedCards(invited);
       renderEvents();
+      renderStream(d.stream);
 
       // prefill prior response
       if (d.attending === 'yes' || d.attending === 'no'){
