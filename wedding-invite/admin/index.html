@@ -401,6 +401,7 @@
           <tr><td><code>wedding</code></td><td>morning Wedding ceremony only</td></tr>
           <tr><td><code>wedding reception</code> · <code>evening</code></td><td>Wedding Reception (Dec 12 night) only</td></tr>
           <tr><td><code>reception</code> · <code>palasamudram</code></td><td>Palasamudram Reception (Dec 17) only</td></tr>
+          <tr><td><code>wed-reception</code></td><td>morning Wedding ceremony &amp; Palasamudram Reception (Dec 17) only</td></tr>
         </table>
         <span class="tip">Case-insensitive. Mix with <b>spaces</b> (not commas) — e.g. <code>sangeet evening</code> for Sangeet + the Dec 12 night reception without the morning ceremony. <code>reception</code> alone always means Dec 17 Palasamudram.</span>
       </div>
@@ -1022,6 +1023,10 @@
     if (/wedding\s*reception|wreception|evening/.test(t)){
       out.push('wreception');
       t = t.replace(/wedding\s*reception|wreception|evening/g,' ');
+    }
+    if (/\bwed\s*reception\b/.test(t)){   // wed-reception: morning Wedding + Palasamudram Reception
+      out.push('wedding','reception');
+      t = t.replace(/\bwed\s*reception\b/g,' ');
     }
     if (t.indexOf('patna')>=0) out.push('sangeet','wedding','wreception');
     if (/sangeet|baraat/.test(t)) out.push('sangeet');
