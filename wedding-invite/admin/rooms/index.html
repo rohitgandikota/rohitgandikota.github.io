@@ -1,0 +1,1438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+<title>Room Planner · Rohit & Aditi</title>
+
+<!-- Same Apps Script Web App URL as the dashboard (ends /exec). -->
+<script>(function(){try{var t=localStorage.getItem('ra_admin_theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+<script>
+  const API_URL = "https://script.google.com/macros/s/AKfycbwm8VPVZllFB7M8Y9-ryF896OKMKhObWXoGXHzpDE6AmdoZZunA8hgY9phxZXQFfM7sOQ/exec";
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,600&family=Mukta:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  /* same palette as the dashboard, plus one tint per side for the guest cards */
+  :root{ color-scheme:light;
+         --bg:#FAF4E7; --surface:#FFFDF6; --ink:#4A1B22; --ink-soft:#96676B; --maroon:#7A2E36; --rosewood:#B4575C;
+         --accent-ink:#7A2E36; --btn-text:#EFE3C6; --pend-ink:#8A6F2E;
+         --gold:#B08D4A; --gold-deep:#7A5D1E; --gold-soft:#D9C69A; --gold-pale:#EFE3C6; --halo:rgba(176,141,74,.14);
+         --yes:#58895F; --no:#B4575C; --pending:#A98A3F;
+         --side-b:rgba(180,87,92,.15); --side-g:rgba(88,137,95,.17); --side-x:rgba(176,141,74,.2); }
+  html[data-theme="dark"]{ color-scheme:dark;
+         --bg:#141210; --surface:#1D1A15; --ink:#EDE6DA; --ink-soft:#A2938A; --maroon:#8E3A44; --rosewood:#C97B80;
+         --accent-ink:#E3A6AA; --btn-text:#F2E8D0; --pend-ink:#D9BC7C;
+         --gold:#C9A45C; --gold-deep:#C9AD6B; --gold-soft:#453D2C; --gold-pale:#332D1F; --halo:rgba(201,164,92,.14);
+         --yes:#7FB98A; --no:#D98A8E; --pending:#C9A45C;
+         --side-b:rgba(201,123,128,.22); --side-g:rgba(127,185,138,.2); --side-x:rgba(201,164,92,.2); }
+  @media (prefers-color-scheme: dark){
+    html:not([data-theme="light"]){ color-scheme:dark;
+         --bg:#141210; --surface:#1D1A15; --ink:#EDE6DA; --ink-soft:#A2938A; --maroon:#8E3A44; --rosewood:#C97B80;
+         --accent-ink:#E3A6AA; --btn-text:#F2E8D0; --pend-ink:#D9BC7C;
+         --gold:#C9A45C; --gold-deep:#C9AD6B; --gold-soft:#453D2C; --gold-pale:#332D1F; --halo:rgba(201,164,92,.14);
+         --yes:#7FB98A; --no:#D98A8E; --pending:#C9A45C;
+         --side-b:rgba(201,123,128,.22); --side-g:rgba(127,185,138,.2); --side-x:rgba(201,164,92,.2); }
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:'Mukta',sans-serif;-webkit-font-smoothing:antialiased;transition:background-color .25s ease,color .25s ease}
+  .hidden{display:none !important}
+  a{color:inherit}
+  .wrap{max-width:1280px;margin:0 auto;padding:28px 20px 80px}
+  body.has-sel .wrap{padding-bottom:calc(var(--selh,120px) + 40px)}
+  .serif{font-family:'Cormorant Garamond',serif}
+  .kicker{font-family:'Marcellus',serif;letter-spacing:.3em;text-transform:uppercase;font-size:11.5px;color:var(--gold-deep);font-weight:700}
+  .muted{color:var(--ink-soft)}
+
+  /* gate */
+  #gate{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 38%,var(--surface),var(--bg));z-index:50;padding:24px}
+  .gate-card{background:var(--surface);border:1px solid var(--gold-soft);border-radius:20px;padding:34px;max-width:380px;width:100%;text-align:center;box-shadow:0 34px 80px -50px rgba(74,27,34,.6)}
+  input.key{width:100%;padding:13px 15px;border-radius:12px;border:1px solid var(--gold-soft);background:var(--bg);font-size:16px;margin-top:18px;color:var(--ink)}
+  input.key:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px var(--halo)}
+  .btn{cursor:pointer;background:var(--maroon);color:var(--btn-text);padding:13px 20px;border-radius:12px;text-align:center;font-family:'Marcellus',serif;letter-spacing:.14em;text-transform:uppercase;font-size:12px;border:none;font-weight:600}
+  .btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--gold)}
+  .btn:hover{filter:brightness(1.08)}
+  .btn:disabled{opacity:.4;cursor:default;filter:none}
+  a.btn{text-decoration:none;display:inline-block}
+  .pill{font-size:12.5px;border:1px solid var(--gold);border-radius:999px;padding:5px 12px;white-space:nowrap;background:transparent;color:var(--ink);cursor:pointer;font-family:inherit}
+  .pill:hover{background:var(--halo)}
+  .err{color:var(--no);font-size:13px;margin-top:10px;min-height:18px}
+  .spinner{width:30px;height:30px;border:3px solid var(--gold-pale);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite;margin:60px auto}
+  @keyframes spin{to{transform:rotate(360deg)}}
+
+  /* header */
+  .head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:10px}
+  h1.title{margin:6px 0 0;font-family:'Cormorant Garamond',serif;font-weight:600;font-size:clamp(34px,6vw,52px);color:var(--accent-ink)}
+  .headbtns{display:flex;gap:10px;flex-wrap:wrap;align-items:stretch}
+  #themeBtn{padding:13px 14px;display:inline-flex;align-items:center}
+  .updated{font-size:12.5px;color:var(--ink-soft);margin:0 0 18px}
+
+  .notice{background:var(--surface);border:1px solid var(--gold);border-left-width:4px;border-radius:12px;padding:11px 14px;margin-bottom:12px;font-size:14px;line-height:1.5;display:flex;flex-wrap:wrap;gap:8px 10px;align-items:center}
+  .notice.bad{border-color:var(--no)}
+  .notice .sp{flex:1;min-width:220px}
+
+  /* city tabs + default stay */
+  .citybar{display:flex;flex-wrap:wrap;gap:12px 22px;align-items:center;justify-content:space-between;margin-bottom:16px}
+  .tabs{display:flex;gap:8px;flex-wrap:wrap}
+  .filter{cursor:pointer;padding:9px 14px;border-radius:999px;border:1px solid var(--gold-soft);font-size:13px;background:var(--surface);user-select:none;white-space:nowrap}
+  .filter .cnt{display:inline-block;margin-left:7px;padding:1px 8px;border-radius:999px;background:var(--halo);font-size:11.5px;color:var(--gold-deep);font-weight:700}
+  .filter.active{background:var(--maroon);color:var(--btn-text);border-color:transparent}
+  .filter.active .cnt{background:rgba(255,253,246,.22);color:var(--btn-text)}
+  .tabs .filter{font-size:15px;padding:10px 16px}
+  .stay{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:13.5px;color:var(--ink-soft)}
+  .stay b{font-family:'Marcellus',serif;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-deep)}
+  input.d{padding:6px 9px;border-radius:9px;border:1px solid var(--gold-soft);background:var(--surface);font:14px 'Mukta',sans-serif;color:var(--ink);height:36px}
+  input.d:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px var(--halo)}
+
+  /* stat cards */
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-bottom:18px}
+  .stat{background:var(--surface);border:1px solid var(--gold-soft);border-radius:16px;padding:14px 16px;box-shadow:0 22px 50px -42px rgba(74,27,34,.6)}
+  .stat .n{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:36px;line-height:1}
+  .stat .l{margin-top:5px;font-family:'Marcellus',serif;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-soft);font-weight:600}
+  .stat .s{margin-top:4px;font-size:12px;color:var(--ink-soft)}
+
+  /* filters */
+  .toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
+  .search{flex:1;min-width:150px;padding:10px 13px;border-radius:10px;border:1px solid var(--gold-soft);background:var(--surface);font-size:15px;font-family:inherit;color:var(--ink);height:44px}
+  select.search{flex:0 1 auto}
+  .search:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px var(--halo)}
+  .legend{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;font-size:12.5px;color:var(--ink-soft);margin-bottom:16px}
+  .legend .sw{display:inline-block;padding:2px 10px;border-radius:8px;color:var(--ink);font-size:12.5px}
+
+  /* board: guests waiting on the left, hotels and rooms on the right */
+  .board{display:grid;grid-template-columns:300px minmax(0,1fr);gap:18px;align-items:start}
+  .side-col{position:sticky;top:12px;display:flex;flex-direction:column;gap:12px;max-height:calc(100vh - 24px - var(--selh,0px))}
+  .pool{background:var(--surface);border:1px solid var(--gold-soft);border-radius:16px;padding:14px;display:flex;flex-direction:column;min-height:0;box-shadow:0 22px 50px -42px rgba(74,27,34,.6);transition:border-color .15s,box-shadow .15s}
+  .pool.main{flex:1 1 auto}
+  .pool.small{flex:0 0 auto}
+  .pool.small .list{max-height:22vh}
+  .pool-h{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:10px;font-family:'Marcellus',serif;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-deep);font-weight:700}
+  .pool-h span{font-family:'Mukta',sans-serif;letter-spacing:0;text-transform:none;font-weight:400;font-size:12.5px;color:var(--ink-soft)}
+  .list{overflow-y:auto;min-height:44px;display:flex;flex-wrap:wrap;gap:6px;align-content:flex-start}
+  .empty{font-size:12.5px;color:var(--ink-soft);font-style:italic;padding:4px 0}
+
+  .chip{display:inline-flex;flex-direction:column;align-items:flex-start;gap:1px;max-width:100%;padding:6px 10px;border-radius:10px;border:1.5px solid transparent;font-size:13.5px;line-height:1.3;cursor:pointer;user-select:none;-webkit-user-select:none;touch-action:manipulation;transition:opacity .15s,border-color .15s}
+  .chip[draggable=true]{cursor:grab}
+  .chip:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+  .chip .nm{font-weight:600;overflow-wrap:anywhere}
+  .chip .ct{font-weight:400;color:var(--ink-soft);white-space:nowrap}
+  .chip .dt{font-size:11.5px;color:var(--ink-soft)}
+  .chip.b{background:var(--side-b)}
+  .chip.g{background:var(--side-g)}
+  .chip.x{background:var(--side-x)}
+  .chip.dim{opacity:.3}
+  .chip.sel{border-color:var(--accent-ink);box-shadow:0 0 0 3px var(--halo)}
+  .chip.gone{border-style:dashed;border-color:var(--no)}
+  .chip.gone .nm{text-decoration:line-through}
+  .chip.gone .dt{color:var(--no)}
+  .chip.many{border-style:dashed;border-color:var(--pending)}
+  .chip.many .dt{color:var(--pend-ink)}
+
+  .hotel{margin-bottom:24px}
+  .hotel-h{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;margin-bottom:10px}
+  .hname{flex:0 1 310px;min-width:150px;border:1px solid transparent;background:transparent;border-radius:9px;padding:2px 8px;margin-left:-8px;font-family:'Cormorant Garamond',serif;font-weight:700;font-size:27px;color:var(--accent-ink)}
+  .hname:hover,.rname:hover{border-color:var(--gold-soft)}
+  .hname:focus,.rname:focus{outline:none;border-color:var(--gold);background:var(--surface);box-shadow:0 0 0 3px var(--halo)}
+  .hmeta{font-size:13px;color:var(--ink-soft);flex:1;min-width:160px}
+  .hbtns{display:flex;gap:6px;flex-wrap:wrap}
+  .rooms{display:grid;grid-template-columns:repeat(auto-fill,minmax(232px,1fr));gap:12px}
+  .room{background:var(--surface);border:1px solid var(--gold-soft);border-radius:14px;padding:10px 12px 12px;display:flex;flex-direction:column;gap:7px;min-height:136px;box-shadow:0 18px 40px -38px rgba(74,27,34,.6);transition:border-color .15s,box-shadow .15s}
+  .room-h{display:flex;align-items:center;gap:6px}
+  .rname{flex:1;min-width:0;border:1px solid transparent;background:transparent;border-radius:8px;padding:2px 6px;margin-left:-6px;font:600 15.5px 'Mukta',sans-serif;color:var(--ink)}
+  .room-b{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:12.5px;color:var(--ink-soft)}
+  .st{display:inline-flex;align-items:center;gap:5px}
+  .st b{min-width:12px;text-align:center;color:var(--ink);font-size:13.5px}
+  .mini{width:24px;height:24px;flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;border-radius:8px;border:1px solid var(--gold-soft);background:var(--bg);color:var(--ink);cursor:pointer;font:15px/1 'Mukta',sans-serif;padding:0}
+  .mini:hover{border-color:var(--gold);background:var(--halo)}
+  .room-s{font-size:12.5px;color:var(--ink-soft)}
+  .room-c{display:flex;flex-wrap:wrap;gap:6px;align-content:flex-start;flex:1}
+  .room.over{border-color:var(--no);box-shadow:0 0 0 2px rgba(180,87,92,.2)}
+  .room.over .room-s{color:var(--no);font-weight:600}
+  .room.fit{border-color:var(--yes);box-shadow:0 0 0 2px rgba(88,137,95,.24)}
+  .room.part{border-color:var(--pending);box-shadow:0 0 0 2px rgba(169,138,63,.24)}
+  .zone.hot{border-color:var(--gold) !important;box-shadow:0 0 0 3px var(--halo) !important}
+  body.has-sel .zone{cursor:pointer}
+
+  /* what is selected: dates, how many of the family, quick moves */
+  #selBar{position:fixed;left:0;right:0;bottom:0;z-index:40;background:var(--surface);border-top:1px solid var(--gold);box-shadow:0 -16px 40px -24px rgba(74,27,34,.6);padding:12px 16px}
+  #selBar .in{max-width:1280px;margin:0 auto;display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;font-size:13.5px;padding-right:34px;position:relative}
+  #selBar .who{display:flex;flex-direction:column;line-height:1.3;min-width:150px}
+  #selBar .who b{font-size:16px}
+  #selBar .who span{font-size:12.5px}
+  #selBar .grp{display:inline-flex;flex-wrap:wrap;align-items:center;gap:7px;color:var(--ink-soft)}
+  #selBar .grp b{color:var(--ink)}
+  #selBar .warn{color:var(--no);font-weight:600}
+  #selBar .hint{color:var(--ink-soft);font-style:italic}
+  #selBar .x{position:absolute;right:0;top:0}
+  #selBar .parts{display:contents}
+  #selBar .dl{display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+  #toast{position:fixed;left:50%;bottom:calc(var(--selh,0px) + 22px);transform:translateX(-50%);z-index:80;background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:999px;font-size:13.5px;box-shadow:0 12px 30px -12px rgba(0,0,0,.5);max-width:90vw;text-align:center}
+
+  /* dialogs */
+  .ov{position:fixed;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(60,25,32,.45);backdrop-filter:blur(2px)}
+  .modal{background:var(--surface);border:1px solid var(--gold-soft);border-radius:20px;padding:28px;width:100%;max-width:440px;box-shadow:0 40px 90px -40px rgba(74,27,34,.7);max-height:92vh;overflow-y:auto}
+  .modal h3{margin:0 0 4px;font-family:'Cormorant Garamond',serif;font-weight:700;font-size:28px;line-height:1.15;color:var(--accent-ink)}
+  .modal .sub{color:var(--ink-soft);font-size:14px;margin:6px 0 16px}
+  .modal label{display:block;font-family:'Marcellus',serif;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-deep);margin:14px 0 6px;font-weight:700}
+  .modal input{width:100%;padding:11px 13px;border-radius:10px;border:1px solid var(--gold-soft);background:var(--bg);font-size:15px;font-family:'Mukta',sans-serif;color:var(--ink)}
+  .modal input:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px var(--halo)}
+  .modal .col{display:flex;flex-direction:column;gap:10px}
+  .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+  .row .btn{flex:1;min-width:120px}
+
+  /* rooming lists (also what gets printed) */
+  .modal.wide{max-width:940px}
+  .lists h4{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:26px;color:var(--accent-ink);margin:24px 0 2px}
+  .lists h5{font-family:'Marcellus',serif;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-deep);margin:18px 0 6px}
+  .lists p{margin:2px 0 8px;font-size:13.5px}
+  .lists table{width:100%;border-collapse:collapse;font-size:13.5px}
+  .lists th,.lists td{text-align:left;padding:7px 9px;border-bottom:1px solid var(--gold-soft);vertical-align:top}
+  .lists th{font-family:'Marcellus',serif;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-deep)}
+  .tablescroll{overflow-x:auto}
+  #printArea{display:none}
+  @media print{
+    body{background:#fff !important;color:#000 !important}
+    body > *:not(#printArea){display:none !important}
+    #printArea{display:block !important;color:#000}
+    #printArea h4{font-size:18pt;margin:16pt 0 2pt;color:#000}
+    #printArea h5{font-size:10pt;margin:12pt 0 4pt;color:#000}
+    #printArea p{font-size:10pt}
+    #printArea table{font-size:10pt}
+    #printArea th,#printArea td{border:1px solid #999;padding:4pt 6pt;color:#000}
+    #printArea tr{page-break-inside:avoid}
+    #printArea .muted{color:#555}
+  }
+
+  /* ---------- mobile ---------- */
+  @media(max-width:820px){
+    .board{grid-template-columns:1fr}
+    .side-col{position:static;max-height:none}
+    .pool.main .list{max-height:34vh}
+    .pool.small .list{max-height:18vh}
+  }
+  @media(max-width:640px){
+    html,body{overflow-x:clip}
+    .wrap{padding:20px 14px 70px}
+    .head .btn{padding:11px 14px;font-size:11px}
+    #themeBtn{padding:11px 12px}
+    .stats{grid-template-columns:repeat(2,1fr);gap:10px}
+    .stat .n{font-size:30px}
+    .toolbar .search{flex:1 1 46%;min-width:0}
+    .toolbar #q{flex:1 1 100%}
+    .rooms{grid-template-columns:1fr}
+    .hname{font-size:23px}
+    .modal{padding:22px;max-width:100%}
+    #selBar{padding:10px 14px}
+    #selBar .in{gap:8px 12px;font-size:13px}
+    #selBar .who b{font-size:15px}
+    #selBar input.d{height:34px;padding:4px 6px;font-size:13px}
+    #selBar .dl{gap:5px}
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== KEY GATE ===== -->
+<div id="gate">
+  <div class="gate-card">
+    <div class="kicker">Rohit &amp; Aditi</div>
+    <div class="serif" style="font-weight:700;font-size:30px;margin-top:6px;color:var(--accent-ink)">Room Planner</div>
+    <div class="muted" style="font-size:14px;margin-top:8px">Enter the admin key to plan the rooms.</div>
+    <input id="keyInput" class="key" type="password" placeholder="Admin key" autocomplete="off">
+    <div class="err" id="gateErr"></div>
+    <button class="btn" id="enterBtn" style="width:100%;margin-top:8px">Unlock</button>
+  </div>
+</div>
+
+<!-- ===== ROOM PLANNER ===== -->
+<div id="app" class="hidden">
+  <div class="wrap">
+    <div class="head">
+      <div>
+        <div class="kicker">Rohit &amp; Aditi · 12 · 12 · 2026</div>
+        <h1 class="title">Room Planner</h1>
+      </div>
+      <div class="headbtns">
+        <a class="btn ghost" id="backBtn" href="../">Dashboard</a>
+        <button class="btn ghost" id="undoBtn" data-act="undo" disabled>Undo</button>
+        <button class="btn ghost" data-act="lists">Rooming lists</button>
+        <button class="btn ghost" data-act="refresh">Refresh</button>
+        <button class="btn ghost" id="themeBtn" data-act="theme" aria-label="Toggle dark mode" title="Toggle dark mode"></button>
+      </div>
+    </div>
+    <p class="updated" id="saveState"></p>
+
+    <div id="notices"></div>
+    <div id="loading"><div class="spinner"></div></div>
+
+    <div id="content" class="hidden">
+      <div class="citybar">
+        <div class="tabs" id="cityTabs" role="tablist"></div>
+        <div class="stay">
+          <b>Default stay</b>
+          <input type="date" class="d" id="stayA" aria-label="Default arrive date">
+          <span>to</span>
+          <input type="date" class="d" id="stayL" aria-label="Default leave date">
+          <span id="stayHint"></span>
+        </div>
+      </div>
+
+      <div class="stats" id="stats"></div>
+
+      <div class="toolbar">
+        <input class="search" id="q" placeholder="Search name or phone…">
+        <select class="search" id="fSide" aria-label="Filter by side">
+          <option value="">Side: any</option>
+          <option value="Bride &amp; Groom">Bride &amp; Groom</option>
+          <option value="Groom's side">Groom's side</option>
+          <option value="Bride's side">Bride's side</option>
+        </select>
+        <select class="search" id="fEvent" aria-label="Filter by event"></select>
+        <select class="search" id="fSize" aria-label="Filter by party size">
+          <option value="">Party size: any</option>
+          <option value="1">1 person</option>
+          <option value="2">2 people</option>
+          <option value="3">3 people</option>
+          <option value="4">4 or more</option>
+        </select>
+        <select class="search" id="fNight" aria-label="Pick a night"></select>
+        <select class="search" id="fRooms" aria-label="Filter rooms">
+          <option value="">Rooms: all</option>
+          <option value="free">Rooms with free beds</option>
+          <option value="empty">Empty rooms</option>
+          <option value="over">Rooms over capacity</option>
+        </select>
+        <div class="filter" data-act="clear-f">Clear</div>
+      </div>
+      <div class="legend">
+        <span class="sw" style="background:var(--side-b)">Bride's side</span>
+        <span class="sw" style="background:var(--side-g)">Groom's side</span>
+        <span class="sw" style="background:var(--side-x)">Bride &amp; Groom</span>
+        <span id="legendHint"></span>
+      </div>
+
+      <div class="board">
+        <div class="side-col">
+          <div class="pool main zone" data-zone="">
+            <div class="pool-h">Unassigned <span id="poolCount"></span></div>
+            <div class="list" id="poolList"></div>
+          </div>
+          <div class="pool small zone" data-zone="none">
+            <div class="pool-h">No room needed <span id="noneCount"></span></div>
+            <div class="list" id="noneList"></div>
+          </div>
+        </div>
+        <div id="hotels"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="selBar" class="hidden"><div class="in" id="selIn"></div></div>
+<div id="ov" class="ov hidden"><div class="modal" id="ovModal"></div></div>
+<div id="listsOv" class="ov hidden">
+  <div class="modal wide">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+      <h3>Rooming lists</h3>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="pill" data-act="lists-print">Print</button>
+        <button class="pill" data-act="lists-csv">Download CSV</button>
+        <button class="pill" data-act="lists-close">Close</button>
+      </div>
+    </div>
+    <div class="lists" id="listsBody"></div>
+  </div>
+</div>
+<div id="printArea" class="lists"></div>
+<div id="toast" class="hidden" role="status"></div>
+
+<script>
+(function(){
+  'use strict';
+  var $ = function(id){ return document.getElementById(id); };
+  var KEY_LS = 'ra_admin_key';
+  var DEMO = /(?:\?|&)demo=1(?:&|$)/.test(location.search);   // ?demo=1 → fake guests and rooms, no key, nothing saved
+  var FINE = !!(window.matchMedia && matchMedia('(pointer: fine)').matches);   // mouse: drag and drop. touch: tap a family, then tap a room
+  var MIN_D = '2026-10-01', MAX_D = '2027-03-31';   // accepted range for stay dates (catches a mistyped year)
+
+  // Each city: the events held there (a guest needs a bed if they attend any of them), the stay every guest
+  // starts with, and the hotels it starts with. The stay, hotels and rooms are all editable on the page.
+  var CITIES = [
+    { key:'patna', label:'Patna',        events:['sangeet','wedding','wreception'], stay:['2026-12-11','2026-12-13'], hotels:['Patna hotel'] },
+    { key:'pal',   label:'Palasamudram', events:['reception'],                      stay:['2026-12-17','2026-12-18'], hotels:['VRM Grandstay','NACIN Guesthouse'] }
+  ];
+  var EV_KEYS = ['sangeet','wedding','wreception','reception'];
+  var EV_LABEL = { sangeet:'Sangeet', wedding:'Wedding', wreception:'Wedding Reception', reception:'Reception' };
+  // exact comma-token matching, same as the dashboard: 'Wedding Reception' must never count as 'Wedding' or 'Reception'
+  var EV_TOKENS = { sangeet:{'sangeet':1}, wedding:{'wedding':1},
+                    wreception:{'wedding reception':1,'wreception':1}, reception:{'reception':1} };
+  function hasEv(str, key){
+    var set = EV_TOKENS[key] || {};
+    var toks = String(str||'').split(',');
+    for (var i=0;i<toks.length;i++){ if (set[toks[i].trim().toLowerCase()]) return true; }
+    return false;
+  }
+
+  // ---------- state ----------
+  var sessionKey = '';
+  var G = {};            // attending guests by key, rebuilt from the Sheet on every load (never saved)
+  var S = null;          // the plan, see freshPlan()
+  var rev = 0;           // revision of the saved plan this page last loaded or wrote
+  var canSave = false;   // false until the Apps Script has the room plan code
+  var planBroken = false;
+  var city = CITIES[0].key;
+  var sel = null;        // {id, k}: the selected piece, and how many of its people the next move or date change applies to
+  var F = { q:'', side:'', ev:'', size:'', night:'', rooms:'' };
+  var FL = {};           // piece id → '' | 'gone' (no longer attending here) | 'many' (more people placed than the RSVP says)
+  var undo = [], lastTag = '', lastTagAt = 0;
+  var uid = 0;
+  var saveTimer = null, saving = false, dirty = false, conflict = null, saveErr = '', savedAt = null, reloadAfterSave = false;
+  var askBtns = [], bulkHotel = '', toastTimer = null;
+
+  // ---------- small helpers ----------
+  function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
+  function plural(n, one, many){ return n + ' ' + (n === 1 ? one : many); }
+  function pad(s, w){ while (s.length < w) s = '0' + s; return s; }
+  function adminKey(){ if (sessionKey) return sessionKey; try{ return localStorage.getItem(KEY_LS) || ''; }catch(_){ return ''; } }
+  function toast(msg){
+    var t = $('toast'); t.textContent = msg; t.classList.remove('hidden');
+    clearTimeout(toastTimer); toastTimer = setTimeout(function(){ t.classList.add('hidden'); }, 3200);
+  }
+
+  // dates are 'YYYY-MM-DD' strings, so plain string comparison orders them
+  var MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var DOW = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  function utc(iso){ return new Date(iso + 'T00:00:00Z'); }
+  function addDays(iso, n){ var d = utc(iso); d.setUTCDate(d.getUTCDate() + n); return d.toISOString().slice(0,10); }
+  function validDate(s){ return typeof s === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(s) && !isNaN(utc(s)) && s >= MIN_D && s <= MAX_D; }
+  function nightCount(a, l){ return Math.round((utc(l) - utc(a)) / 86400000); }
+  function fmtDay(iso){ return MON[+iso.slice(5,7)-1] + ' ' + (+iso.slice(8,10)); }
+  function fmtDow(iso){ return DOW[utc(iso).getUTCDay()] + ', ' + fmtDay(iso); }
+  function fmtLong(iso){ return fmtDay(iso) + ', ' + iso.slice(0,4); }
+  function fmtRange(a, l){ return a.slice(0,7) === l.slice(0,7) ? fmtDay(a) + ' to ' + (+l.slice(8,10)) : fmtDay(a) + ' to ' + fmtDay(l); }
+
+  // ---------- guests ----------
+  // A guest's key is the start of their invite token: stable even if their name is edited in the Sheet.
+  function keyOf(g){
+    var m = /[?&]t=([A-Za-z0-9]+)/.exec(String(g.inviteLink||''));
+    return m ? m[1].slice(0,12) : 'n:' + String(g.name||'').trim().toLowerCase();
+  }
+  function buildGuests(list){
+    G = {};
+    list.forEach(function(g){
+      if (String(g.status||'').trim().toLowerCase() !== 'yes') return;   // only people who said yes
+      var ev = EV_KEYS.filter(function(e){ return hasEv(g.events, e); });
+      // a yes with no events ticked (a row edited by hand): fall back to what they are invited to
+      if (!ev.length) ev = EV_KEYS.filter(function(e){ return !String(g.invited||'').trim() || hasEv(g.invited, e); });
+      var k = keyOf(g);
+      G[k] = { key:k, name:String(g.name||'Guest'), side:String(g.side||''), n:Math.max(1, Number(g.guests)||1),
+               ev:ev, phone:String(g.whatsapp||''), email:String(g.email||'') };
+    });
+  }
+  function cdef(ck){ for (var i=0;i<CITIES.length;i++){ if (CITIES[i].key === ck) return CITIES[i]; } return CITIES[0]; }
+  function inCity(gk, ck){ var g = G[gk]; return !!g && cdef(ck).events.some(function(e){ return g.ev.indexOf(e) >= 0; }); }
+  function nameOf(gk){ return G[gk] ? G[gk].name : ((S.names && S.names[gk]) || 'Guest'); }
+  function sideCls(gk){ var s = G[gk] ? G[gk].side : ''; return s === "Bride's side" ? 'b' : (s === "Groom's side" ? 'g' : 'x'); }
+  function byName(a, b){ var x = nameOf(a.g).toLowerCase(), y = nameOf(b.g).toLowerCase(); return x < y ? -1 : (x > y ? 1 : 0); }
+
+  // ---------- the plan ----------
+  // Per city: a default stay, hotels with rooms, and "pieces". A piece is some or all of one invited party in
+  // one place: r is '' (unassigned), 'none' (no room needed) or a room id. a/l are the arrive and leave dates,
+  // null while the piece follows the city's default stay.
+  function freshPlan(){
+    var p = { seq:0, cities:{}, names:{} };
+    CITIES.forEach(function(c){
+      p.cities[c.key] = { stay:c.stay.slice(), pieces:[],
+        hotels:c.hotels.map(function(n){ return { id:'h' + (++p.seq), name:n, rooms:[] }; }) };
+    });
+    return p;
+  }
+  function mk(g, r, n, a, l){ return { id:++uid, g:g, r:r, n:n, a:a||null, l:l||null }; }
+
+  // Read a saved plan. Anything odd in it is repaired or dropped rather than trusted. Returns null if unreadable.
+  function parsePlan(str){
+    var raw = null;
+    try { raw = JSON.parse(str); } catch(e){ return null; }
+    if (!raw || typeof raw !== 'object' || !raw.cities) return null;
+    var p = freshPlan();
+    p.seq = Math.max(p.seq, parseInt(raw.seq, 10) || 0);
+    if (raw.names && typeof raw.names === 'object') p.names = raw.names;
+    CITIES.forEach(function(c){
+      var rc = raw.cities[c.key];
+      if (!rc) return;
+      var cs = p.cities[c.key], ids = {};
+      if (Array.isArray(rc.stay) && validDate(rc.stay[0]) && validDate(rc.stay[1]) && rc.stay[0] < rc.stay[1]) cs.stay = [rc.stay[0], rc.stay[1]];
+      cs.hotels = (Array.isArray(rc.hotels) ? rc.hotels : []).map(function(h){
+        return { id:String(h.id), name:String(h.name || 'Hotel'), rooms:(Array.isArray(h.rooms) ? h.rooms : []).map(function(r){
+          ids[String(r.id)] = 1;
+          return { id:String(r.id), name:String(r.name || 'Room'), beds:Math.max(1, parseInt(r.beds,10) || 1), extra:Math.max(0, parseInt(r.extra,10) || 0) };
+        }) };
+      });
+      cs.pieces = (Array.isArray(rc.pieces) ? rc.pieces : []).map(function(q){
+        var r = String(q.r || ''), custom = validDate(q.a) && validDate(q.l) && q.a < q.l;
+        if (r && r !== 'none' && !ids[r]) r = '';   // its room no longer exists
+        return mk(String(q.g), r, Math.max(1, parseInt(q.n,10) || 1), custom ? q.a : null, custom ? q.l : null);
+      });
+    });
+    return p;
+  }
+
+  // What gets saved. A whole family still waiting in Unassigned with the default dates carries no information
+  // (reconcile() rebuilds it from the guest list), so it is left out.
+  function serialize(){
+    var out = { v:1, seq:S.seq, cities:{}, names:{} };
+    CITIES.forEach(function(c){
+      var cs = S.cities[c.key], count = {};
+      cs.pieces.forEach(function(p){ count[p.g] = (count[p.g]||0) + 1; });
+      out.cities[c.key] = {
+        stay: cs.stay.slice(),
+        hotels: cs.hotels.map(function(h){
+          return { id:h.id, name:h.name, rooms:h.rooms.map(function(r){ return { id:r.id, name:r.name, beds:r.beds, extra:r.extra }; }) };
+        }),
+        pieces: cs.pieces.filter(function(p){ return !(p.r === '' && !p.a && count[p.g] === 1); }).map(function(p){
+          var o = { g:p.g, r:p.r, n:p.n };
+          if (p.a){ o.a = p.a; o.l = p.l; }
+          return o;
+        })
+      };
+      // remember the names of placed guests, so a row later deleted from the Sheet can still be shown by name
+      cs.pieces.forEach(function(p){ if (p.r && p.r !== 'none') out.names[p.g] = nameOf(p.g); });
+    });
+    return out;
+  }
+
+  // Make the plan agree with the current guest list. New guests and added people land in Unassigned. People
+  // who dropped out are taken off the waiting lists, but anyone already in a room stays there, flagged, until
+  // you remove them: this never empties a room on its own.
+  function reconcile(){
+    CITIES.forEach(function(c){
+      var cs = S.cities[c.key], sum = {};
+      cs.pieces = cs.pieces.filter(function(p){ return inCity(p.g, c.key) || (p.r !== '' && p.r !== 'none'); });
+      cs.pieces.forEach(function(p){ sum[p.g] = (sum[p.g]||0) + p.n; });
+      Object.keys(G).forEach(function(k){
+        if (!inCity(k, c.key)) return;
+        var diff = G[k].n - (sum[k]||0);
+        if (diff > 0) cs.pieces.push(mk(k, '', diff));
+        // the party shrank: take the difference from Unassigned first, then from No room needed
+        ['', 'none'].forEach(function(where){
+          cs.pieces.forEach(function(p){
+            if (diff < 0 && p.g === k && p.r === where){ var cut = Math.min(p.n, -diff); p.n -= cut; diff += cut; }
+          });
+        });
+      });
+      normalize(c.key);
+    });
+  }
+  // drop emptied pieces, turn dates equal to the default back into "default", merge identical neighbours
+  function normalize(ck){
+    var cs = S.cities[ck], seen = {}, out = [];
+    cs.pieces.forEach(function(p){
+      if (p.n <= 0) return;
+      if (p.a && p.a === cs.stay[0] && p.l === cs.stay[1]) p.a = p.l = null;
+      var k = p.g + '|' + p.r + '|' + (p.a||'') + '|' + (p.l||'');
+      if (seen[k]){ seen[k].n += p.n; if (sel && sel.id === p.id) sel.id = seen[k].id; }
+      else { seen[k] = p; out.push(p); }
+    });
+    cs.pieces = out;
+  }
+  function computeFlags(){
+    FL = {};
+    CITIES.forEach(function(c){
+      var tot = {};
+      S.cities[c.key].pieces.forEach(function(p){ tot[p.g] = (tot[p.g]||0) + p.n; });
+      S.cities[c.key].pieces.forEach(function(p){
+        FL[p.id] = !inCity(p.g, c.key) ? 'gone' : (tot[p.g] > G[p.g].n ? 'many' : '');
+      });
+    });
+  }
+
+  // ---------- lookups and bed counting ----------
+  function findPiece(id){ var l = S.cities[city].pieces; for (var i=0;i<l.length;i++){ if (l[i].id === id) return l[i]; } return null; }
+  function findHotel(ck, hid){ var hs = S.cities[ck].hotels; for (var i=0;i<hs.length;i++){ if (hs[i].id === hid) return hs[i]; } return null; }
+  function findRoom(ck, rid){
+    var hs = S.cities[ck].hotels;
+    for (var i=0;i<hs.length;i++){ for (var j=0;j<hs[i].rooms.length;j++){ if (hs[i].rooms[j].id === rid) return hs[i].rooms[j]; } }
+    return null;
+  }
+  function roomLabel(ck, rid){
+    var hs = S.cities[ck].hotels;
+    for (var i=0;i<hs.length;i++){ for (var j=0;j<hs[i].rooms.length;j++){ if (hs[i].rooms[j].id === rid) return hs[i].name + ', ' + hs[i].rooms[j].name; } }
+    return '';
+  }
+  function A(cs, p){ return p.a || cs.stay[0]; }
+  function L(cs, p){ return p.l || cs.stay[1]; }
+  // the people who take a bed in a room (someone who dropped out no longer does)
+  function roomPieces(ck, rid){ return S.cities[ck].pieces.filter(function(p){ return p.r === rid && FL[p.id] !== 'gone'; }); }
+  function occOn(cs, list, night){ var n = 0; list.forEach(function(p){ if (A(cs,p) <= night && night < L(cs,p)) n += p.n; }); return n; }
+  // Busiest night among `list` within [a, l). The count only goes up on a night someone arrives, so checking
+  // the first night and each arrival inside the range is enough.
+  function peakIn(cs, list, a, l){
+    var best = { n:0, night:a };
+    [a].concat(list.map(function(p){ return A(cs,p); })).forEach(function(nt){
+      if (nt < a || nt >= l) return;
+      var n = occOn(cs, list, nt);
+      if (n > best.n) best = { n:n, night:nt };
+    });
+    return best;
+  }
+  function roomPeak(ck, rid){
+    var cs = S.cities[ck], list = roomPieces(ck, rid);
+    if (!list.length) return { n:0, night:'' };
+    var a = A(cs, list[0]), l = L(cs, list[0]);
+    list.forEach(function(p){ if (A(cs,p) < a) a = A(cs,p); if (L(cs,p) > l) l = L(cs,p); });
+    return peakIn(cs, list, a, l);
+  }
+  // beds a room still has for this piece on every night of its stay
+  function freeFor(p, room){
+    var cs = S.cities[city];
+    var others = roomPieces(city, room.id).filter(function(q){ return q.id !== p.id; });
+    return room.beds + room.extra - peakIn(cs, others, A(cs,p), L(cs,p)).n;
+  }
+  function nightList(){
+    var cs = S.cities[city], a = cs.stay[0], l = cs.stay[1], out = [];
+    cs.pieces.forEach(function(p){
+      if (p.r === 'none' || FL[p.id] === 'gone') return;
+      if (A(cs,p) < a) a = A(cs,p);
+      if (L(cs,p) > l) l = L(cs,p);
+    });
+    for (var d = a; d < l && out.length < 200; d = addDays(d, 1)) out.push(d);
+    return out;
+  }
+
+  // ---------- changing the plan ----------
+  // Every change goes through commit(): it keeps an undo step, re-checks the plan against the guest list,
+  // redraws, and queues a save. Changes with the same tag made within a few seconds share one undo step
+  // (typing a date fires several changes).
+  function commit(fn, tag, quiet){
+    var now = Date.now();
+    if (!(tag && tag === lastTag && now - lastTagAt < 4000)){
+      undo.push(JSON.stringify(serialize()));
+      if (undo.length > 60) undo.shift();
+    }
+    lastTag = tag || ''; lastTagAt = now;
+    fn();
+    reconcile();
+    if (quiet){ computeFlags(); renderSel(); $('undoBtn').disabled = false; } else render();
+    scheduleSave();
+  }
+  function doUndo(){
+    if (!undo.length) return;
+    S = parsePlan(undo.pop()) || S;
+    lastTag = ''; sel = null;
+    reconcile(); render(); scheduleSave();
+    toast('Undone');
+  }
+
+  // move k of a piece's people; returns nothing, the piece that now holds them is merged by normalize()
+  function part(cs, p, target, k){
+    if (k >= p.n){ p.r = target; return; }
+    p.n -= k;
+    cs.pieces.push(mk(p.g, target, k, p.a, p.l));
+  }
+  function moveTo(pid, target, k){
+    var cs = S.cities[city], p = findPiece(pid);
+    if (!p || p.r === target) return;
+    k = Math.min(k || p.n, p.n);
+    if (target === '' || target === 'none'){ commit(function(){ part(cs, p, target, k); sel = null; }); return; }
+    var room = findRoom(city, target);
+    if (!room) return;
+    var free = freeFor(p, room);
+    if (free >= k){ commit(function(){ part(cs, p, target, k); sel = null; }); return; }
+    askOverflow(p, room, Math.max(0, free), k);
+  }
+  // the family does not fit: add extra beds, place only those who fit, or cancel
+  function askOverflow(p, room, free, k){
+    var cs = S.cities[city], need = k - free, btns = [];
+    btns.push({ label:'Add ' + plural(need, 'extra bed', 'extra beds') + ' and place all ' + k, primary:true, fn:function(){
+      commit(function(){ room.extra += need; part(cs, p, room.id, k); sel = null; });
+    } });
+    if (free > 0) btns.push({ label:'Place ' + free + ' here, leave ' + need + ' where they are', fn:function(){
+      commit(function(){ part(cs, p, room.id, free); sel = null; });
+    } });
+    ask(room.name + (free > 0 ? ' has only ' + plural(free, 'free bed', 'free beds') : ' is full') + ' on those dates',
+        nameOf(p.g) + ': ' + plural(k, 'person', 'people') + ', ' + fmtRange(A(cs,p), L(cs,p)) + '.', btns);
+  }
+  // set (or with nulls, reset) the dates of the selected people; fewer than the whole piece splits them off
+  function setDates(a, l){
+    var cs = S.cities[city], p = sel && findPiece(sel.id);
+    if (!p) return;
+    var k = Math.min(sel.k, p.n);
+    commit(function(){
+      var q = p;
+      if (k < p.n){ p.n -= k; q = mk(p.g, p.r, k, null, null); cs.pieces.push(q); }
+      q.a = a; q.l = l;
+      sel = { id:q.id, k:q.n };
+    }, 'dates');
+  }
+  function removePieces(test){
+    var cs = S.cities[city];
+    commit(function(){ cs.pieces = cs.pieces.filter(function(p){ return !test(p); }); sel = null; });
+  }
+  function trimMany(p){
+    var cs = S.cities[city], tot = 0;
+    cs.pieces.forEach(function(q){ if (q.g === p.g) tot += q.n; });
+    var cut = Math.min(p.n, tot - G[p.g].n);
+    if (cut > 0) commit(function(){ p.n -= cut; });
+  }
+
+  function nextName(h){
+    var last = h.rooms.length ? h.rooms[h.rooms.length-1].name : '';
+    var m = /^(.*?)(\d+)$/.exec(last);
+    return m ? m[1] + pad(String(Number(m[2]) + 1), m[2].length) : 'Room ' + (h.rooms.length + 1);
+  }
+  function focusName(q){ var el = document.querySelector(q); if (el){ el.focus(); el.select(); } }
+  function addRoom(hid){
+    var h = findHotel(city, hid), r = null;
+    if (!h) return;
+    commit(function(){ r = { id:'r' + (++S.seq), name:nextName(h), beds:2, extra:0 }; h.rooms.push(r); });
+    focusName('[data-rn="' + r.id + '"]');
+  }
+  function bump(rid, field, d){
+    var r = findRoom(city, rid);
+    if (!r) return;
+    var v = r[field] + d;
+    if (field === 'beds' ? (v < 1 || v > 30) : (v < 0 || v > 20)) return;
+    commit(function(){ r[field] = v; });
+  }
+  function delRoom(rid){
+    var cs = S.cities[city], r = findRoom(city, rid);
+    if (!r) return;
+    var n = 0;
+    roomPieces(city, rid).forEach(function(p){ n += p.n; });
+    var go = function(){
+      commit(function(){
+        cs.pieces.forEach(function(p){ if (p.r === rid) p.r = ''; });
+        cs.hotels.forEach(function(h){ h.rooms = h.rooms.filter(function(x){ return x.id !== rid; }); });
+        sel = null;
+      });
+      toast(r.name + ' removed');
+    };
+    if (!n) return go();
+    ask('Remove ' + r.name + '?', plural(n, 'person', 'people') + ' in it will go back to Unassigned.', [{ label:'Remove room', primary:true, fn:go }]);
+  }
+  function addHotel(){
+    var cs = S.cities[city], h = null;
+    commit(function(){ h = { id:'h' + (++S.seq), name:'New hotel', rooms:[] }; cs.hotels.push(h); });
+    focusName('[data-hn="' + h.id + '"]');
+  }
+  function delHotel(hid){
+    var cs = S.cities[city], h = findHotel(city, hid);
+    if (!h) return;
+    var ids = {};
+    h.rooms.forEach(function(r){ ids[r.id] = 1; });
+    var go = function(){
+      commit(function(){
+        cs.pieces.forEach(function(p){ if (ids[p.r]) p.r = ''; });
+        cs.hotels = cs.hotels.filter(function(x){ return x.id !== hid; });
+        sel = null;
+      });
+      toast(h.name + ' removed');
+    };
+    if (!h.rooms.length) return go();
+    ask('Remove ' + h.name + '?', 'Its ' + plural(h.rooms.length, 'room goes', 'rooms go') + ' too. Anyone placed there will go back to Unassigned.', [{ label:'Remove hotel', primary:true, fn:go }]);
+  }
+  function renameRoom(t){
+    var r = findRoom(city, t.getAttribute('data-rn')), v = t.value.trim();
+    if (!r) return;
+    if (!v){ t.value = r.name; toast('A room needs a name.'); return; }
+    if (v !== r.name) commit(function(){ r.name = v; }, '', true);
+  }
+  function renameHotel(t){
+    var h = findHotel(city, t.getAttribute('data-hn')), v = t.value.trim();
+    if (!h) return;
+    if (!v){ t.value = h.name; toast('A hotel needs a name.'); return; }
+    if (v !== h.name) commit(function(){ h.name = v; }, '', true);
+  }
+
+  function openBulk(hid){
+    var h = findHotel(city, hid);
+    if (!h) return;
+    bulkHotel = hid; askBtns = [];
+    $('ovModal').innerHTML = '<h3>Add rooms</h3><div class="sub">' + esc(h.name) + '</div>' +
+      '<label for="bkCount">How many rooms</label><input id="bkCount" type="number" min="1" max="200" value="10" inputmode="numeric">' +
+      '<label for="bkBeds">Beds in each</label><input id="bkBeds" type="number" min="1" max="30" value="2" inputmode="numeric">' +
+      '<label for="bkStart">First room name or number</label><input id="bkStart" type="text" value="' + esc(nextName(h)) + '">' +
+      '<div class="err" id="bkErr"></div>' +
+      '<div class="row"><button class="btn ghost" data-ask="x">Cancel</button><button class="btn" id="bkGo">Add rooms</button></div>';
+    $('ov').classList.remove('hidden');
+    $('bkCount').focus(); $('bkCount').select();
+  }
+  function bulkGo(){
+    var h = findHotel(city, bulkHotel);
+    var count = parseInt($('bkCount').value, 10), beds = parseInt($('bkBeds').value, 10), start = $('bkStart').value.trim();
+    if (!h) return closeAsk();
+    if (!(count >= 1 && count <= 200)){ $('bkErr').textContent = 'Enter how many rooms, from 1 to 200.'; return; }
+    if (!(beds >= 1 && beds <= 30)){ $('bkErr').textContent = 'Enter the beds in each room, from 1 to 30.'; return; }
+    var m = /^(.*?)(\d+)$/.exec(start);
+    commit(function(){
+      for (var i = 0; i < count; i++){
+        var name = m ? m[1] + pad(String(Number(m[2]) + i), m[2].length) : (start ? start + ' ' + (i + 1) : 'Room ' + (h.rooms.length + 1));
+        h.rooms.push({ id:'r' + (++S.seq), name:name, beds:beds, extra:0 });
+      }
+    });
+    closeAsk();
+    toast(plural(count, 'room', 'rooms') + ' added to ' + h.name);
+  }
+
+  // a small question with a few answers; Cancel is always there
+  function ask(title, text, buttons){
+    askBtns = buttons;
+    $('ovModal').innerHTML = '<h3>' + esc(title) + '</h3>' + (text ? '<div class="sub">' + esc(text) + '</div>' : '') +
+      '<div class="col">' + buttons.map(function(b, i){
+        return '<button class="btn' + (b.primary ? '' : ' ghost') + '" data-ask="' + i + '">' + esc(b.label) + '</button>';
+      }).join('') + '<button class="btn ghost" data-ask="x">Cancel</button></div>';
+    $('ov').classList.remove('hidden');
+  }
+  function closeAsk(){ $('ov').classList.add('hidden'); askBtns = []; }
+
+  // ---------- drawing ----------
+  function matches(p){
+    var g = G[p.g];
+    if (!g) return true;
+    if (F.q && (g.name + ' ' + g.phone + ' ' + g.email).toLowerCase().indexOf(F.q) < 0) return false;
+    if (F.side && g.side !== F.side) return false;
+    if (F.ev && g.ev.indexOf(F.ev) < 0) return false;
+    if (F.size && (F.size === '4' ? g.n < 4 : g.n !== Number(F.size))) return false;
+    if (F.night && p.r !== 'none'){ var cs = S.cities[city]; if (!(A(cs,p) <= F.night && F.night < L(cs,p))) return false; }
+    return true;
+  }
+  function chipHtml(p){
+    var cs = S.cities[city], g = G[p.g], flag = FL[p.id] || '';
+    var total = g ? g.n : p.n, sub = '';
+    if (flag === 'gone') sub = 'No longer attending';
+    else if (flag === 'many') sub = 'RSVP now says ' + total;
+    else if (p.a && p.r !== 'none') sub = fmtRange(A(cs,p), L(cs,p));
+    return '<div class="chip ' + sideCls(p.g) + (matches(p) ? '' : ' dim') + (sel && sel.id === p.id ? ' sel' : '') + (flag ? ' ' + flag : '') +
+      '" role="button" tabindex="0" draggable="' + (FINE ? 'true' : 'false') + '" data-p="' + p.id + '">' +
+      '<span class="nm">' + esc(nameOf(p.g)) + ' <span class="ct">(' + (p.n < total ? p.n + ' of ' + total : p.n) + ')</span></span>' +
+      (sub ? '<span class="dt">' + esc(sub) + '</span>' : '') + '</div>';
+  }
+
+  function render(){
+    computeFlags();
+    renderTabs(); renderStay(); renderStats(); renderFilterOptions(); renderBoard(); renderSel(); renderNotices(); paintSave();
+    $('undoBtn').disabled = !undo.length;
+  }
+  function renderBoard(){ renderPools(); renderHotels(); }
+
+  function renderTabs(){
+    $('cityTabs').innerHTML = CITIES.map(function(c){
+      var un = 0, any = false;
+      S.cities[c.key].pieces.forEach(function(p){ any = true; if (p.r === '') un += p.n; });
+      return '<div class="filter' + (c.key === city ? ' active' : '') + '" data-city="' + c.key + '" role="tab" tabindex="0">' + c.label +
+        '<span class="cnt">' + (un ? un + ' to place' : (any ? 'all placed' : 'no guests yet')) + '</span></div>';
+    }).join('');
+  }
+  function renderStay(){
+    var cs = S.cities[city], ae = document.activeElement;
+    [['stayA', 0], ['stayL', 1]].forEach(function(x){
+      var el = $(x[0]);
+      el.min = MIN_D; el.max = MAX_D;
+      if (ae !== el) el.value = cs.stay[x[1]];
+    });
+    $('stayHint').textContent = plural(nightCount(cs.stay[0], cs.stay[1]), 'night', 'nights') + '. Cards without dates follow this.';
+    $('legendHint').textContent = (FINE ? 'Drag a family onto a room, or click it and then click a room.' : 'Tap a family, then tap a room.') + ' A card shows dates only when they differ from the default stay.';
+  }
+  function renderStats(){
+    var cs = S.cities[city], att = 0, fam = 0, placed = 0, un = 0, unFam = {}, none = 0;
+    Object.keys(G).forEach(function(k){ if (inCity(k, city)){ att += G[k].n; fam++; } });
+    cs.pieces.forEach(function(p){
+      if (FL[p.id] === 'gone') return;
+      if (p.r === ''){ un += p.n; unFam[p.g] = 1; } else if (p.r === 'none') none += p.n; else placed += p.n;
+    });
+    var rooms = 0, used = 0, beds = 0, extra = 0, extraUse = 0;
+    cs.hotels.forEach(function(h){ h.rooms.forEach(function(r){
+      var pk = roomPeak(city, r.id).n;
+      rooms++; beds += r.beds; extra += r.extra;
+      if (pk) used++;
+      extraUse += Math.min(r.extra, Math.max(0, pk - r.beds));
+    }); });
+    var need = placed + un;
+    var cards = [
+      ['Attending', att, 'var(--ink)', plural(fam, 'family', 'families')],
+      ['In rooms', placed, 'var(--yes)', need ? Math.round(placed / need * 100) + '% of those who need one' : ''],
+      ['Unassigned', un, 'var(--pend-ink)', un ? plural(Object.keys(unFam).length, 'family', 'families') : (need ? 'everyone has a place' : '')],
+      ['No room needed', none, 'var(--ink-soft)', ''],
+      ['Rooms in use', used + ' / ' + rooms, 'var(--accent-ink)', plural(beds, 'bed', 'beds')],
+      ['Extra beds', extra, 'var(--accent-ink)', extra ? extraUse + ' in use on the busiest nights' : 'none added']
+    ];
+    $('stats').innerHTML = cards.map(function(c){
+      return '<div class="stat"><div class="n" style="color:' + c[2] + '">' + c[1] + '</div><div class="l">' + c[0] + '</div>' + (c[3] ? '<div class="s">' + c[3] + '</div>' : '') + '</div>';
+    }).join('');
+  }
+  function renderFilterOptions(){
+    var evs = cdef(city).events, nights = nightList();
+    if (evs.indexOf(F.ev) < 0) F.ev = '';
+    if (nights.indexOf(F.night) < 0) F.night = '';
+    var fe = $('fEvent');
+    fe.innerHTML = '<option value="">Attending: any event</option>' + evs.map(function(e){ return '<option value="' + e + '">Attending ' + EV_LABEL[e] + '</option>'; }).join('');
+    fe.value = F.ev;
+    fe.classList.toggle('hidden', evs.length < 2);
+    var fn = $('fNight');
+    fn.innerHTML = '<option value="">All nights</option>' + nights.map(function(d){ return '<option value="' + d + '">Night of ' + fmtDow(d) + '</option>'; }).join('');
+    fn.value = F.night;
+  }
+  function renderPools(){
+    var cs = S.cities[city], pool = [], none = [], poolAll = 0, noneAll = 0, shown = 0;
+    cs.pieces.forEach(function(p){
+      if (p.r === ''){ poolAll += p.n; if (matches(p)){ pool.push(p); shown += p.n; } }
+      else if (p.r === 'none'){ noneAll += p.n; none.push(p); }
+    });
+    pool.sort(byName); none.sort(byName);
+    $('poolCount').textContent = shown === poolAll ? plural(poolAll, 'person', 'people') : shown + ' of ' + poolAll + ' people';
+    $('poolList').innerHTML = pool.map(chipHtml).join('') ||
+      '<div class="empty">' + (poolAll ? 'No one here matches the filters.' : (cs.pieces.length ? 'Everyone has a place.' : 'No one has said yes for this city yet.')) + '</div>';
+    $('noneCount').textContent = plural(noneAll, 'person', 'people');
+    $('noneList').innerHTML = none.map(chipHtml).join('') || '<div class="empty">For locals and anyone with their own stay.</div>';
+  }
+  function renderHotels(){
+    var cs = S.cities[city], selP = sel && findPiece(sel.id);
+    var h = cs.hotels.map(function(hh){
+      var beds = 0, extra = 0, free = 0, cards = '';
+      hh.rooms.forEach(function(r){
+        var all = cs.pieces.filter(function(p){ return p.r === r.id; });
+        var cap = r.beds + r.extra, pk = roomPeak(city, r.id);
+        var u = F.night ? occOn(cs, roomPieces(city, r.id), F.night) : pk.n;
+        var over = pk.n > cap;
+        beds += r.beds; extra += r.extra; free += Math.max(0, cap - u);
+        if (F.rooms === 'free' && cap - u <= 0) return;
+        if (F.rooms === 'empty' && all.length) return;
+        if (F.rooms === 'over' && !over) return;
+        var status;
+        if (!all.length) status = 'Empty';
+        else {
+          status = (F.night ? fmtDay(F.night) + ': ' : 'Busiest night: ') + u + ' of ' + plural(cap, 'bed', 'beds');
+          if (u > cap) status += ', over by ' + (u - cap);
+          else if (over) status += ', over on ' + fmtDay(pk.night);
+          else if (u > r.beds) status += ', ' + (u - r.beds) + ' extra in use';
+        }
+        var cls = '';
+        if (over) cls = ' over';
+        else if (selP && selP.r !== r.id && FL[selP.id] !== 'gone'){
+          var f = freeFor(selP, r);
+          cls = f >= sel.k ? ' fit' : (f > 0 ? ' part' : '');
+        }
+        cards += '<div class="room zone' + cls + '" data-zone="' + r.id + '">' +
+          '<div class="room-h"><input class="rname" data-rn="' + r.id + '" value="' + esc(r.name) + '" aria-label="Room name">' +
+            '<button class="mini" data-act="del-room" data-id="' + r.id + '" aria-label="Remove room" title="Remove room">&times;</button></div>' +
+          '<div class="room-b">' +
+            '<span class="st">Beds <button class="mini" data-act="beds-" data-id="' + r.id + '" aria-label="Fewer beds">&minus;</button><b>' + r.beds + '</b><button class="mini" data-act="beds+" data-id="' + r.id + '" aria-label="More beds">+</button></span>' +
+            '<span class="st">Extra <button class="mini" data-act="extra-" data-id="' + r.id + '" aria-label="Fewer extra beds">&minus;</button><b>' + r.extra + '</b><button class="mini" data-act="extra+" data-id="' + r.id + '" aria-label="More extra beds">+</button></span>' +
+          '</div>' +
+          '<div class="room-s">' + status + '</div>' +
+          '<div class="room-c">' + all.map(chipHtml).join('') + '</div>' +
+        '</div>';
+      });
+      return '<div class="hotel">' +
+        '<div class="hotel-h"><input class="hname" data-hn="' + hh.id + '" value="' + esc(hh.name) + '" aria-label="Hotel name">' +
+          '<span class="hmeta">' + plural(hh.rooms.length, 'room', 'rooms') + ', ' + plural(beds, 'bed', 'beds') + (extra ? ' + ' + extra + ' extra' : '') +
+            (hh.rooms.length ? ', ' + free + ' free' + (F.night ? ' on ' + fmtDay(F.night) : '') : '') + '</span>' +
+          '<span class="hbtns"><button class="pill" data-act="add-room" data-id="' + hh.id + '">Add room</button>' +
+            '<button class="pill" data-act="add-rooms" data-id="' + hh.id + '">Add several</button>' +
+            '<button class="pill" data-act="del-hotel" data-id="' + hh.id + '">Remove hotel</button></span></div>' +
+        (hh.rooms.length
+          ? (cards ? '<div class="rooms">' + cards + '</div>' : '<div class="empty">No rooms here match the room filter.</div>')
+          : '<div class="empty">No rooms yet. Use Add room, or Add several to make a whole floor at once.</div>') +
+      '</div>';
+    }).join('');
+    $('hotels').innerHTML = h + '<button class="btn ghost" data-act="add-hotel">Add a hotel</button>';
+  }
+
+  // The bar is three parts: who it is, the dates, and the actions. While a date is being typed only the
+  // parts around it are redrawn, so the box under the cursor is never replaced mid-keystroke.
+  function renderSel(){
+    var bar = $('selBar'), p = sel && findPiece(sel.id);
+    if (!p){
+      sel = null;
+      bar.classList.add('hidden'); document.body.classList.remove('has-sel');
+      document.documentElement.style.setProperty('--selh', '0px');
+      return;
+    }
+    var cs = S.cities[city], g = G[p.g], flag = FL[p.id] || '', ae = document.activeElement;
+    sel.k = Math.max(1, Math.min(sel.k, p.n));
+    var where = p.r === '' ? 'Unassigned' : (p.r === 'none' ? 'No room needed' : roomLabel(city, p.r));
+    var evs = g ? g.ev.filter(function(e){ return cdef(city).events.indexOf(e) >= 0; }).map(function(e){ return EV_LABEL[e]; }).join(', ') : '';
+    var head = '<div class="who"><b>' + esc(nameOf(p.g)) + '</b><span class="muted">' + plural(p.n, 'person', 'people') + (g && g.side ? ', ' + esc(g.side) : '') + '</span>' +
+      '<span class="muted">' + esc(where) + (evs ? ' · ' + esc(evs) : '') + '</span></div>';
+    var dates = '', tail = '';
+    if (flag === 'gone'){
+      head += '<span class="warn">No longer attending in ' + cdef(city).label + '.</span><button class="pill" data-act="rm-gone">Remove from the plan</button>';
+    } else {
+      if (flag === 'many'){
+        var tot = 0;
+        cs.pieces.forEach(function(q){ if (q.g === p.g) tot += q.n; });
+        head += '<span class="warn">RSVP now says ' + g.n + ', but ' + tot + ' are placed.</span>' +
+          '<button class="pill" data-act="rm-many">Remove ' + Math.min(p.n, tot - g.n) + ' from this card</button>';
+      }
+      if (p.n > 1) head += '<span class="grp">People <button class="mini" data-act="k-" aria-label="Fewer people">&minus;</button><b>' + sel.k + ' of ' + p.n + '</b>' +
+        '<button class="mini" data-act="k+" aria-label="More people">+</button></span>';
+      if (p.r !== 'none') dates = '<label class="dl">Arrive <input type="date" class="d" data-d="a" min="' + MIN_D + '" max="' + MAX_D + '" value="' + A(cs,p) + '"></label>' +
+        '<label class="dl">Leave <input type="date" class="d" data-d="l" min="' + MIN_D + '" max="' + MAX_D + '" value="' + L(cs,p) + '"></label>';
+      tail = '<span class="grp">' + (p.a && p.r !== 'none' ? '<button class="pill" data-act="d-reset">Use the default dates</button>' : '') +
+        (p.r !== '' ? '<button class="pill" data-act="to-pool">Unassign</button>' : '') +
+        (p.r !== 'none' ? '<button class="pill" data-act="to-none">No room needed</button>' : '') + '</span>' +
+        '<span class="hint">' + (FINE ? 'Click' : 'Tap') + ' a room to move ' + (sel.k < p.n ? 'these ' + sel.k : (p.n === 1 ? 'this guest' : 'them')) + ' there.</span>';
+    }
+    tail += '<button class="mini x" data-act="desel" aria-label="Close">&times;</button>';
+    if (ae && ae.type === 'date' && $('selDates') && $('selDates').contains(ae) && dates){
+      $('selHead').innerHTML = head; $('selTail').innerHTML = tail;
+      Array.prototype.forEach.call($('selDates').querySelectorAll('[data-d]'), function(el){
+        if (el !== ae) el.value = el.getAttribute('data-d') === 'a' ? A(cs,p) : L(cs,p);
+      });
+    } else {
+      $('selIn').innerHTML = '<span id="selHead" class="parts">' + head + '</span><span class="grp' + (dates ? '' : ' hidden') + '" id="selDates">' + dates + '</span><span id="selTail" class="parts">' + tail + '</span>';
+    }
+    bar.classList.remove('hidden'); document.body.classList.add('has-sel');
+    document.documentElement.style.setProperty('--selh', bar.offsetHeight + 'px');
+  }
+
+  function renderNotices(){
+    if (!S) return;
+    var h = '';
+    if (!DEMO && !canSave) h += '<div class="notice bad"><span class="sp"><b>Saving is not set up yet.</b> Paste the updated Code.gs into your Apps Script, then go to Deploy, Manage deployments, the pencil on your existing deployment, New version, Deploy. Until then, changes made here are lost when you close the page.</span></div>';
+    if (planBroken) h += '<div class="notice bad"><span class="sp"><b>The saved plan could not be read</b>, so this is a fresh start. Your next change replaces the unreadable copy.</span></div>';
+    if (conflict) h += '<div class="notice bad"><span class="sp"><b>The plan was changed somewhere else</b>, on another device or tab, after this page loaded.</span>' +
+      '<button class="pill" data-act="take-theirs">Load the newer plan</button><button class="pill" data-act="keep-mine">Keep mine and overwrite</button></div>';
+    if (saveErr && saveErr !== 'network') h += '<div class="notice bad"><span class="sp"><b>Could not save:</b> ' + esc(saveErr) + '</span><button class="pill" data-act="retry">Try again</button></div>';
+    var gone = 0, many = {};
+    S.cities[city].pieces.forEach(function(p){ if (FL[p.id] === 'gone') gone++; else if (FL[p.id] === 'many') many[p.g] = 1; });
+    if (gone) h += '<div class="notice"><span class="sp">' + plural(gone, 'card in a room here belongs to someone who is', 'cards in rooms here belong to people who are') +
+      ' no longer attending. They are crossed out and no longer take a bed.</span><button class="pill" data-act="rm-all-gone">Remove them</button></div>';
+    var m = Object.keys(many).length;
+    if (m) h += '<div class="notice"><span class="sp">' + plural(m, 'family now has', 'families now have') + ' fewer people than you placed. Look for the dashed cards and click one to fix it.</span></div>';
+    $('notices').innerHTML = h;
+  }
+  function paintSave(){
+    var t;
+    if (DEMO) t = 'Demo data. Nothing here is saved.';
+    else if (!S) t = '';
+    else if (!canSave) t = 'Not saving: the Apps Script needs its update.';
+    else if (conflict) t = 'Not saved: the plan was changed somewhere else.';
+    else if (saving || (dirty && !saveErr)) t = 'Saving…';
+    else if (saveErr === 'network') t = 'Not saved yet. No connection, trying again shortly.';
+    else if (saveErr) t = 'Not saved.';
+    else t = savedAt ? 'All changes saved at ' + savedAt.toLocaleTimeString(undefined, { hour:'numeric', minute:'2-digit' }) + '.' : 'Changes save to your Google Sheet on their own.';
+    $('saveState').textContent = t;
+  }
+
+  // ---------- rooming lists: on screen, printed, as CSV, and as readable tabs in the Sheet ----------
+  function rowFor(c, cs, hotel, room, p){
+    var g = G[p.g] || {};
+    return [c.label, hotel, room, nameOf(p.g), p.n, fmtLong(A(cs,p)), fmtLong(L(cs,p)), nightCount(A(cs,p), L(cs,p)), g.side || '', g.phone || ''];
+  }
+  function listRows(){
+    var rows = [['City','Hotel','Room','Guest','People','Arrive','Leave','Nights','Side','Phone']];
+    CITIES.forEach(function(c){
+      var cs = S.cities[c.key];
+      cs.hotels.forEach(function(h){ h.rooms.forEach(function(r){
+        roomPieces(c.key, r.id).forEach(function(p){ rows.push(rowFor(c, cs, h.name, r.name, p)); });
+      }); });
+      cs.pieces.filter(function(p){ return p.r === ''; }).sort(byName).forEach(function(p){ rows.push(rowFor(c, cs, '', 'Unassigned', p)); });
+    });
+    return rows;
+  }
+  function roomRows(){
+    var rows = [['City','Hotel','Room','Beds','Extra beds','Busiest night','People that night','Guests']];
+    CITIES.forEach(function(c){
+      S.cities[c.key].hotels.forEach(function(h){ h.rooms.forEach(function(r){
+        var pk = roomPeak(c.key, r.id);
+        rows.push([c.label, h.name, r.name, r.beds, r.extra, pk.n ? fmtLong(pk.night) : '', pk.n,
+          roomPieces(c.key, r.id).map(function(p){ return nameOf(p.g) + ' (' + p.n + ')'; }).join(', ')]);
+      }); });
+    });
+    return rows;
+  }
+  function listsHtml(){
+    var h = '';
+    CITIES.forEach(function(c){
+      var cs = S.cities[c.key], days = {}, extras = '', waiting = cs.pieces.filter(function(p){ return p.r === ''; }).sort(byName);
+      h += '<h4>' + c.label + '</h4><p class="muted">Default stay: ' + fmtDow(cs.stay[0]) + ' to ' + fmtDow(cs.stay[1]) + '.</p>';
+      cs.hotels.forEach(function(hh){
+        h += '<h5>' + esc(hh.name) + '</h5>';
+        if (!hh.rooms.length){ h += '<p class="muted">No rooms yet.</p>'; return; }
+        var extra = 0, use = 0;
+        h += '<div class="tablescroll"><table><thead><tr><th>Room</th><th>Beds</th><th>Guests</th><th>Busiest night</th></tr></thead><tbody>' + hh.rooms.map(function(r){
+          var list = roomPieces(c.key, r.id), pk = roomPeak(c.key, r.id);
+          extra += r.extra; use += Math.min(r.extra, Math.max(0, pk.n - r.beds));
+          list.forEach(function(p){
+            var a = A(cs,p), l = L(cs,p), who = esc(nameOf(p.g)) + ' (' + p.n + '), ' + esc(hh.name) + ' ' + esc(r.name);
+            (days[a] = days[a] || { arr:[], dep:[] }).arr.push(who);
+            (days[l] = days[l] || { arr:[], dep:[] }).dep.push(who);
+          });
+          return '<tr><td>' + esc(r.name) + '</td><td>' + r.beds + (r.extra ? ' + ' + r.extra + ' extra' : '') + '</td><td>' +
+            (list.map(function(p){ return esc(nameOf(p.g)) + ' (' + p.n + '), ' + fmtRange(A(cs,p), L(cs,p)); }).join('<br>') || '<span class="muted">Empty</span>') +
+            '</td><td>' + (pk.n ? pk.n + ' on ' + fmtDay(pk.night) : '') + '</td></tr>';
+        }).join('') + '</tbody></table></div>';
+        if (extra) extras += '<p>' + esc(hh.name) + ': ' + plural(extra, 'extra bed', 'extra beds') + ' set, ' + use + ' in use on the busiest nights.</p>';
+      });
+      h += '<h5>Extra beds</h5>' + (extras || '<p class="muted">None added.</p>');
+      h += '<h5>Still unassigned</h5>' + (waiting.length
+        ? '<p>' + waiting.map(function(p){ return esc(nameOf(p.g)) + ' (' + p.n + ')'; }).join(', ') + '</p>'
+        : '<p class="muted">No one.</p>');
+      var dl = Object.keys(days).sort();
+      h += '<h5>Arrivals and departures</h5>' + (dl.length
+        ? '<div class="tablescroll"><table><thead><tr><th>Day</th><th>Arriving</th><th>Leaving</th></tr></thead><tbody>' + dl.map(function(d){
+            return '<tr><td>' + fmtDow(d) + '</td><td>' + (days[d].arr.join('<br>') || '') + '</td><td>' + (days[d].dep.join('<br>') || '') + '</td></tr>';
+          }).join('') + '</tbody></table></div>'
+        : '<p class="muted">No one is in a room yet.</p>');
+    });
+    return h;
+  }
+  function openLists(){ $('listsBody').innerHTML = listsHtml(); $('listsOv').classList.remove('hidden'); }
+  function closeLists(){ $('listsOv').classList.add('hidden'); }
+  function printLists(){ $('printArea').innerHTML = '<h4 style="margin-top:0">Rohit &amp; Aditi: rooming lists</h4>' + listsHtml(); window.print(); }
+  function downloadCsv(){
+    var csv = listRows().map(function(r){
+      return r.map(function(v){ v = String(v==null?'':v); return /[",\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; }).join(',');
+    }).join('\n');
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([csv], { type:'text/csv;charset=utf-8' }));
+    a.download = 'rooming-list.csv';
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function(){ URL.revokeObjectURL(a.href); }, 1000);
+  }
+
+  // ---------- saving ----------
+  // Saves run on their own a moment after each change, one at a time. The Sheet keeps a revision number:
+  // if someone else saved in between, this copy is refused and you choose which one to keep.
+  function scheduleSave(){
+    dirty = true;
+    paintSave();
+    if (DEMO || !canSave || conflict) return;
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(saveNow, 1500);
+  }
+  function saveNow(force){
+    if (DEMO || !canSave || saving || !S) return;
+    if (conflict && force !== true) return;
+    clearTimeout(saveTimer);
+    saving = true; dirty = false; saveErr = '';
+    if (force === true) conflict = null;
+    paintSave();
+    var payload = { action:'setRooms', key:adminKey(), baseRev:rev, plan:JSON.stringify(serialize()), listRows:listRows(), roomRows:roomRows() };
+    if (force === true) payload.force = true;
+    fetch(API_URL, { method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body:JSON.stringify(payload) })
+      .then(function(r){ return r.json(); })
+      .then(function(res){
+        saving = false;
+        if (res && res.ok){ rev = Number(res.rev) || rev; savedAt = new Date(); planBroken = false; }
+        else if (res && res.conflict){ conflict = res.rooms || { rev:0, plan:'' }; dirty = true; }
+        else { saveErr = (res && res.error) || 'unknown error'; dirty = true; }
+        paintSave(); renderNotices();
+        if (res && res.ok && reloadAfterSave){ reloadAfterSave = false; load(); return; }
+        if (dirty && !conflict && !saveErr) scheduleSave();   // something changed while this save was on its way
+      })
+      .catch(function(){
+        saving = false; dirty = true; saveErr = 'network';
+        paintSave();
+        saveTimer = setTimeout(saveNow, 8000);
+      });
+  }
+  function takeTheirs(){ var t = conflict; conflict = null; applyRooms(t); toast('Loaded the newer plan'); }
+  window.addEventListener('beforeunload', function(e){
+    if (!DEMO && S && (dirty || saving)){ e.preventDefault(); e.returnValue = ''; }
+  });
+
+  // ---------- events ----------
+  function act(a, id){
+    var p = sel && findPiece(sel.id);
+    if (a === 'add-room') return addRoom(id);
+    if (a === 'add-rooms') return openBulk(id);
+    if (a === 'del-room') return delRoom(id);
+    if (a === 'beds-') return bump(id, 'beds', -1);
+    if (a === 'beds+') return bump(id, 'beds', 1);
+    if (a === 'extra-') return bump(id, 'extra', -1);
+    if (a === 'extra+') return bump(id, 'extra', 1);
+    if (a === 'add-hotel') return addHotel();
+    if (a === 'del-hotel') return delHotel(id);
+    if (a === 'desel'){ sel = null; return render(); }
+    if (a === 'k-' || a === 'k+'){ if (p){ sel.k = Math.max(1, Math.min(p.n, sel.k + (a === 'k+' ? 1 : -1))); render(); } return; }
+    if (a === 'to-pool') return p && moveTo(p.id, '', sel.k);
+    if (a === 'to-none') return p && moveTo(p.id, 'none', sel.k);
+    if (a === 'd-reset') return p && setDates(null, null);
+    if (a === 'rm-gone') return p && removePieces(function(q){ return q.id === p.id; });
+    if (a === 'rm-all-gone') return removePieces(function(q){ return FL[q.id] === 'gone'; });
+    if (a === 'rm-many') return p && trimMany(p);
+    if (a === 'take-theirs') return takeTheirs();
+    if (a === 'keep-mine') return saveNow(true);
+    if (a === 'retry') return saveNow();
+    if (a === 'undo') return doUndo();
+    if (a === 'lists') return openLists();
+    if (a === 'lists-close') return closeLists();
+    if (a === 'lists-print') return printLists();
+    if (a === 'lists-csv') return downloadCsv();
+    if (a === 'clear-f') return clearFilters();
+    if (a === 'theme') return toggleTheme();
+    if (a === 'refresh') return refresh();
+  }
+  function elOf(e){ var t = e.target; return t && t.nodeType === 1 ? t : (t && t.parentElement); }
+  function toggleSel(id){
+    var p = findPiece(id);
+    sel = (!p || (sel && sel.id === id)) ? null : { id:id, k:p.n };
+    render();
+  }
+  function setCity(ck){ if (ck === city) return; city = ck; sel = null; render(); }
+
+  document.addEventListener('click', function(e){
+    var t = elOf(e);
+    if (!t || !S) return;
+    var ab = t.closest('[data-ask]');
+    if (ab){
+      var b = askBtns[Number(ab.getAttribute('data-ask'))];
+      closeAsk();
+      if (b) b.fn();
+      return;
+    }
+    if (t.id === 'bkGo') return bulkGo();
+    if (t.id === 'ov') return closeAsk();
+    if (t.id === 'listsOv') return closeLists();
+    var a = t.closest('[data-act]');
+    if (a) return act(a.getAttribute('data-act'), a.getAttribute('data-id'));
+    var ct = t.closest('[data-city]');
+    if (ct) return setCity(ct.getAttribute('data-city'));
+    if (t.closest('input,select,textarea,a,button,label')) return;
+    var ch = t.closest('.chip[data-p]');
+    if (ch) return toggleSel(Number(ch.getAttribute('data-p')));
+    var z = t.closest('[data-zone]');
+    if (z && sel) moveTo(sel.id, z.getAttribute('data-zone'), sel.k);
+  });
+
+  // native drag and drop (mouse)
+  var dragId = null, hot = null;
+  function setHot(z){ if (hot === z) return; if (hot) hot.classList.remove('hot'); hot = z; if (hot) hot.classList.add('hot'); }
+  document.addEventListener('dragstart', function(e){
+    var t = elOf(e), ch = t && t.closest('.chip[data-p]');
+    if (!ch) return;
+    dragId = Number(ch.getAttribute('data-p'));
+    e.dataTransfer.effectAllowed = 'move';
+    try { e.dataTransfer.setData('text/plain', String(dragId)); } catch(_){}
+  });
+  document.addEventListener('dragover', function(e){
+    if (dragId === null) return;
+    var t = elOf(e), z = t && t.closest('[data-zone]');
+    setHot(z || null);
+    if (z){ e.preventDefault(); e.dataTransfer.dropEffect = 'move'; }
+  });
+  document.addEventListener('drop', function(e){
+    if (dragId === null) return;
+    var t = elOf(e), z = t && t.closest('[data-zone]'), id = dragId;
+    dragId = null; setHot(null);
+    if (!z) return;
+    e.preventDefault();
+    sel = null;
+    moveTo(id, z.getAttribute('data-zone'));
+  });
+  document.addEventListener('dragend', function(){ dragId = null; setHot(null); });
+
+  // Dates apply as soon as they are a real date in range, without redrawing the box being typed in.
+  function dateChanged(t){
+    var cs = S.cities[city], p = sel && findPiece(sel.id), v = t.value;
+    if (!p || !validDate(v)) return;
+    var a = A(cs,p), l = L(cs,p);
+    if (t.getAttribute('data-d') === 'a'){ a = v; if (l <= a) l = addDays(a, 1); }
+    else { if (v <= a) return; l = v; }
+    if (l > MAX_D || (a === A(cs,p) && l === L(cs,p))) return;
+    setDates(a, l);
+  }
+  function stayChanged(t){
+    var cs = S.cities[city], a = cs.stay[0], l = cs.stay[1], v = t.value;
+    if (!validDate(v)) return;
+    if (t.id === 'stayA'){ a = v; if (l <= a) l = addDays(a, 1); }
+    else { if (v <= a) return; l = v; }
+    if (l > MAX_D || (a === cs.stay[0] && l === cs.stay[1])) return;
+    commit(function(){ cs.stay = [a, l]; }, 'stay');
+  }
+  // leaving a date box that holds something unusable: say why, then show the real value again
+  function dateLeft(t, current, redraw){
+    var v = t.value;
+    if (v !== current) toast(validDate(v) ? 'The leave date must be after the arrive date.' : 'Pick a date between October 2026 and March 2027.');
+    setTimeout(redraw, 0);
+  }
+  document.addEventListener('change', function(e){
+    var t = elOf(e);
+    if (!t || !S) return;
+    if (t.hasAttribute('data-rn')) return renameRoom(t);
+    if (t.hasAttribute('data-hn')) return renameHotel(t);
+    if (t.hasAttribute('data-d')) return dateChanged(t);
+    if (t.id === 'stayA' || t.id === 'stayL') return stayChanged(t);
+  });
+  document.addEventListener('focusout', function(e){
+    var t = elOf(e);
+    if (!t || !S) return;
+    var cs = S.cities[city];
+    if (t.hasAttribute('data-d')){
+      var p = sel && findPiece(sel.id);
+      if (p) dateLeft(t, t.getAttribute('data-d') === 'a' ? A(cs,p) : L(cs,p), renderSel);
+    } else if (t.id === 'stayA' || t.id === 'stayL'){
+      dateLeft(t, cs.stay[t.id === 'stayA' ? 0 : 1], renderStay);
+    }
+  });
+  document.addEventListener('keydown', function(e){
+    var t = elOf(e);
+    if (!t || !S) return;
+    var typing = t.matches('input,textarea,select');
+    if (e.key === 'Escape'){
+      if (!$('ov').classList.contains('hidden')) closeAsk();
+      else if (!$('listsOv').classList.contains('hidden')) closeLists();
+      else if (sel){ sel = null; render(); }
+      return;
+    }
+    if (e.key === 'Enter' && (t.hasAttribute('data-rn') || t.hasAttribute('data-hn'))) return t.blur();
+    if (e.key === 'Enter' && t.matches('#ovModal input') && $('bkGo')) return bulkGo();
+    if ((e.key === 'Enter' || e.key === ' ') && !typing){
+      if (t.matches('.chip[data-p]')){ e.preventDefault(); return toggleSel(Number(t.getAttribute('data-p'))); }
+      if (t.matches('[data-city]')){ e.preventDefault(); return setCity(t.getAttribute('data-city')); }
+    }
+    if ((e.metaKey || e.ctrlKey) && !e.shiftKey && String(e.key).toLowerCase() === 'z' && !typing){ e.preventDefault(); doUndo(); }
+  });
+
+  $('q').addEventListener('input', function(e){ F.q = e.target.value.toLowerCase().trim(); renderBoard(); });
+  [['fSide','side'],['fEvent','ev'],['fSize','size'],['fNight','night'],['fRooms','rooms']].forEach(function(x){
+    $(x[0]).addEventListener('change', function(e){ F[x[1]] = e.target.value; render(); });
+  });
+  function clearFilters(){
+    F = { q:'', side:'', ev:'', size:'', night:'', rooms:'' };
+    $('q').value = ''; $('fSide').value = ''; $('fSize').value = ''; $('fRooms').value = '';
+    render();
+  }
+
+  // ---------- theme (same setting as the dashboard) ----------
+  var mq = window.matchMedia ? matchMedia('(prefers-color-scheme: dark)') : null;
+  function isDark(){ var t = document.documentElement.getAttribute('data-theme'); return t ? t === 'dark' : !!(mq && mq.matches); }
+  function paintTheme(){
+    $('themeBtn').innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+      (isDark() ? '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>'
+                : '<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/>') + '</svg>';
+  }
+  function toggleTheme(){
+    var next = isDark() ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    try{ localStorage.setItem('ra_admin_theme', next); }catch(_){}
+    paintTheme();
+  }
+  if (mq && mq.addEventListener) mq.addEventListener('change', paintTheme);
+  paintTheme();
+
+  // ---------- loading ----------
+  function applyRooms(rooms){
+    canSave = !!rooms;
+    rev = rooms ? (Number(rooms.rev) || 0) : 0;
+    var parsed = (rooms && rooms.plan) ? parsePlan(rooms.plan) : null;
+    planBroken = !!(rooms && rooms.plan && !parsed);
+    S = parsed || freshPlan();
+    reconcile();
+    undo = []; lastTag = ''; sel = null; dirty = false; conflict = null; saveErr = '';
+    $('loading').classList.add('hidden'); $('content').classList.remove('hidden');
+    render();
+  }
+  function start(guests, rooms){ buildGuests(guests); applyRooms(rooms); }
+  function showApp(){ $('gate').classList.add('hidden'); $('app').classList.remove('hidden'); }
+  function fetchAll(key){
+    return fetch(API_URL + '?action=admin&key=' + encodeURIComponent(key)).then(function(r){ return r.json(); });
+  }
+  function unlock(key){
+    $('gateErr').textContent = '';
+    $('enterBtn').textContent = 'Checking…';
+    fetchAll(key)
+      .then(function(res){
+        $('enterBtn').textContent = 'Unlock';
+        if (res && res.ok){
+          sessionKey = key;
+          try{ localStorage.setItem(KEY_LS, key); }catch(_){}
+          showApp();
+          start(res.guests || [], res.rooms);
+        } else {
+          $('gateErr').textContent = 'That key was not accepted.';
+        }
+      })
+      .catch(function(){ $('enterBtn').textContent = 'Unlock'; $('gateErr').textContent = 'Network error. Try again.'; });
+  }
+  function load(){
+    if (DEMO){ showApp(); start(demoGuests(), { rev:1, plan:demoPlan() }); return; }
+    var key = adminKey();
+    if (!key) return;   // the gate stays up
+    sessionKey = key;
+    showApp();
+    $('loading').innerHTML = '<div class="spinner"></div>';
+    $('loading').classList.remove('hidden'); $('content').classList.add('hidden');
+    fetchAll(key)
+      .then(function(res){
+        if (res && res.ok) start(res.guests || [], res.rooms);
+        else lock();
+      })
+      .catch(function(){ $('loading').innerHTML = '<p style="text-align:center" class="muted">Could not load the guest list. Check your connection and press Refresh.</p>'; });
+  }
+  function lock(){ try{ localStorage.removeItem(KEY_LS); }catch(_){} location.reload(); }
+  function refresh(){
+    // get pending changes into the Sheet first, then read everything again
+    if (!DEMO && canSave && S && (dirty || saving) && !conflict){ reloadAfterSave = true; if (!saving) saveNow(); return; }
+    load();
+  }
+  $('enterBtn').onclick = function(){ unlock($('keyInput').value.trim()); };
+  $('keyInput').addEventListener('keydown', function(e){ if (e.key === 'Enter') unlock($('keyInput').value.trim()); });
+  if (DEMO) $('backBtn').href = '../?demo=1';
+
+  // ---------- demo data (?demo=1): made-up names, shows every state the planner has ----------
+  function demoGuests(){
+    var B = "Bride's side", Gr = "Groom's side", X = 'Bride & Groom', n = 0;
+    function g(name, side, people, events, status){
+      n++;
+      return { name:name, side:side, status:status || 'yes', guests:people, partySize:people, invited:'', events:events,
+               whatsapp:'9198123450' + pad(String(n), 2), email:'', inviteLink:'https://example.com/?t=demo' + pad(String(n), 8) };
+    }
+    return [
+      g('Priya & Arjun', B, 2, 'Sangeet, Wedding, Wedding Reception, Reception'),
+      g('The Sharma Family', Gr, 4, 'Sangeet, Wedding Reception'),
+      g('Meera Aunty', B, 1, 'Wedding, Reception'),
+      g('The Krishnamurthys', B, 3, 'Sangeet, Wedding, Wedding Reception'),
+      g('Ananya', B, 1, 'Sangeet'),
+      g('Prof. Iyer', X, 2, 'Reception'),
+      g('Divya & Karthik', B, 2, 'Reception'),
+      g('The Guptas', Gr, 5, 'Sangeet, Wedding Reception'),
+      g('Old Roommates', Gr, 4, 'Sangeet, Reception'),
+      g('Nani', B, 1, 'Wedding'),
+      g('Ravi Uncle and family', Gr, 3, 'Wedding, Wedding Reception, Reception'),
+      g('The Reddys', Gr, 4, 'Reception'),
+      g('Lakshmi Aunty', Gr, 2, 'Reception'),
+      g('Sinha Family', B, 4, 'Sangeet, Wedding, Wedding Reception'),
+      g('Rahul & Sneha', Gr, 2, 'Wedding Reception'),
+      g('Venkat and family', Gr, 3, 'Wedding, Reception'),
+      g('College friends', B, 6, 'Sangeet, Wedding Reception'),
+      g('Suresh Mama', Gr, 2, 'Sangeet, Wedding, Wedding Reception, Reception'),
+      g('Kabir', Gr, 1, '', 'no'),
+      g('Zara', B, 1, '', 'pending')
+    ];
+  }
+  function demoPlan(){
+    function k(i){ return 'demo' + pad(String(i), 8); }
+    return JSON.stringify({ v:1, seq:40, names:(function(){ var o = {}; o[k(19)] = 'Kabir'; return o; })(), cities:{
+      patna:{ stay:['2026-12-11','2026-12-13'],
+        hotels:[{ id:'h1', name:'Patna hotel', rooms:[
+          { id:'r1', name:'201', beds:2, extra:0 }, { id:'r2', name:'202', beds:2, extra:0 }, { id:'r3', name:'203', beds:3, extra:0 },
+          { id:'r4', name:'204', beds:2, extra:1 }, { id:'r5', name:'205', beds:4, extra:0 }, { id:'r6', name:'206', beds:2, extra:0 } ] }],
+        pieces:[
+          { g:k(1), r:'r1', n:2 },
+          { g:k(5), r:'r2', n:1, a:'2026-12-10', l:'2026-12-12' },      // two parties share 202 on different nights
+          { g:k(15), r:'r2', n:2, a:'2026-12-12', l:'2026-12-14' },
+          { g:k(4), r:'r4', n:3 },                                       // uses the extra bed
+          { g:k(2), r:'r5', n:4 },
+          { g:k(19), r:'r3', n:1 },                                      // said yes, later declined
+          { g:k(14), r:'r3', n:2 }, { g:k(14), r:'r6', n:3 },            // RSVP says 4, 5 are placed
+          { g:k(10), r:'none', n:1 } ] },
+      pal:{ stay:['2026-12-17','2026-12-18'],
+        hotels:[
+          { id:'h2', name:'VRM Grandstay', rooms:[ { id:'r7', name:'101', beds:2, extra:0 }, { id:'r8', name:'102', beds:2, extra:0 }, { id:'r9', name:'103', beds:3, extra:0 }, { id:'r10', name:'104', beds:2, extra:0 } ] },
+          { id:'h3', name:'NACIN Guesthouse', rooms:[ { id:'r11', name:'A', beds:2, extra:0 }, { id:'r12', name:'B', beds:4, extra:0 }, { id:'r13', name:'C', beds:3, extra:0 } ] } ],
+        pieces:[ { g:k(6), r:'r7', n:2 }, { g:k(7), r:'r8', n:2 }, { g:k(12), r:'r12', n:4 } ] }
+    } });
+  }
+
+  load();
+})();
+</script>
+</body>
+</html>

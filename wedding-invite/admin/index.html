@@ -231,6 +231,7 @@
         <button class="btn ghost" id="refreshBtn">↻ Refresh</button>
         <button class="btn ghost" id="csvBtn">⬇ Export CSV</button>
         <button class="btn ghost" id="songsBtn">♫ Song list</button>
+        <a class="btn ghost" id="roomsBtn" href="rooms/" style="text-decoration:none">Rooms</a>
         <button class="btn ghost" id="lockBtn">Lock</button>
       </div>
     </div>
@@ -472,6 +473,7 @@
   var search = '';
   var sortCol = '', sortDir = 1;   // click a column header to sort; '' = sheet order
   var DEMO = /(?:\?|&)demo=1(?:&|$)/.test(location.search);   // ?demo=1 → styled preview with fake data, no key, no API
+  if (DEMO) $('roomsBtn').href = 'rooms/?demo=1';
 
   // ---------- auth ----------
   function unlock(key){
