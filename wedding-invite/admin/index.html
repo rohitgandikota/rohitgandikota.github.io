@@ -490,6 +490,7 @@
           $('dash').classList.remove('hidden');
           render(res.guests || []);
           setStreamState(res.stream || '');
+          cachePut(res);
         } else {
           $('gateErr').textContent = 'That key was not accepted.';
         }
@@ -505,20 +506,34 @@
       return;
     }
     var key = (function(){ try{ return localStorage.getItem(KEY_LS); }catch(_){ return null; } })();
-    if (key){ $('gate').classList.add('hidden'); $('dash').classList.remove('hidden'); fetchData(key); }
+    if (!key) return;
+    $('gate').classList.add('hidden'); $('dash').classList.remove('hidden');
+    // open at once from the copy this tab last loaded, then swap in the latest when it arrives
+    var c = cacheGet();
+    if (c){
+      render(c.guests); setStreamState(c.stream || '');
+      $('updatedAt').textContent = 'Showing the last copy. Getting the latest…';
+    }
+    fetchData(key, !!c);
   }
-  function fetchData(key){
+  var CACHE_SS = 'ra_admin_cache';   // last admin response, kept for this tab only (shared with the Rooms page)
+  function cacheGet(){ try{ var c = JSON.parse(sessionStorage.getItem(CACHE_SS)); return c && Array.isArray(c.guests) ? c : null; }catch(_){ return null; } }
+  function cachePut(res){ try{ sessionStorage.setItem(CACHE_SS, JSON.stringify({ guests:res.guests || [], stream:res.stream || '', rooms:res.rooms })); }catch(_){} }
+  function fetchData(key, quiet){
     sessionKey = key;
-    $('loading').classList.remove('hidden'); $('content').classList.add('hidden');
+    if (!quiet){ $('loading').classList.remove('hidden'); $('content').classList.add('hidden'); }
     fetch(API_URL + '?action=admin&key=' + encodeURIComponent(key))
       .then(function(r){ return r.json(); })
       .then(function(res){
-        if (res && res.ok){ render(res.guests || []); setStreamState(res.stream || ''); }
+        if (res && res.ok){ render(res.guests || []); setStreamState(res.stream || ''); cachePut(res); }
         else { lock(); }
       })
-      .catch(function(){ $('loading').innerHTML = '<p style="text-align:center" class="muted">Could not load data.</p>'; });
+      .catch(function(){
+        if (quiet) $('updatedAt').textContent = 'Could not get the latest. This is the last copy. Press Refresh to try again.';
+        else $('loading').innerHTML = '<p style="text-align:center" class="muted">Could not load data.</p>';
+      });
   }
-  function lock(){ try{ localStorage.removeItem(KEY_LS); }catch(_){} location.reload(); }
+  function lock(){ try{ localStorage.removeItem(KEY_LS); sessionStorage.removeItem(CACHE_SS); }catch(_){} location.reload(); }
 
   $('enterBtn').onclick = function(){ unlock($('keyInput').value.trim()); };
   $('keyInput').addEventListener('keydown', function(e){ if(e.key==='Enter') unlock($('keyInput').value.trim()); });
