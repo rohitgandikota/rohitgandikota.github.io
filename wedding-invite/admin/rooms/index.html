@@ -391,11 +391,6 @@
   var uid = 0;
   var saveTimer = null, saving = false, dirty = false, conflict = null, saveErr = '', savedAt = null, reloadAfterSave = false;
   var askBtns = [], bulkHotel = '', toastTimer = null;
-  // The last admin response, kept for this tab only and shared with the dashboard, so the page can open at
-  // once and fetch the latest behind it. `pending` is true while that fetch is out: nothing is saved until it lands.
-  var CACHE_SS = 'ra_admin_cache', raw = null, pending = false, loadFailed = false;
-  function cacheGet(){ try{ var c = JSON.parse(sessionStorage.getItem(CACHE_SS)); return c && Array.isArray(c.guests) ? c : null; }catch(_){ return null; } }
-  function cachePut(){ try{ sessionStorage.setItem(CACHE_SS, JSON.stringify(raw)); }catch(_){} }
 
   // ---------- small helpers ----------
   function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
@@ -1014,8 +1009,6 @@
     var t;
     if (DEMO) t = 'Demo data. Nothing here is saved.';
     else if (!S) t = '';
-    else if (loadFailed) t = 'Could not get the latest from the Sheet. This is the last copy, and changes are not being saved. Press Refresh.';
-    else if (pending) t = 'Showing the last copy. Getting the latest…';
     else if (!canSave) t = 'Not saving: the Apps Script needs its update.';
     else if (conflict) t = 'Not saved: the plan was changed somewhere else.';
     else if (saving || (dirty && !saveErr)) t = 'Saving…';
@@ -1108,12 +1101,12 @@
   function scheduleSave(){
     dirty = true;
     paintSave();
-    if (DEMO || !canSave || conflict || pending) return;
+    if (DEMO || !canSave || conflict) return;
     clearTimeout(saveTimer);
     saveTimer = setTimeout(saveNow, 1500);
   }
   function saveNow(force){
-    if (DEMO || !canSave || saving || !S || pending) return;
+    if (DEMO || !canSave || saving || !S) return;
     if (conflict && force !== true) return;
     clearTimeout(saveTimer);
     saving = true; dirty = false; saveErr = '';
@@ -1125,10 +1118,7 @@
       .then(function(r){ return r.json(); })
       .then(function(res){
         saving = false;
-        if (res && res.ok){
-          rev = Number(res.rev) || rev; savedAt = new Date(); planBroken = false;
-          if (raw){ raw.rooms = { rev:rev, plan:payload.plan }; cachePut(); }
-        }
+        if (res && res.ok){ rev = Number(res.rev) || rev; savedAt = new Date(); planBroken = false; }
         else if (res && res.conflict){ conflict = res.rooms || { rev:0, plan:'' }; dirty = true; }
         else { saveErr = (res && res.error) || 'unknown error'; dirty = true; }
         paintSave(); renderNotices();
@@ -1353,8 +1343,7 @@
           sessionKey = key;
           try{ localStorage.setItem(KEY_LS, key); }catch(_){}
           showApp();
-          raw = { guests:res.guests || [], stream:res.stream || '', rooms:res.rooms }; cachePut();
-          start(raw.guests, raw.rooms);
+          start(res.guests || [], res.rooms);
         } else {
           $('gateErr').textContent = 'That key was not accepted.';
         }
@@ -1367,44 +1356,18 @@
     if (!key) return;   // the gate stays up
     sessionKey = key;
     showApp();
-    var c = cacheGet();
-    loadFailed = false;
-    if (pending && S) paintSave();   // retrying after a failed fetch: keep what is on screen, changes included
-    else if (c){ raw = c; start(c.guests, c.rooms); pending = true; paintSave(); }
-    else {
-      $('loading').innerHTML = '<div class="spinner"></div>';
-      $('loading').classList.remove('hidden'); $('content').classList.add('hidden');
-    }
+    $('loading').innerHTML = '<div class="spinner"></div>';
+    $('loading').classList.remove('hidden'); $('content').classList.add('hidden');
     fetchAll(key)
       .then(function(res){
-        if (!(res && res.ok)) return lock();
-        var had = pending;
-        pending = false;
-        raw = { guests:res.guests || [], stream:res.stream || '', rooms:res.rooms }; cachePut();
-        if (had) fresh(); else start(raw.guests, raw.rooms);
+        if (res && res.ok) start(res.guests || [], res.rooms);
+        else lock();
       })
-      .catch(function(){
-        if (pending){ loadFailed = true; paintSave(); }
-        else $('loading').innerHTML = '<p style="text-align:center" class="muted">Could not load the guest list. Check your connection and press Refresh.</p>';
-      });
+      .catch(function(){ $('loading').innerHTML = '<p style="text-align:center" class="muted">Could not load the guest list. Check your connection and press Refresh.</p>'; });
   }
-  // The latest has arrived while the last copy was on screen. Keep anything changed in the meantime, unless
-  // the saved plan itself moved on, which is the same two-copies choice as a save conflict.
-  function fresh(){
-    var sr = raw.rooms, edited = dirty || undo.length > 0;
-    buildGuests(raw.guests);
-    if (!sr) canSave = false;
-    else if (!canSave || (Number(sr.rev) || 0) > rev){
-      if (!(canSave && edited)) return applyRooms(sr);
-      conflict = sr;
-    }
-    reconcile(); render();
-    if (dirty && !conflict) scheduleSave();
-  }
-  function lock(){ try{ localStorage.removeItem(KEY_LS); sessionStorage.removeItem(CACHE_SS); }catch(_){} location.reload(); }
+  function lock(){ try{ localStorage.removeItem(KEY_LS); }catch(_){} location.reload(); }
   function refresh(){
     // get pending changes into the Sheet first, then read everything again
-    if (pending) return load();
     if (!DEMO && canSave && S && (dirty || saving) && !conflict){ reloadAfterSave = true; if (!saving) saveNow(); return; }
     load();
   }
