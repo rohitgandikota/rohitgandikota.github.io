@@ -796,8 +796,10 @@
 
   function actsHtml(g, i){
     var acts='<button class="rowcopy" data-i="'+i+'">⧉ Msg</button>';
-    if (g.whatsappSend) acts+='<a href="'+esc(g.whatsappSend)+'" target="_blank" rel="noopener">WhatsApp</a>';
-    if (g.emailSend) acts+='<a href="'+esc(g.emailSend)+'" target="_blank" rel="noopener">Email</a>';
+    // built from the current message each time, so edits to InviteMessage in the Sheet show up here too
+    var phone = String(g.whatsapp||'').replace(/[^0-9]/g,''), msg = encodeURIComponent(msgFor(g));
+    if (phone) acts+='<a href="https://wa.me/'+phone+'?text='+msg+'" target="_blank" rel="noopener">WhatsApp</a>';
+    if (g.email) acts+='<a href="'+esc('mailto:'+g.email+'?subject='+encodeURIComponent("You're invited to Rohit & Aditi's wedding 💍")+'&body='+msg)+'" target="_blank" rel="noopener">Email</a>';
     if (g.inviteLink) acts+='<a href="'+esc(g.inviteLink)+'" target="_blank" rel="noopener">Link</a>';
     return acts;
   }
