@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Rohit & Aditi · Wedding Registry</title>
+<meta name="description" content="Rohit and Aditi are getting married on December 12, 2026.">
+<meta property="og:title" content="Rohit & Aditi · Wedding Registry">
+<meta property="og:description" content="Your presence is the greatest gift. If you would like to bless us, here is how.">
+<meta property="og:image" content="https://rohitgandikota.github.io/wedding-registry/assets/portrait.webp">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Mukta:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+
+<script>
+  // ===== Payment details. Fill these in; anything left empty shows "details coming soon". =====
+  const PAY = {
+    venmo: 'Rohit-Gandikota',       // Venmo username without the @
+    zelle: 'grohit0@gmail.com',     // the email your Zelle is registered to
+    zellePhone: '(617) 238-4817',   // the US phone your Zelle is registered to
+    zelleName: '',                  // the name guests will see in Zelle (optional)
+    zelleQr: 'https://enroll.zellepay.com/qr-codes?data=eyJuYW1lIjoiUk9ISVQiLCJ0b2tlbiI6Imdyb2hpdDBAZ21haWwuY29tIiwiYWN0aW9uIjoicGF5bWVudCJ9',  // what Rohit's Zelle QR code says (from his bank app)
+    upi: 'grohit0@okicici',         // UPI ID
+    upiName: 'Rohit Gandikota'      // shown in the UPI app before paying
+  };
+</script>
+
+<style>
+  :root{
+    --bg:#FAF4E7; --surface:#FFFDF6; --ink:#4A1B22; --ink-soft:#8E6268; --body-ink:#5C3036;
+    --maroon:#7A2E36; --rosewood:#B4575C; --gold:#B08D4A; --gold-deep:#7A5D1E; --gold-soft:#D9C69A; --gold-pale:#EFE3C6;
+    --halo:rgba(176,141,74,.14);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:'Mukta',sans-serif;-webkit-font-smoothing:antialiased;overflow-x:clip}
+  #backdrop{position:fixed;inset:0;z-index:0;pointer-events:none;background:url('../wedding-invite/assets/backdrop-art.webp') center top/cover no-repeat;opacity:.32;
+    -webkit-mask-image:linear-gradient(180deg,#000 0%,#000 60%,transparent 100%);mask-image:linear-gradient(180deg,#000 0%,#000 60%,transparent 100%)}
+  @media(max-width:640px){#backdrop{background-image:url('../wedding-invite/assets/backdrop-art-mobile.webp');height:100lvh}}
+  #petals{position:fixed;inset:0;width:100%;height:100%;z-index:1;pointer-events:none}
+  main{position:relative;z-index:2;max-width:880px;margin:0 auto;padding:56px 20px 70px}
+
+  .kicker{font-family:'Marcellus',serif;letter-spacing:.34em;text-transform:uppercase;font-size:12.5px;color:var(--gold-deep);font-weight:700}
+  .center{text-align:center}
+
+  /* ---- opening: seal, then the arch opens on the portrait ---- */
+  .seal{width:64px;height:64px;margin:0 auto 18px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+    background:radial-gradient(circle at 36% 30%,#DEC489,var(--gold) 58%,#93733A);box-shadow:0 10px 22px -8px rgba(71,22,31,.5),inset 0 0 0 1px rgba(255,253,246,.4);
+    font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:700;font-size:21px;color:var(--maroon);position:relative;
+    animation:sealIn .9s cubic-bezier(.2,.9,.3,1.3) both}
+  .seal::before{content:'';position:absolute;inset:6px;border-radius:50%;border:1px dashed rgba(71,22,31,.45)}
+  @keyframes sealIn{from{transform:scale(.4) rotate(-25deg);opacity:0}to{transform:none;opacity:1}}
+
+  .frame{position:relative;margin:26px auto 0;max-width:720px;padding:10px;border-radius:340px 340px 22px 22px / 260px 260px 22px 22px;
+    background:linear-gradient(160deg,#E6CF96,var(--gold) 45%,#9C7A3C);box-shadow:0 40px 80px -46px rgba(71,22,31,.75)}
+  .frame::before{content:'';position:absolute;inset:4px;border-radius:inherit;border:1px solid rgba(255,253,246,.65);pointer-events:none;z-index:2}
+  .frame .pic{border-radius:330px 330px 14px 14px / 252px 252px 14px 14px;overflow:hidden;background:var(--surface);
+    clip-path:inset(100% 0 0 0 round 330px 330px 14px 14px);animation:archOpen 1.6s cubic-bezier(.65,0,.25,1) .55s forwards}
+  .frame img{display:block;width:100%;height:auto;transform:scale(1.08);animation:settle 2.6s cubic-bezier(.2,.7,.2,1) .55s forwards}
+  @keyframes archOpen{to{clip-path:inset(0 0 0 0 round 330px 330px 14px 14px)}}
+  @keyframes settle{to{transform:scale(1)}}
+  .lamp{position:absolute;bottom:-16px;width:34px;height:34px;color:var(--gold);z-index:3}
+  .lamp.l{left:18px}.lamp.r{right:18px}
+  .lamp .fl{transform-origin:50% 70%;animation:flicker 2.2s ease-in-out infinite}
+  @keyframes flicker{0%,100%{transform:scale(1)}50%{transform:scale(.9) translateY(.5px)}}
+
+  .names{margin:40px 0 0;font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:600;font-size:clamp(46px,9vw,78px);line-height:1;color:var(--maroon)}
+  .names .amp{color:var(--gold);font-weight:500}
+  .date{margin-top:12px;font-family:'Marcellus',serif;letter-spacing:.3em;font-size:13px;color:var(--gold-deep)}
+  .rise{opacity:0;transform:translateY(18px);animation:rise 1s cubic-bezier(.2,.7,.2,1) forwards}
+  @keyframes rise{to{opacity:1;transform:none}}
+
+  .divider{display:flex;align-items:center;justify-content:center;gap:12px;margin:34px auto 0;color:var(--gold)}
+  .divider span{height:1px;width:90px;background:linear-gradient(90deg,transparent,var(--gold))}
+  .divider span:last-child{transform:scaleX(-1)}
+
+  /* ---- the note ---- */
+  .note{position:relative;margin:34px auto 0;max-width:640px;background:rgba(255,253,246,.9);border:1px solid var(--gold-soft);border-radius:22px;
+    padding:34px 34px 30px;box-shadow:0 30px 70px -50px rgba(71,22,31,.6);backdrop-filter:blur(2px)}
+  .note::before{content:'';position:absolute;inset:7px;border:1px solid var(--gold-pale);border-radius:16px;pointer-events:none}
+  .note h2{margin:0 0 14px;font-family:'Cormorant Garamond',serif;font-weight:600;font-style:italic;font-size:30px;color:var(--maroon)}
+  .note p{margin:0 0 13px;font-size:17px;line-height:1.7;color:var(--body-ink);font-weight:300}
+  .note p:last-child{margin:0}
+  .note .sign{margin-top:18px;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:23px;color:var(--maroon);font-weight:600}
+
+  /* ---- where are you sending from ---- */
+  .give{margin:52px auto 0;max-width:640px}
+  .give .kicker,.give h3{text-shadow:0 0 10px var(--bg),0 0 20px var(--bg),0 0 3px var(--bg)}   /* keep text clear of the monument lines behind it */
+  .give h3{margin:10px 0 0;font-family:'Cormorant Garamond',serif;font-weight:600;font-size:clamp(32px,6vw,44px);color:var(--maroon)}
+  .tabs{display:flex;gap:8px;justify-content:center;margin:20px 0 18px;flex-wrap:wrap}
+  .tab{cursor:pointer;border:1px solid var(--gold);background:rgba(255,253,246,.85);color:var(--ink);border-radius:999px;padding:11px 20px;font:500 15px 'Mukta',sans-serif;transition:all .2s}
+  .tab[aria-selected="true"]{background:var(--maroon);color:var(--gold-pale);border-color:var(--maroon);box-shadow:0 12px 26px -14px rgba(107,31,45,.8)}
+  .panel{background:var(--surface);border:1px solid var(--gold-soft);border-radius:22px;padding:26px;box-shadow:0 30px 70px -50px rgba(71,22,31,.6);animation:fadeUp .45s ease}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  .opt{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:18px;align-items:center;padding:6px 0}
+  .opt + .opt{border-top:1px solid var(--gold-pale);margin-top:18px;padding-top:22px}
+  .opt h4{margin:0;font-family:'Marcellus',serif;letter-spacing:.16em;text-transform:uppercase;font-size:13px;color:var(--gold-deep)}
+  .opt .how{margin:6px 0 12px;font-size:14.5px;line-height:1.55;color:var(--body-ink)}
+  .idrow{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+  .id{font:600 16px 'Mukta',sans-serif;color:var(--ink);background:var(--halo);border:1px solid var(--gold-soft);border-radius:10px;padding:7px 12px;word-break:break-all}
+  .btn{display:inline-flex;align-items:center;gap:8px;text-decoration:none;cursor:pointer;border:none;background:var(--maroon);color:var(--gold-pale);border-radius:999px;padding:12px 22px;
+    font-family:'Marcellus',serif;letter-spacing:.14em;text-transform:uppercase;font-size:12.5px;box-shadow:0 14px 30px -16px rgba(107,31,45,.85);transition:transform .2s}
+  .btn:hover{transform:translateY(-2px)}
+  .btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--gold);box-shadow:none;padding:8px 14px;font-size:11.5px}
+  .qr{width:132px;height:132px;padding:8px;background:#fff;border:1px solid var(--gold-soft);border-radius:14px}
+  .qr svg,.qr img{display:block;width:100%;height:100%}
+  .qrcap{text-align:center;font-size:12px;color:var(--ink-soft);margin-top:6px}
+  .zdone{margin-top:14px;padding:12px 14px;border-radius:12px;background:rgba(88,137,95,.12);border:1px solid rgba(88,137,95,.35);font-size:14.5px;line-height:1.55;color:var(--ink)}
+  .zdone b{color:#3F6B47}
+  .soon{font-size:14.5px;color:var(--ink-soft);font-style:italic}
+  .small{font-size:13px;color:var(--ink-soft);margin-top:14px;line-height:1.55}
+  .foot{margin-top:60px;text-align:center;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:22px;color:var(--maroon)}
+  .foot small{display:block;margin-top:6px;font-family:'Marcellus',serif;font-style:normal;letter-spacing:.3em;font-size:11px;color:var(--gold-deep)}
+  #toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:9;background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:999px;font-size:14px;opacity:0;transition:opacity .25s;pointer-events:none}
+  #toast.on{opacity:1}
+
+  @media(max-width:640px){
+    main{padding:38px 16px 60px}
+    .frame{padding:7px;border-radius:220px 220px 16px 16px / 170px 170px 16px 16px}
+    .frame .pic{border-radius:214px 214px 10px 10px / 164px 164px 10px 10px;clip-path:inset(100% 0 0 0 round 214px 214px 10px 10px);animation-name:archOpenS}
+    @keyframes archOpenS{to{clip-path:inset(0 0 0 0 round 214px 214px 10px 10px)}}
+    .note{padding:28px 22px 24px}
+    .note p{font-size:16px}
+    .panel{padding:20px}
+    .opt{grid-template-columns:1fr}
+    .opt .qrwrap{display:none}
+  }
+  @media (prefers-reduced-motion: reduce){
+    *,*::before,*::after{animation-duration:.01ms !important;animation-delay:0s !important}
+    #petals{display:none}
+  }
+</style>
+</head>
+<body>
+<div id="backdrop" aria-hidden="true"></div>
+<canvas id="petals" aria-hidden="true"></canvas>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="samai" viewBox="0 0 64 64">
+    <g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <path class="fl" d="M32 21 Q27.5 14.5 32 7 Q36.5 14.5 32 21 Z" fill="#E9B44C" stroke="#C9822E"/>
+      <path d="M22.5 26.5 Q32 31 41.5 26.5 L39 32 Q32 35.2 25 32 Z"/>
+      <path d="M32 35.2 V45.5"/><path d="M26.5 45.5 H37.5"/>
+      <path d="M23 51.5 Q32 48.5 41 51.5 L39.2 55 H24.8 Z"/>
+    </g>
+  </symbol>
+</svg>
+
+<main>
+  <header class="center">
+    <div class="seal" aria-hidden="true">R·A</div>
+    <div class="kicker rise" style="animation-delay:.25s">Our wedding registry</div>
+    <div class="frame">
+      <div class="pic"><img src="assets/portrait.webp" width="1400" height="974" alt="Watercolor portrait of Rohit and Aditi, smiling together"></div>
+      <svg class="lamp l" aria-hidden="true"><use href="#samai"/></svg>
+      <svg class="lamp r" aria-hidden="true"><use href="#samai"/></svg>
+    </div>
+    <h1 class="names rise" style="animation-delay:1.6s">Rohit <span class="amp">&amp;</span> Aditi</h1>
+    <div class="date rise" style="animation-delay:1.85s">12 · 12 · 2026</div>
+    <div class="divider rise" style="animation-delay:2s" aria-hidden="true"><span></span>✦<span></span></div>
+  </header>
+
+  <section class="note rise" style="animation-delay:2.15s">
+    <h2>Dear family and friends,</h2>
+    <p>Having you with us as we begin this new chapter is the greatest gift we could ask for. Truly, your presence and your blessings are more than enough.</p>
+    <p>If you would still like to give something, a contribution toward our wedding and the life we are building together would mean the world to us. Since we live in the United States, carrying gifts back with us is not easy, so we would gently prefer a monetary gift over a boxed one.</p>
+    <p>Whatever you choose, thank you for your love, and for being a part of our story.</p>
+    <div class="sign">With love, Rohit &amp; Aditi</div>
+  </section>
+
+  <section class="give center rise" style="animation-delay:2.3s" id="give">
+    <div class="kicker">Send your blessings</div>
+    <h3>Where are you sending from?</h3>
+    <div class="tabs" role="tablist">
+      <button class="tab" role="tab" id="tab-us" aria-controls="panel-us" aria-selected="false">In the United States</button>
+      <button class="tab" role="tab" id="tab-in" aria-controls="panel-in" aria-selected="false">In India</button>
+    </div>
+    <div class="panel" role="tabpanel" id="panel-us" aria-labelledby="tab-us" hidden style="text-align:left"></div>
+    <div class="panel" role="tabpanel" id="panel-in" aria-labelledby="tab-in" hidden style="text-align:left"></div>
+  </section>
+
+  <div class="foot">Thank you for celebrating with us<small>Patna · Palasamudram</small></div>
+</main>
+<div id="toast" role="status"></div>
+
+<script>
+(function(){
+  var $ = function(id){ return document.getElementById(id); };
+  function esc(s){ return String(s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+  function toast(t){ var e = $('toast'); e.textContent = t; e.classList.add('on'); clearTimeout(toast.t); toast.t = setTimeout(function(){ e.classList.remove('on'); }, 2200); }
+  function qr(text){
+    if (typeof qrcode !== 'function') return '';
+    var q = qrcode(0, 'M'); q.addData(text); q.make();
+    return q.createSvgTag({ cellSize:4, margin:0, scalable:true });
+  }
+  function copyBtn(v){ return '<button class="btn ghost" data-copy="' + esc(v) + '">Copy</button>'; }
+  var soon = '<div class="soon">Details coming soon.</div>';
+
+  // ---- United States: Venmo and Zelle ----
+  // opens Venmo's pay screen with the recipient and note filled in; the guest only types the amount
+  var venmoUrl = PAY.venmo ? 'https://venmo.com/?txn=pay&recipients=' + encodeURIComponent(PAY.venmo) + '&note=' + encodeURIComponent('Wedding gift for Rohit and Aditi') : '';
+  $('panel-us').innerHTML =
+    '<div class="opt"><div><h4>Venmo</h4>' + (PAY.venmo
+      ? '<p class="how">On your phone, tap below: Venmo opens with us already filled in, so you only enter the amount. On a computer, scan the code with your phone camera.</p>' +
+        '<div class="idrow"><a class="btn" href="' + venmoUrl + '" target="_blank" rel="noopener">Pay with Venmo</a><span class="id">@' + esc(PAY.venmo) + '</span></div>'
+      : soon) + '</div>' +
+      (PAY.venmo ? '<div class="qrwrap"><div class="qr">' + qr(venmoUrl) + '</div><div class="qrcap">Scan with your phone</div></div>' : '') + '</div>' +
+    '<div class="opt"><div><h4>Zelle</h4>' + (PAY.zelle
+      ? '<p class="how">Zelle lives inside your bank app, so it cannot open from a link. Copy our email, then in your bank app choose Zelle and paste it in.</p>' +
+        '<div class="idrow"><span class="id">' + esc(PAY.zelle) + '</span>' + copyBtn(PAY.zelle) + '</div>' +
+        (PAY.zellePhone ? '<p class="small">Or use our phone number:</p><div class="idrow"><span class="id">' + esc(PAY.zellePhone) + '</span>' + copyBtn(PAY.zellePhone.replace(/[^0-9]/g, '')) + '</div>' : '') +
+        (PAY.zelleName ? '<p class="small">It will show up as ' + esc(PAY.zelleName) + '.</p>' : '') +
+        '<div class="zdone" id="zelleDone" hidden></div>' +
+        (PAY.zelleQr ? '<div class="idrow" style="margin-top:14px"><button class="btn ghost" id="zqBtn" aria-expanded="false">Show Zelle QR code</button></div>' +
+          '<div id="zq" hidden style="margin-top:14px"><div class="qr" style="width:180px;height:180px">' + qr(PAY.zelleQr) + '</div>' +
+          '<p class="small">In your bank app, open Zelle and choose to scan a QR code. We are filled in for you.</p></div>' : '')
+      : soon) + '</div></div>';
+
+  // ---- India: UPI (any UPI app: GPay, PhonePe, Paytm, BHIM) ----
+  var upiUrl = PAY.upi ? 'upi://pay?pa=' + encodeURIComponent(PAY.upi).replace('%40', '@') + (PAY.upiName ? '&pn=' + encodeURIComponent(PAY.upiName) : '') + '&cu=INR&tn=' + encodeURIComponent('Wedding shagun') : '';
+  $('panel-in').innerHTML =
+    '<div class="opt"><div><h4>UPI</h4>' + (PAY.upi
+      ? '<p class="how">On your phone, tap below and pick your UPI app: it opens with us already filled in, so you only enter the amount. On a computer, scan the code with GPay, PhonePe, Paytm or any UPI app.</p>' +
+        '<div class="idrow"><a class="btn" href="' + esc(upiUrl) + '">Send shagun by UPI</a></div>' +
+        '<p class="small">Or send to this UPI ID:</p><div class="idrow"><span class="id">' + esc(PAY.upi) + '</span>' + copyBtn(PAY.upi) + '</div>' +
+        (PAY.upiName ? '<p class="small">It will show up as ' + esc(PAY.upiName) + '.</p>' : '')
+      : soon) + '</div>' +
+      (PAY.upi ? '<div class="qrwrap"><div class="qr">' + qr(upiUrl) + '</div><div class="qrcap">Scan with any UPI app</div></div>' : '') + '</div>';
+
+  // ---- tabs: open the one that matches where the guest is ----
+  function pick(which){
+    ['us','in'].forEach(function(k){
+      $('tab-' + k).setAttribute('aria-selected', k === which ? 'true' : 'false');
+      $('panel-' + k).hidden = k !== which;
+    });
+  }
+  $('tab-us').onclick = function(){ pick('us'); };
+  $('tab-in').onclick = function(){ pick('in'); };
+  var tz = ''; try { tz = Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch(e){}
+  pick(/Kolkata|Calcutta/.test(tz) ? 'in' : 'us');
+
+  document.addEventListener('click', function(e){
+    if (e.target.closest('#zqBtn')){
+      var open = $('zq').hidden;
+      $('zq').hidden = !open;
+      $('zqBtn').textContent = open ? 'Hide Zelle QR code' : 'Show Zelle QR code';
+      $('zqBtn').setAttribute('aria-expanded', open ? 'true' : 'false');
+      return;
+    }
+    var b = e.target.closest('[data-copy]'); if (!b) return;
+    var v = b.getAttribute('data-copy');
+    var zelle = !!b.closest('#panel-us');
+    (navigator.clipboard ? navigator.clipboard.writeText(v) : Promise.reject()).then(function(){
+      if (!zelle) return toast('Copied');
+      // no link can open someone's bank app, so say exactly what to do next
+      var d = $('zelleDone');
+      d.innerHTML = '<b>Copied.</b> Now open your bank\'s app (Chase, Bank of America, Wells Fargo and most others), tap <b>Send money with Zelle</b>, and paste it in as the recipient.';
+      d.hidden = false;
+    }, function(){ toast(v); });
+  });
+
+  // ---- drifting petals: marigold, rose and jasmine ----
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var cv = $('petals'), ctx = cv.getContext('2d'), W, H, dpr = Math.min(2, window.devicePixelRatio || 1), P = [];
+  var COLORS = ['#E9A23B','#F2C14E','#D9534F','#E58A8F','#FFF6E5','#C15E52'];
+  function size(){ W = innerWidth; H = innerHeight; cv.width = W * dpr; cv.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0); }
+  function petal(top){ return { x:Math.random() * W, y:top ? -20 - Math.random() * H * .3 : Math.random() * H, r:4 + Math.random() * 6, c:COLORS[(Math.random() * COLORS.length) | 0],
+    vy:.35 + Math.random() * .7, vx:-.2 + Math.random() * .4, a:Math.random() * 6.28, va:-.02 + Math.random() * .04, sw:Math.random() * 6.28 }; }
+  size(); addEventListener('resize', size);
+  var N = W < 640 ? 18 : 34;
+  for (var i = 0; i < N; i++) P.push(petal(true));
+  (function tick(){
+    ctx.clearRect(0, 0, W, H);
+    P.forEach(function(p, i){
+      p.sw += .015; p.x += p.vx + Math.sin(p.sw) * .45; p.y += p.vy; p.a += p.va;
+      if (p.y > H + 20) P[i] = petal(true);
+      ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.a); ctx.globalAlpha = .75;
+      ctx.fillStyle = p.c; ctx.beginPath(); ctx.ellipse(0, 0, p.r, p.r * .55, 0, 0, 6.283); ctx.fill(); ctx.restore();
+    });
+    requestAnimationFrame(tick);
+  })();
+})();
+</script>
+</body>
+</html>
