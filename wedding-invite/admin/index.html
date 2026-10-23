@@ -792,11 +792,10 @@
     return rows;
   }
 
-  // reminder: nudges anyone who has not replied and points everyone to the registry at the end of the invite
+  // reminder for anyone who has not replied yet
   function remindFor(g){
     return 'Dear ' + (g.name || 'friend') + ',\n\n' +
-      'We are so excited to have you at our wedding! If you have not RSVP\'d yet, please do so soon.\n\n' +
-      'At the end of the invitation, we have also added a new link to our wedding registry. You being there is already a gift for us and we truly appreciate it, but we will not complain if you want to gift us more XD\n\n' +
+      'We are excited to have you at our wedding. If you have not RSVPed yet, please do so soon.\n\n' +
       (g.inviteLink || '') + '\n\n' +
       'Love,\nRohit and Aditi';
   }
