@@ -792,10 +792,18 @@
     return rows;
   }
 
+  // reminder: nudges anyone who has not replied and points everyone to the registry at the end of the invite
+  function remindFor(g){
+    return 'Dear ' + (g.name || 'friend') + ',\n\n' +
+      'We are so excited to have you at our wedding! If you have not RSVP\'d yet, please do so soon.\n\n' +
+      'At the end of the invitation, we have also added a new link to our wedding registry. You being there is already a gift for us and we truly appreciate it, but we will not complain if you want to contribute to our life ahead XD\n\n' +
+      (g.inviteLink || '') + '\n\n' +
+      'Love,\nRohit and Aditi';
+  }
   function msgFor(g){ return g.inviteMessage || ("Hi "+(g.name||'friend')+"! 💍 Rohit & Aditi are getting married and would love for you to join the celebrations. Here's your personal invitation & RSVP: "+(g.inviteLink||'')); }
 
   function actsHtml(g, i){
-    var acts='<button class="rowcopy" data-i="'+i+'">⧉ Msg</button>';
+    var acts='<button class="rowcopy" data-i="'+i+'">⧉ Msg</button><button class="rowcopy" data-i="'+i+'" data-kind="remind">Remind</button>';
     // built from the current message each time, so edits to InviteMessage in the Sheet show up here too
     var phone = String(g.whatsapp||'').replace(/[^0-9]/g,''), msg = encodeURIComponent(msgFor(g));
     if (phone) acts+='<a href="https://wa.me/'+phone+'?text='+msg+'" target="_blank" rel="noopener">WhatsApp</a>';
@@ -872,7 +880,7 @@
   function copyHandler(e){
     var btn = e.target.closest('.rowcopy'); if (!btn) return;
     var g = lastRows[Number(btn.getAttribute('data-i'))]; if (!g) return;
-    var text = msgFor(g);
+    var text = btn.getAttribute('data-kind') === 'remind' ? remindFor(g) : msgFor(g);
     var done=function(){ var o=btn.textContent; btn.textContent='✓ Copied'; setTimeout(function(){ btn.textContent=o; }, 1500); };
     if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(done, done);
     else { var ta=document.createElement('textarea'); ta.value=text; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy');}catch(_){} document.body.removeChild(ta); done(); }
