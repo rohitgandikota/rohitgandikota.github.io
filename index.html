@@ -90,6 +90,39 @@
 <table style="width:100%;border:0px;border-spacing:0px;border-collapse:separate;margin-right:auto;margin-left:auto;">
     <tbody>
 
+        <!-- VLM Planning Entry -->
+        <tr>
+          <td style="padding:16px;width:20%;vertical-align:middle">
+            <div class="one">
+              <img src='images/vlmplanning.png' width=100%>
+            </div>
+          </td>
+          <td style="padding:8px;width:80%;vertical-align:middle">
+            <a href="https://plan.baulab.info/">
+              <span class="papertitle">How VLMs Plan What's Next</span>
+            </a>
+            <br>
+            <strong>Rohit Gandikota</strong>,
+            <a href="https://arnab-api.github.io/">Arnab Sen Sharma</a>,
+            Adam Belfki,
+            <a href="https://baulab.info">David Bau</a>
+            <br>
+            <em>arXiv</em>, 2026
+            <br>
+            <a href="https://plan.baulab.info/">project page</a>
+            /
+            <a href="https://arxiv.org/abs/2611.21600">arXiv</a>
+            /
+            <a href="https://github.com/rohitgandikota/vlm-planning">code</a>
+            /
+            <a href="https://plan.baulab.info/#demo">demo</a>
+            <p></p>
+            <p>
+            How does a VLM decide what to describe first, what next, and when to stop? We find that it plans on the image itself. Binding heads find where the answer is and keep a pointer to that place. A relay passes the pointer to the token where the answer is written, and gaze heads follow it back to the image. For a list, the VLM tracks its progress and picks the next place before it writes.
+            </p>
+          </td>
+        </tr>
+
         <!-- Gaze Heads Entry -->
         <tr onmouseout="gaze_stop()" onmouseover="gaze_start()">
           <td style="padding:16px;width:20%;vertical-align:middle">
@@ -376,6 +409,41 @@
     <tbody>
 
 
+        <!-- T-DIG Entry -->
+        <tr>
+          <td style="padding:16px;width:20%;vertical-align:middle">
+            <div class="one">
+              <img src='images/tdig.png' width=100%>
+            </div>
+          </td>
+          <td style="padding:8px;width:80%;vertical-align:middle">
+            <a href="https://image-study.org/t-dig/">
+              <span class="papertitle">T-DIG: Text-Conditioned Diversity for Image Generation</span>
+            </a>
+            <br>
+            <a href="https://simran-khanuja.github.io/">Simran Khanuja</a>,
+            <strong>Rohit Gandikota</strong>,
+            <a href="https://gauravparmar.com/">Gaurav Parmar</a>,
+            <a href="https://www.phontron.com/">Graham Neubig</a>
+            <br>
+            <em>arXiv</em>, 2026
+            <br>
+            <a href="https://image-study.org/t-dig/">project page</a>
+            /
+            <a href="https://arxiv.org/abs/2610.29003">arXiv</a>
+            /
+            <a href="https://github.com/simran-khanuja/t-dig">code</a>
+            /
+            <a href="https://huggingface.co/collections/neulab/t-dig">data and models</a>
+            /
+            <a href="https://image-study.org/demo/">demo</a>
+            <p></p>
+            <p>
+                Image generators return several images per prompt, but the images rarely differ in the way you want. T-DIG lets you say in plain text what should vary: the background, the style, the clothing. An LLM policy then writes a set of prompts that delivers that variation with any frozen image model, for generation and for editing.
+            </p>
+          </td>
+        </tr>
+
         <!-- Vision-Language Binding Entry -->
         <tr onmouseout="binding_stop()" onmouseover="binding_start()">
           <td style="padding:16px;width:20%;vertical-align:middle">
@@ -541,6 +609,45 @@
     <table style="width:100%;border:0px;border-spacing:0px;border-collapse:separate;margin-right:auto;margin-left:auto;">
     <tbody>
 
+
+        <!-- Goal Encoding Entry -->
+        <tr>
+          <td style="padding:16px;width:20%;vertical-align:middle">
+            <div class="one">
+              <img src='images/goals.png' width=100%>
+            </div>
+          </td>
+          <td style="padding:8px;width:80%;vertical-align:middle">
+            <a href="https://goals.baulab.info/">
+              <span class="papertitle">Goal Encoding in LLMs</span>
+            </a>
+            <br>
+              <a href="https://arnab-api.github.io/">Arnab Sen Sharma</a>,
+              <a href="https://ericwtodd.github.io/">Eric Todd</a>,
+              <a href="https://sfeucht.github.io/">Sheridan Feucht</a>,
+              <a href="https://andyrdt.com/">Andy Arditi</a>,
+              <strong>Rohit Gandikota</strong>,
+              <a href="https://scholar.google.com/citations?user=hd7quH4AAAAJ&hl=en">Natalie Shapira</a>,
+              <a href="https://gsarti.com/">Gabriele Sarti</a>,
+              <a href="https://constanzafierro.github.io/">Constanza Fierro</a>,
+              <a href="https://sites.google.com/view/lisaschut">Lisa Schut</a>,
+              <a href="https://baulab.info">David Bau</a>
+            <br>
+            <em>arXiv</em>, 2026
+            <br>
+            <a href="https://goals.baulab.info/">project page</a>
+            /
+            <a href="https://arxiv.org/abs/2611.17297">arXiv</a>
+            /
+            <a href="https://github.com/arnab-api/goals">code</a>
+            /
+            <a href="https://goals.baulab.info/demo/index.html">demo</a>
+            <p></p>
+            <p>
+                Do LLMs have goals? We look for a goal encoding inside models that write code: one that is set before the model acts, adapts to the situation, and persists over a long output. We find it in the outputs of a sparse set of attention heads. A transformer of fixed depth keeps the goal alive by reading it again at every step.
+            </p>
+          </td>
+        </tr>
 
         <!-- In-Context Algebra Entry -->
         <tr onmouseout="algebra_stop()" onmouseover="algebra_start()">
